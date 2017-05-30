@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/event_layout"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:textAppearanceMedium"
+    android:textColor="#000"
+    android:text="Corso patentino frigoristi"
+    android:id="@+id/title"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="4dp"
+        android:id="@+id/date"
+        android:textColor="@color/colorAccent"
+        android:text="30 maggio" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_view_distance"
+        android:id="@+id/description"
+        android:text="Il corso permetterà di ricevere il patentino per frigoristi con certificazione valida in tutta Italia." />
+</LinearLayout>

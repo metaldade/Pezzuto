@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
+<TextView
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:text="R999l tubo multi strato isolato o20x2 rosso"
+    android:textColor="#000"
+    android:textAppearance="?android:textAppearanceMedium"
+    android:id="@+id/title"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantità: 0"
+        android:id="@+id/quantity"
+        android:layout_marginTop="4dp"
+        android:layout_below="@id/title"/>
+    <ImageButton
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="4dp"
+        android:id="@+id/add"
+        android:src="@drawable/ic_add"
+        style="?android:attr/borderlessButtonStyle"
+        />
+    <ImageButton
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="8dp"
+        android:id="@+id/remove"
+        android:layout_toLeftOf="@id/add"
+        android:src="@drawable/ic_remove"
+        style="?android:attr/borderlessButtonStyle"
+        />
+</RelativeLayout>

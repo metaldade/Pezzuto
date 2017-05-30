@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="VMW 226/5 - 3 A"
+    android:id="@+id/title"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+
+        android:layout_marginTop="@dimen/text_view_distance"
+        android:id="@+id/oldPrice"
+        android:text="869" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_marginTop="@dimen/text_view_distance"
+        android:src="@drawable/ic_right_arrow"
+        android:layout_below="@id/title"
+        android:tint="@color/colorAccent"
+        android:id="@+id/right_arrow"
+        android:layout_toRightOf="@id/oldPrice"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_toRightOf="@id/right_arrow"
+        android:layout_marginTop="@dimen/text_view_distance"
+        android:id="@+id/price"
+        android:textColor="@color/colorAccent"
+        android:text="677€ + IVA" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_keyboard_arrow_right_black_24px"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:tint="@color/text_grey"/>
+</RelativeLayout>

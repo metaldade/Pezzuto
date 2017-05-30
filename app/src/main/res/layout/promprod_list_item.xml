@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:id="@+id/promprod_item">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:text="Promozione caldaie Vaillant ecoTEC Pro ed ecoTEC Plus" />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Torna la promozione sulle caldaie vaillant, questa volta dedicata ai modelli ecoTEC Pro ed ecoTEC Plus"
+    android:layout_below="@id/title"
+android:textColor="@color/text_grey"
+    android:layout_marginTop="4dp"
+    android:id="@+id/description"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/description"
+        android:layout_marginTop="4dp"
+        android:id="@+id/validity"
+        android:textColor="@color/colorAccent"
+        android:text="Valida dal 12/1 al 31/1 o esaurimento scorte" />
+</RelativeLayout>

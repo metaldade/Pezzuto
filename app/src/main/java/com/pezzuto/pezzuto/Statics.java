@@ -1,0 +1,61 @@
+package com.pezzuto.pezzuto;
+
+import android.content.Context;
+import android.os.Environment;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.pezzuto.pezzuto.requests.RequestsUtils;
+import com.squareup.picasso.Picasso;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
+/**
+ * Created by dade on 21/04/17.
+ */
+
+public class Statics {
+    public static final String PROMOZIONI_JSON =
+            "[{\"id\":23,\"nome\":\"Tempora consequatur nesciunt maxime ad ipsam ullam nihil enim eum vel enim amet.\",\"descrizione\":\"Facere vel aut quibusdam numquam eligendi quo provident. Dolore repudiandae molestias possimus sint. Debitis aut sunt ex qui et odio. Ullam deserunt consectetur facilis incidunt. Et aut aut voluptatem voluptatem.\",\"valida_dal\":\"2017-10-24\",\"valida_al\":\"2017-12-06\",\"esaurimento_scorte\":\"0\",\"img\":\"http://lorempixel.com/640/480/?41188\",\"id_categoria\":\"11\",\"attiva\":\"1\",\"id_utente\":\"1\",\"created_at\":\"2017-03-22 14:36:20\",\"updated_at\":\"2017-03-22 14:36:20\"}]";
+
+    public static Date parseSimpleDate(String target) {
+        try {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALIAN);
+            return df.parse(target);
+        }
+        catch (ParseException ex) { return null; }
+    }
+
+    public static Date parseExtDate(String target) {
+        try {
+            DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss", Locale.ITALIAN);
+            return df.parse(target);
+        }
+        catch (ParseException ex) { return null; }
+    }
+    public static String getSimpleDate(Date d) {
+        DateFormat df = new SimpleDateFormat("dd/MM/yy",Locale.ITALIAN);
+        return df.format(d);
+    }
+    public static String getDayMonth(Date d) {
+        DateFormat df = new SimpleDateFormat("dd MMMM",Locale.ITALIAN);
+        return df.format(d);
+    }
+    public static String getExtDate(Date d) {
+        DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss",Locale.ITALIAN);
+        return df.format(d);
+    }
+    public static void loadImage(Context context, String path, ImageView v) {
+        Picasso.with(context).load(path.contains("http") ? path: RequestsUtils.BASE_STORAGE_URL+path).into(v);
+    }
+}

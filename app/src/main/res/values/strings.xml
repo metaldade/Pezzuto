@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Pezzuto</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lorem1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In malesuada nibh sapien, eget elementum ligula egestas ut. Morbi imperdiet lacus eu tellus commodo, ac feugiat mi porttitor. Donec porta magna massa, non porta leo rhoncus vitae. Nunc semper nibh a lacus placerat luctus. Proin ullamcorper augue sit amet eros hendrerit tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc porttitor est ac leo porttitor pretium. Vivamus arcu elit, finibus at consectetur ut, suscipit a metus.</string>
+    <string name="lorem300">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum at elit sed nunc fringilla eleifend eget sit amet dui. Donec tempor magna sit amet justo porta iaculis. Etiam eget lorem aliquam, molestie diam in, tristique lectus. Nunc iaculis accumsan arcu quis feugiat. Vivamus mattis nisi nibh. Duis et lorem eget mauris varius tempus. Integer at volutpat dui. Pellentesque cursus enim non blandit tempus. Praesent libero quam, dictum non imperdiet eu, congue elementum justo. Sed fermentum vulputate porta.</string>
+    <string name="lorem200">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque nec pellentesque eros, vitae tempor enim. Mauris id sodales risus, vitae vestibulum justo. Donec pharetra molestie orci, nec dictum sapien egestas a. Mauris neque purus, ornare vel laoreet fringilla, laoreet molestie dui. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent luctus tincidunt ex, rhoncus consectetur leo bibendum eget. Sed eget interdum diam. Ut molestie sem non metus malesuada, a congue nisi rhoncus. Mauris ut varius risus, sit amet viverra tortor.</string>
+    <string-array name="tipi_consegna">
+        <item>Ritiro in negozio</item>
+        <item>Spedizione</item>
+    </string-array>
+    <string name="err_msg_ragione_sociale">Inserisci la ragione sociale</string>
+    <string name="err_msg_email">Inserisci un indirizzo email valido</string>
+    <string name="err_msg_piva_empty">Inserisci la partita IVA</string>
+    <string name="err_msg_piva_characters">La partita deve essere di 11 cifre</string>
+</resources>

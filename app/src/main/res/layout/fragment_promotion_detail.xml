@@ -1,0 +1,59 @@
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".PromotionDetailFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Promozione caldaie Vaillant ecoTEC Pro ed ecoTEC plus"
+        android:id="@+id/title"
+       android:gravity="center"
+        android:textAppearance="?android:textAppearanceLarge"
+        />
+    <TextView
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Valida dal 13 marzo al 25 aprile o fino ad esaurimento scorte"
+        android:textColor="@color/colorAccent"
+        android:id="@+id/validity"
+        android:drawableLeft="@drawable/ic_event_red_24px"
+        android:drawableStart="@drawable/ic_event_red_24px"
+        android:textStyle="bold"
+        />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/image"
+        android:scaleType="centerCrop"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:id="@+id/description"
+        android:text="@string/lorem200"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:text="Prodotti in promozione"
+        android:textColor="@color/text_grey"
+        android:textAppearance="?android:textAppearanceMedium"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewPromotions"
+        />
+</LinearLayout>
+</ScrollView>

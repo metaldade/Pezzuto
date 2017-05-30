@@ -1,0 +1,103 @@
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="com.pezzuto.pezzuto.CustomerInfoFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:textAppearanceMedium"
+        android:text="Informazioni cliente" />
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/layout_ragione_sociale"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/ragione_sociale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:inputType="text"
+            android:maxLines="1"
+            android:hint="Ragione sociale" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/layout_partita_iva"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/partita_iva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Partita iva"
+            android:inputType="number"
+            android:maxLength="11" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/layout_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
+    </android.support.design.widget.TextInputLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Queste informazioni serviranno per identificare il cliente e verranno richieste solo al primo ordine" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        style="?android:textAppearanceMedium"
+        android:text="Informazioni ordine" />
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Tipo di consegna" />
+        <Spinner
+            android:id="@+id/tipo_consegna"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/layout_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/note"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:hint="Note"
+            android:inputType="textMultiLine"
+            android:maxLength="300" />
+    </android.support.design.widget.TextInputLayout>
+</LinearLayout>
+</ScrollView>
