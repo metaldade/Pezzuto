@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.pezzuto.pezzuto.EventDetailFragment;
 import com.pezzuto.pezzuto.ProductDetailFragment;
 import com.pezzuto.pezzuto.R;
 import com.pezzuto.pezzuto.Statics;
@@ -49,7 +50,6 @@ public class StickyEventAdapter extends RecyclerView.Adapter<StickyEventAdapter.
         this.events = events;
         this.listener = listener;
         mInflater = LayoutInflater.from(context);
-
     }
 
     @Override
@@ -65,15 +65,13 @@ public class StickyEventAdapter extends RecyclerView.Adapter<StickyEventAdapter.
         viewHolder.event_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //listener.setSelectedEvent(e);
-                listener.launchFragment(new ProductDetailFragment());
-
+                listener.setSelectedEvent(e);
+                listener.launchFragment(new EventDetailFragment());
             }
         });
         viewHolder.title.setText(e.getName());
         viewHolder.description.setText(e.getBriefDescription());
-        viewHolder.date.setText(e.getEndDate() == null ? Statics.getDayMonth(e.getStartDate()) :
-                "Dal "+Statics.getDayMonth(e.getStartDate())+" al "+Statics.getDayMonth(e.getEndDate()));
+        viewHolder.date.setText(Statics.getFormattedEventDate(e));
     }
 
     @Override

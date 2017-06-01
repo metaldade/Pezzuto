@@ -1,0 +1,74 @@
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="8dp"
+    android:orientation="vertical"
+    android:id="@+id/event_detail_layout"
+    tools:context="com.pezzuto.pezzuto.EventDetailFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:layout_marginLeft="8dp"
+        android:text="Corso patentino frigoristi"
+        android:textAppearance="?android:textAppearanceLarge" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="16dp"
+        android:id="@+id/date_layout"
+        android:layout_below="@id/title"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@color/colorAccent"
+            android:tint="#FFF"
+            android:src="@drawable/ic_event_white_48px"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="30 maggio"
+            android:id="@+id/date"
+            android:layout_gravity="center"
+            android:textColor="@color/colorAccent"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+    </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/image"
+        android:layout_below="@id/date_layout"
+        android:background="@color/colorAccent"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/description"
+        android:layout_below="@id/image"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="@string/lorem200"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:id="@+id/askInfo"
+        android:textAllCaps="false"
+        android:layout_below="@id/description"
+        android:textColor="@color/colorAccent"
+        android:text="Chiedi informazioni"
+        style="?android:attr/borderlessButtonStyle"
+        />
+</RelativeLayout>
+</ScrollView>

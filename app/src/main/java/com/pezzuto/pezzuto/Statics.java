@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pezzuto.pezzuto.items.Event;
 import com.pezzuto.pezzuto.requests.RequestsUtils;
 import com.squareup.picasso.Picasso;
 
@@ -57,5 +58,9 @@ public class Statics {
     }
     public static void loadImage(Context context, String path, ImageView v) {
         Picasso.with(context).load(path.contains("http") ? path: RequestsUtils.BASE_STORAGE_URL+path).into(v);
+    }
+    public static String getFormattedEventDate(Event e) {
+        return e.getEndDate() == null ? Statics.getDayMonth(e.getStartDate()) :
+                "Dal "+Statics.getDayMonth(e.getStartDate())+" al "+Statics.getDayMonth(e.getEndDate());
     }
 }

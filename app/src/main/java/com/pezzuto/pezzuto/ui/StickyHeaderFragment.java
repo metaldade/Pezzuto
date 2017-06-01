@@ -288,9 +288,10 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
             mListener.stopRefresh();
             try {
                 prods.clear();
-                String category = response.getJSONObject(0).getJSONArray("categoria").getString(1);
+                String category = response.getJSONObject(0).getJSONArray("prodotti").getJSONObject(0)
+                .getJSONObject("categoria").getString("nome");
                 Log.d("category",category);
-                JSONArray products = response.getJSONObject(1).getJSONArray("prodotti");
+                JSONArray products = response.getJSONObject(0).getJSONArray("prodotti");
                 List<Product> prodsList = ParseUtils.parseProducts(products);
                 for (Product p : prodsList) {
                     p.setLabel(category);

@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.github.jorgecastilloprz.FABProgressCircle;
 import com.github.jorgecastilloprz.listeners.FABProgressListener;
+import com.pezzuto.pezzuto.items.Event;
 import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.items.Promprod;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
@@ -37,6 +38,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener,FABProgressListener {
     private Promprod selected;
     private Product prodSelected;
+    private Event eventSelected;
     private FloatingActionButton fab;
     private BottomSheetBehavior bottomSheetBehavior;
     private FrameLayout llBottomSheet;
@@ -204,14 +206,20 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         lastFragment = f;
     }
 
-    public Promprod getSelectedPromprod() {
-        return selected;
-    }
     public void setSelectedPromprod(Promprod p) {
         selected = p;
     }
+    public void setSelectedEvent(Event e) {
+        eventSelected = e;
+    }
     public Product getSelectedProduct() {
         return prodSelected;
+    }
+    public Promprod getSelectedPromprod() {
+        return selected;
+    }
+    public Event getSelectedEvent() {
+        return eventSelected;
     }
     public void setSelectedProduct(Product p) {
         prodSelected = p;
