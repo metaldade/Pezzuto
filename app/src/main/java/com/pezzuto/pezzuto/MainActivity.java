@@ -1,16 +1,20 @@
 package com.pezzuto.pezzuto;
 
 
+import android.graphics.Color;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -48,11 +52,15 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private FABProgressCircle progressCircle;
     private SwipeRefreshLayout swipe;
     private RefreshableFragment lastFragment;
+    private TextView emptyState;
     private HashMap<String,Integer> categories = new HashMap<>();
-
     //type of fragments
     public static final String PROMOTION_DETAIL = "promotion_detail";
     public static final String PRODUCT_DETAIL = "product_detail";
+    public static final String PROMOTIONS = "promotions";
+    public static final String PRODUCTS = "products";
+    public static final String EVENTS = "events";
+    public static final String PROD_FILTER = "prod_filter";
 
     Response.Listener<JSONArray> parseCatResponse = new Response.Listener<JSONArray>() {
         @Override
@@ -71,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        categories.put("In primo piano",0);
         //Dove caricare i fragment
         FrameLayout contentContainer = (FrameLayout) findViewById(R.id.contentContainer);
         fab = (FloatingActionButton)  findViewById(R.id.cartFab);
@@ -84,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         });
         //categories request
         RequestsUtils.sendRequest(this,RequestsUtils.CATEGORIE,RequestsUtils.NO_FILTER,null,parseCatResponse);
-
+        emptyState = (TextView) findViewById(R.id.emptyIcon);
         progressCircle = (FABProgressCircle) findViewById(R.id.fabProgressCircle);
         progressCircle.attachListener(this);
 
@@ -102,36 +110,36 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 if (tabId == R.id.tab_promozioni) {
                     if (firstAccessProm) {
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        RefreshableFragment f = StickyHeaderFragment.newInstance("promotions");
-                        ft.replace(R.id.contentContainer,f , "promotions").commit();
+                        RefreshableFragment f = StickyHeaderFragment.newInstance(PROMOTIONS);
+                        ft.replace(R.id.contentContainer,f , PROMOTIONS).commit();
                         lastFragment = f;
                         ft.addToBackStack(null);
                         firstAccessProm = false;
                     }
                     else {
-                        launchFragment("promotions");
+                        launchFragment(PROMOTIONS);
                         setFabVisible(false);
                     }
                 }
                 if (tabId == R.id.tab_prodotti) {
                     if (firstAccessProd) {
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        RefreshableFragment f = StickyHeaderFragment.newInstance("products");
-                        ft.replace(R.id.contentContainer, f, "products").commit();
+                        RefreshableFragment f = StickyHeaderFragment.newInstance(PRODUCTS);
+                        ft.replace(R.id.contentContainer, f, PRODUCTS).commit();
                         lastFragment = f;
                         ft.addToBackStack(null);
                         firstAccessProd = false;
                     }
                     else {
-                        launchFragment("products");
+                        launchFragment(PRODUCTS);
                         setProdFab();
                     }
                 }
                 if (tabId == R.id.tab_eventi) {
                     if (firstAccessEvent) {
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        RefreshableFragment f = StickyHeaderFragment.newInstance("events");
-                        ft.replace(R.id.contentContainer, f, "events").commit();
+                        RefreshableFragment f = StickyHeaderFragment.newInstance(EVENTS);
+                        ft.replace(R.id.contentContainer, f, EVENTS).commit();
                         lastFragment = f;
                         ft.addToBackStack(null);
                         firstAccessEvent = false;
@@ -147,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             @Override
             public void onTabReSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_promozioni) {
-                    launchFragment("promotions");
+                    launchFragment(PROMOTIONS);
                 }
             }
         });
@@ -177,15 +185,17 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         lastFragment = fragment;
     }
     public void launchFragment(String key) {
-        if (key.equals("products")) {
+        if (key.equals(PRODUCTS)) {
             setProductSheetBehaviour();
             setProdFab();
         }
-        else if (key.equals("promotions")) {
+        else if (key.equals(PROMOTIONS)) {
             setPromotionSheetBehaviour();
             setFabVisible(false);
         }
         RefreshableFragment f = (RefreshableFragment) getSupportFragmentManager().findFragmentByTag(key);
+        if (f.hasEmptySet(key)) setEmptyState(key);
+        else removeEmptyState();
         launchFragment(f);
         lastFragment = f;
     }
@@ -201,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void launchProductFragment(int category) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         RefreshableFragment f = StickyHeaderFragment.newProdInstance(category);
-        ft.replace(R.id.contentContainer, f, "products").commit();
+        ft.replace(R.id.contentContainer, f, PRODUCTS).commit();
         ft.addToBackStack(null);
         lastFragment = f;
     }
@@ -258,10 +268,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED || bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_DRAGGING )
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         else if (lastFragment.getType().equals(PROMOTION_DETAIL)) {
-            launchFragment("promotions");
+            launchFragment(PROMOTIONS);
         }
         else if (lastFragment.getType().equals(PRODUCT_DETAIL)) {
-            launchFragment("products");
+            launchFragment(PRODUCTS);
         }
         else if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
@@ -338,5 +348,31 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
     @Override public void onFABProgressAnimationEnd() {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+    public void setEmptyState(String type) {
+        emptyState.setVisibility(View.VISIBLE);
+        switch (type) {
+            case PROMOTIONS:
+                emptyState.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_grade_black_24px,0,0);
+                emptyState.setText("Nessuna promozione attiva");
+                break;
+            case PRODUCTS:
+                emptyState.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_local_offer_black_24px,0,0);
+                emptyState.setText("Nessuna prodotto trovato");
+                break;
+            case EVENTS:
+                emptyState.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_event_black_24px,0,0);
+                emptyState.setText("Nessun evento attivo");
+                break;
+            case PROD_FILTER:
+                emptyState.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_filter,0,0);
+                emptyState.setText("Nessun prodotto trovato in questa categoria");
+                break;
+            default:
+                emptyState.setVisibility(View.GONE);
+        }
+    }
+    public void removeEmptyState() {
+        emptyState.setVisibility(View.GONE);
     }
 }

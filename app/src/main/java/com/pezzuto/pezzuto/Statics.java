@@ -26,6 +26,8 @@ import java.util.Locale;
  */
 
 public class Statics {
+    public static final String SHARED_PREF = "pezzuto";
+    public static final int CALENDAR_PERMISSION = 1;
     public static final String PROMOZIONI_JSON =
             "[{\"id\":23,\"nome\":\"Tempora consequatur nesciunt maxime ad ipsam ullam nihil enim eum vel enim amet.\",\"descrizione\":\"Facere vel aut quibusdam numquam eligendi quo provident. Dolore repudiandae molestias possimus sint. Debitis aut sunt ex qui et odio. Ullam deserunt consectetur facilis incidunt. Et aut aut voluptatem voluptatem.\",\"valida_dal\":\"2017-10-24\",\"valida_al\":\"2017-12-06\",\"esaurimento_scorte\":\"0\",\"img\":\"http://lorempixel.com/640/480/?41188\",\"id_categoria\":\"11\",\"attiva\":\"1\",\"id_utente\":\"1\",\"created_at\":\"2017-03-22 14:36:20\",\"updated_at\":\"2017-03-22 14:36:20\"}]";
 
@@ -62,5 +64,10 @@ public class Statics {
     public static String getFormattedEventDate(Event e) {
         return e.getEndDate() == null ? Statics.getDayMonth(e.getStartDate()) :
                 "Dal "+Statics.getDayMonth(e.getStartDate())+" al "+Statics.getDayMonth(e.getEndDate());
+    }
+    public static void swap(String[] array,int i1,int i2) {
+        String temp = array[i2];
+        array[i2] = array[i1];
+        array[i1] = temp;
     }
 }

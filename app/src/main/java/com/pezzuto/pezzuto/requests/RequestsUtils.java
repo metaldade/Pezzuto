@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.pezzuto.pezzuto.LaravelObjRequest;
 
 import org.json.JSONArray;
@@ -39,6 +40,7 @@ public class RequestsUtils {
     public static String PRODUCT_ORDER = "prodotti/ordine";
 
 
+    //Urls
     private static String BASE_URL = "http://api.pezzuto.net/pezzuto/public/api/";
     public static String BASE_STORAGE_URL = "http://api.pezzuto.net/pezzuto/storage/app/";
 
@@ -54,7 +56,6 @@ public class RequestsUtils {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             // TODO Auto-generated method stub
-
                         }
                     });
         }
@@ -108,6 +109,10 @@ public class RequestsUtils {
 
             }
         });
+        VolleySingleton.getInstance(context).getRequestQueue().add(request);
+    }
+    public static void participateEventRequest(final Context context, int id, Response.Listener<String> response) {
+        StringRequest request = new StringRequest(Request.Method.GET,BASE_URL+EVENTI+"/"+id+"/"+EVENT_PARTICIPATE, response,null);
         VolleySingleton.getInstance(context).getRequestQueue().add(request);
     }
 }

@@ -150,7 +150,7 @@ public class PromotionDetailFragment extends RefreshableFragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
+    public boolean hasEmptySet(String type) { return false; }
     @Override
     public void onDetach() {
         super.onDetach();

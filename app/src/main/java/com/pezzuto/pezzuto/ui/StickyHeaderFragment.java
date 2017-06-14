@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.pezzuto.pezzuto.MainActivity;
 import com.pezzuto.pezzuto.ParseUtils;
 import com.pezzuto.pezzuto.PromotionDetailFragment;
 import com.pezzuto.pezzuto.R;
@@ -87,19 +88,18 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
         adapterProm = new StickyTestAdapter(this.getActivity(),promprods,mListener);
         adapterProd = new StickyProdAdapter(this.getActivity(),prods,mListener);
         adapterEvent = new StickyEventAdapter(this.getActivity(),events,mListener);
-        if (type.equals("promotions")) {
+        if (type.equals(MainActivity.PROMOTIONS)) {
             decor = new StickyHeaderDecoration(adapterProm);
             list.setAdapter(adapterProm);
         }
-        else if (type.equals("products")) {
+        else if (type.equals(MainActivity.PRODUCTS)) {
             decor = new StickyHeaderDecoration(adapterProd);
             list.setAdapter(adapterProd);
         }
-        else if (type.equals("events")) {
+        else if (type.equals(MainActivity.EVENTS)) {
             decor = new StickyHeaderDecoration(adapterEvent);
             list.setAdapter(adapterEvent);
         }
-
         setHasOptionsMenu(true);
         list.addItemDecoration(decor, 1);
         list.addOnItemTouchListener(this);
@@ -111,7 +111,8 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
         RequestsUtils.sendRequest(getContext(),RequestsUtils.PRODOTTI,RequestsUtils.NO_FILTER,"",parseProdResponse);
     }
     public void sendFilteredProductRequest() {
-        RequestsUtils.sendRequest(getContext(),RequestsUtils.PRODOTTI,RequestsUtils.FILTER_CATEGORIA,""+category,parseProdFilter);
+        if (category == 0) sendProductRequest();
+        else RequestsUtils.sendRequest(getContext(),RequestsUtils.PRODOTTI,RequestsUtils.FILTER_CATEGORIA,""+category,parseProdFilter);
     }
     public void sendEventRequest() {
         RequestsUtils.sendRequest(getContext(), RequestsUtils.EVENTI, RequestsUtils.NO_FILTER, null, parseEventResponse);
@@ -123,7 +124,6 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
         promprods.clear();
         prods.clear();
         products.clear();
-
         checkType();
     }
     public void checkType() {
@@ -184,6 +184,8 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
         public void onResponse(JSONArray response) {
             try {
                 events.clear();
+                if (response.length() == 0) mListener.setEmptyState(MainActivity.EVENTS);
+                else mListener.removeEmptyState();
               for (int i = 0; i < response.length(); i++) {
 
                     JSONObject event = response.getJSONObject(i);
@@ -233,6 +235,8 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
             mListener.stopRefresh();
             try {
                 JSONArray arr = ((JSONObject) response.get(0)).getJSONArray("promozioni");
+                if (arr.length() == 0) mListener.setEmptyState(MainActivity.PROMOTIONS);
+                else mListener.removeEmptyState();
                 promprods.addAll(ParseUtils.parsePromotions(arr));
                 adapterProm.notifyDataSetChanged();
 
@@ -247,6 +251,8 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
             prods.clear();
             try {
                 JSONArray arr = ((JSONObject) response.get(0)).getJSONArray("prodotti");
+                if (arr.length() == 0) mListener.setEmptyState(MainActivity.PRODUCTS);
+                else mListener.removeEmptyState();
                 products = ParseUtils.parseProducts(arr);
             }
             catch (JSONException e) { e.printStackTrace(); }
@@ -292,6 +298,8 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
                 .getJSONObject("categoria").getString("nome");
                 Log.d("category",category);
                 JSONArray products = response.getJSONObject(0).getJSONArray("prodotti");
+                if (products.length() == 0) mListener.setEmptyState(MainActivity.PROD_FILTER);
+                else mListener.removeEmptyState();
                 List<Product> prodsList = ParseUtils.parseProducts(products);
                 for (Product p : prodsList) {
                     p.setLabel(category);
@@ -344,4 +352,16 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
         // do nothing
     }
     public String getType() { return type; }
+    public boolean hasEmptySet(String type) {
+        switch (type) {
+            case MainActivity.PROMOTIONS:
+                return promprods.isEmpty();
+            case MainActivity.PRODUCTS:
+                return prods.isEmpty();
+            case MainActivity.EVENTS:
+                return events.isEmpty();
+            default:
+              return false;
+        }
+    }
 }

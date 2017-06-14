@@ -124,4 +124,5 @@ private Product p;
         });
     }
     public String getType() { return MainActivity.PRODUCT_DETAIL; }
+    public boolean hasEmptySet(String type) { return false; }
 }

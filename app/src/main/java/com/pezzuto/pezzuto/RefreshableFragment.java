@@ -10,4 +10,5 @@ import android.support.v4.app.Fragment;
 public abstract class RefreshableFragment extends Fragment {
     abstract public void refresh();
     abstract public String getType();
+    abstract public boolean hasEmptySet(String type);
 }

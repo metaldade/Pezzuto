@@ -31,5 +31,6 @@ public class Event {
     public Date getStartDate() { return startDate; }
     public Date getEndDate() { return endDate; }
     public String getMonth() { return month; }
+    public int getId() { return id; }
     public void setMonth(String month) { this.month = month; }
 }

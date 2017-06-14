@@ -14,6 +14,10 @@ import android.widget.ListView;
 
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,10 +56,14 @@ public class BottomFilterFragment extends Fragment {
         categories = (ListView) v.findViewById(R.id.categories);
         cats = new String[mListener.getCategories().keySet().size()];
         mListener.getCategories().keySet().toArray(cats);
+
+        //Individua primo piano e SWAPPA
+        int primoPiano = Arrays.binarySearch(cats,"In primo piano");
+        Statics.swap(cats,0,primoPiano);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_list_item_1, android.R.id.text1,cats);
         categories.setAdapter(adapter);
-
         categories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -54,5 +54,6 @@ public interface OnFragmentInteractionListener {
     FloatingActionButton getFab();
     void setFabVisible(boolean visible);
     void setProdFab();
-
+    void setEmptyState(String type);
+    void removeEmptyState();
 }
