@@ -91,6 +91,7 @@ public class EventDetailFragment extends RefreshableFragment {
         date = (TextView) v.findViewById(R.id.date);
         description = (TextView) v.findViewById(R.id.description);
         eventLayout = (RelativeLayout) v.findViewById(R.id.event_detail_layout);
+        mListener.disableSwipeRefresh();
         fill();
         shre = getContext().getSharedPreferences(Statics.SHARED_PREF,Context.MODE_PRIVATE);
         edit = shre.edit();
@@ -103,9 +104,14 @@ public class EventDetailFragment extends RefreshableFragment {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if (ContextCompat.checkSelfPermission(getActivity(),
+                                Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)
                         requestPermissions(
                                 new String[]{Manifest.permission.WRITE_CALENDAR},
                                 Statics.CALENDAR_PERMISSION);
+                        else {
+                            pushAppointmentsToCalender();
+                        }
                     }
                 }).setNegativeButton("No", null).create().show();
     }
@@ -117,7 +123,7 @@ public class EventDetailFragment extends RefreshableFragment {
             case Statics.CALENDAR_PERMISSION: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    addScheduleToCalendar(event.getName(),event.getPlace(),event.getBriefDescription());
+                    pushAppointmentsToCalender();
                 }
                 else {
                     edit.putBoolean("eventsInCalendar",false);
@@ -181,10 +187,9 @@ public class EventDetailFragment extends RefreshableFragment {
         RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         if (!withImage) {
             rl.addRule(RelativeLayout.BELOW, R.id.description);
-            rl.setMargins(18,0,0,0);
+            rl.setMargins(0,36,0,0);
         }
         if (withImage) rl.addRule(RelativeLayout.BELOW,R.id.image);
-
         b.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_event_white_48px, 0, 0, 0);
         b.setText("Partecipa");
         b.setTextColor(ContextCompat.getColor(getContext(),R.color.colorAccent));
@@ -238,4 +243,56 @@ public class EventDetailFragment extends RefreshableFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
+    public long pushAppointmentsToCalender() {
+        /***************** Event: note(without alert) *******************/
+
+        String eventUriString = "content://com.android.calendar/events";
+        ContentValues eventValues = new ContentValues();
+        eventValues.put("calendar_id", 1); // id, We need to choose from
+        // our mobile for primary
+        // its 1
+        eventValues.put("title", event.getName());
+        eventValues.put("description", event.getBriefDescription());
+        eventValues.put("eventLocation", event.getPlace());
+        long startDate = event.getStartDate().getTime();
+        long endDate;
+        if (event.getEndDate() == null) endDate = startDate + 1000 * 60 * 60* 24; // For all day
+        else endDate = event.getEndDate().getTime();
+
+        eventValues.put("dtstart", startDate);
+        eventValues.put("dtend", endDate);
+
+        // values.put("allDay", 1); //If it is bithday alarm or such
+        // kind (which should remind me for whole day) 0 for false, 1
+        // for true
+        eventValues.put("eventStatus", 1); // This information is
+        // sufficient for most
+        // entries tentative (0),
+        // confirmed (1) or canceled
+        // (2):
+        eventValues.put("eventTimezone", "UTC/GMT +2:00");
+   /*Comment below visibility and transparency  column to avoid java.lang.IllegalArgumentException column visibility is invalid error */
+
+    /*eventValues.put("visibility", 3); // visibility to default (0),
+                                        // confidential (1), private
+                                        // (2), or public (3):
+    eventValues.put("transparency", 0); // You can control whether
+                                        // an event consumes time
+                                        // opaque (0) or transparent
+                                        // (1).
+      */
+        eventValues.put("hasAlarm", 0); // 0 for false, 1 for true
+
+        Uri eventUri = getContext().getContentResolver().insert(Uri.parse(eventUriString), eventValues);
+        long eventID = Long.parseLong(eventUri.getLastPathSegment());
+
+
+
+        /***************** Event: Meeting(without alert) Adding Attendies to the meeting *******************/
+
+
+        Toast.makeText(getContext(),"Evento correttamente inserito nel calendario",Toast.LENGTH_SHORT).show();
+        return eventID;
+
+    }
 }

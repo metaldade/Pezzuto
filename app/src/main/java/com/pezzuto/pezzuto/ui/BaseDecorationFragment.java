@@ -45,6 +45,7 @@ public abstract class BaseDecorationFragment extends RefreshableFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_recycler, container, false);
         mList = (RecyclerView) view.findViewById(R.id.list);
+        mListener.enableSwipeRefresh();
         return view;
     }
     @Override

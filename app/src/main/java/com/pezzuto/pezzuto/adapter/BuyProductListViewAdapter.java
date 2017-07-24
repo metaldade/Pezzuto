@@ -1,15 +1,23 @@
 package com.pezzuto.pezzuto.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.pezzuto.pezzuto.BottomBuyFragment;
+import com.pezzuto.pezzuto.CartActivity;
+import com.pezzuto.pezzuto.MainActivity;
 import com.pezzuto.pezzuto.R;
+import com.pezzuto.pezzuto.SharedUtils;
+import com.pezzuto.pezzuto.Statics;
 import com.pezzuto.pezzuto.items.Product;
 
 import java.util.List;
@@ -20,13 +28,23 @@ import java.util.Locale;
  */
 
 public class BuyProductListViewAdapter extends ArrayAdapter<Product> {
+    List<Product> prods;
+    TextView total;
+    TextView imponibile;
+    TextView iva;
     public BuyProductListViewAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
 
-    public BuyProductListViewAdapter(Context context, int resource, List<Product> items) {
+    public BuyProductListViewAdapter(Context context, int resource, List<Product> items,
+                                     TextView imponibile, TextView iva, TextView total) {
         super(context, resource, items);
+        this.total = total;
+        this.iva = iva;
+        this.imponibile = imponibile;
+        prods = items;
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -42,29 +60,78 @@ public class BuyProductListViewAdapter extends ArrayAdapter<Product> {
         final Product p = getItem(position);
 
         TextView title = (TextView) v.findViewById(R.id.title);
+        final TextView price = (TextView) v.findViewById(R.id.price);
         final TextView textViewQuantity = (TextView) v.findViewById(R.id.quantity);
+        final CheckBox check = (CheckBox) v.findViewById(R.id.selectedCheck);
+
         ImageButton add = (ImageButton) v.findViewById(R.id.add);
         ImageButton remove = (ImageButton) v.findViewById(R.id.remove);
-        refreshQuantity(textViewQuantity,p.getQuantity());
         title.setText(p.getTitle());
+
+        //handle modifying state
+        if (p.isModifying()) {
+            add.setVisibility(View.GONE);
+            remove.setVisibility(View.GONE);
+            check.setVisibility(View.VISIBLE);
+        }
+        else {
+            add.setVisibility(View.VISIBLE);
+            remove.setVisibility(View.VISIBLE);
+            check.setVisibility(View.GONE);
+        }
+        check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) p.goRemove(true);
+                else p.goRemove(false);
+            }
+        });
+        //Refresh quantities
+        refreshQuantity(textViewQuantity,p.getQuantity());
+        refreshQuantity(price,p);
+
+        //Set and and remove listeners
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 p.add();
+                refreshQuantity(price,p);
+                SharedUtils.addQuantity(getContext().getSharedPreferences(Statics.SHARED_PREF+"-cart", Context.MODE_PRIVATE),p.getId());
                 refreshQuantity(textViewQuantity,p.getQuantity());
+                refreshTotal();
             }
         });
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 p.remove();
+                refreshQuantity(price,p);
+                if (p.getQuantity() > 1) SharedUtils.removeQuantity(getContext().getSharedPreferences(Statics.SHARED_PREF+"-cart", Context.MODE_PRIVATE),p.getId());
                 refreshQuantity(textViewQuantity,p.getQuantity());
+                refreshTotal();
             }
         });
-
+        refreshTotal();
         return v;
+    }
+    public void refreshQuantity(TextView v, Product p) {
+        v.setText(String.format("%.2f",
+                p.getPromotionPrice() != 0 ? p.getPromotionPrice()*p.getQuantity() : p.getPrice()*p.getQuantity())+"€");
     }
     private void refreshQuantity(TextView v, int quantity) {
         v.setText("Quantità: "+quantity);
     }
+    public void refreshTotal() {
+        double num_imp = 0;
+        double num_iva = 0;
+        for (Product p : prods) {
+            num_imp += (p.getPromotionPrice() != 0) ? p.getPromotionPrice()*p.getQuantity() : p.getPrice()*p.getQuantity();
+            num_iva += (p.getPromotionPrice() != 0) ? (p.getPromotionPrice()*p.getIVA()/100)*p.getQuantity() :
+                    (p.getPrice()*p.getIVA()/100)*p.getQuantity();
+        }
+        imponibile.setText(String.format("%.2f",num_imp)+"€");
+        iva.setText("+"+String.format("%.2f",num_iva)+"€");
+        total.setText(String.format("%.2f",num_iva+num_imp)+"€");
+    }
+
 }

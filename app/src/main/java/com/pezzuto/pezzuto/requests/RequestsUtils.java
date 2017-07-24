@@ -27,6 +27,7 @@ public class RequestsUtils {
     public static String PRODOTTI = "prodotti";
     public static String CATEGORIE = "categorie";
     public static String EVENTI = "eventi";
+    public static String CERCA = "cerca";
 
     //Filtri
     public static String FILTER_CATEGORIA = "filtro/";
@@ -89,16 +90,16 @@ public class RequestsUtils {
 // Access the RequestQueue through your singleton class.
         VolleySingleton.getInstance(context).getRequestQueue().add(jsArrRequest);
     }
-    public static void sendOrderRequest(final Context context, String type, JSONObject order, Response.Listener<String> response) {
-           LaravelObjRequest request =  new LaravelObjRequest(Request.Method.POST, BASE_URL + type, order, response, new Response.ErrorListener() {
-               @Override
-               public void onErrorResponse(VolleyError error) {
-                   error.printStackTrace();
-                   Toast.makeText(context,"error: "+error.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
-               }
-           });
+    public static void sendOrderRequest(final Context context, String type, JSONObject order, Response.Listener<String> response, Response.ErrorListener error) {
+           LaravelObjRequest request =  new LaravelObjRequest(Request.Method.POST, BASE_URL + type, order, response, error);
         VolleySingleton.getInstance(context).getRequestQueue().add(request);
     }
+
+    public static void sendSearchRequest(final Context context, JSONObject search, Response.Listener<JSONArray> response, Response.ErrorListener error){
+        CustomRequest request =  new CustomRequest(Request.Method.POST,BASE_URL+CERCA,search,response,error);
+        VolleySingleton.getInstance(context).getRequestQueue().add(request);
+    }
+
     public static void sendProductRequest(final Context context, int id, Response.Listener<JSONObject> response){
         JsonObjectRequest request =  new JsonObjectRequest(BASE_URL+PRODOTTI+"/"+id,
                null,response,new Response.ErrorListener() {

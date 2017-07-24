@@ -1,4 +1,4 @@
-package com.pezzuto.pezzuto;
+package com.pezzuto.pezzuto.ui;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +24,7 @@ public class GraphicUtils {
         view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
         view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-        totalHeight = view.getMeasuredHeight()*(listAdapter.getCount()+1);
+        totalHeight = view.getMeasuredHeight()*(listAdapter.getCount());
 
         /*for (int i = 0; i < listAdapter.getCount(); i++) {
             view = listAdapter.getView(i, view, listView);
@@ -38,4 +38,5 @@ public class GraphicUtils {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
+
 }

@@ -21,10 +21,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.items.Promprod;
+import com.pezzuto.pezzuto.listeners.OnCartInteractionListener;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
 import com.pezzuto.pezzuto.requests.RequestsUtils;
+import com.pezzuto.pezzuto.ui.StickyHeaderFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,16 +49,25 @@ public class CustomerInfoFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
     private OnFragmentInteractionListener mListener;
+    private OnCartInteractionListener cartListener;
     private EditText ragioneSociale, pIVA, email, note;
     private TextInputLayout emailLayout, ragioneSocialeLayout, pIVALayout;
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor editor;
     String[] tipiConsegna = {"Ritiro in negozio","Spedizione"};
     Spinner spinner;
+    String type;
     public CustomerInfoFragment() {
         // Required empty public constructor
     }
-
+    public static CustomerInfoFragment newInstance(String type) {
+        CustomerInfoFragment f = new CustomerInfoFragment();
+        // Supply index input as an argument.
+        Bundle args = new Bundle();
+        args.putString("type", type);
+        f.setArguments(args);
+        return f;
+    }
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -66,7 +78,8 @@ public class CustomerInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Bundle args = getArguments();
+        type = args.getString("type");
     }
 
     @Override
@@ -97,13 +110,18 @@ public class CustomerInfoFragment extends Fragment {
         ragioneSociale.addTextChangedListener(new InfoTextWatcher(ragioneSociale));
         email.addTextChangedListener(new InfoTextWatcher(email));
         pIVA.addTextChangedListener(new InfoTextWatcher(pIVA));
-        mListener.getFab().setOnClickListener(new View.OnClickListener() {
+        if (type.equals("promotion")) mListener.getFab().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 submitForm();
             }
         });
-
+        else cartListener.getCartButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitForm();
+            }
+        });
         if (sharedPref.contains("ragione_sociale")) ragioneSociale.setText(sharedPref.getString("ragione_sociale",""));
         if (sharedPref.contains("partita_iva")) pIVA.setText(sharedPref.getString("partita_iva",""));
         if (sharedPref.contains("email")) email.setText(sharedPref.getString("email",""));
@@ -118,7 +136,11 @@ public class CustomerInfoFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-        } else {
+        }
+        else if (context instanceof OnCartInteractionListener) {
+            cartListener = (OnCartInteractionListener) context;
+        }
+        else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
@@ -184,7 +206,6 @@ public class CustomerInfoFragment extends Fragment {
         editor.apply();
         editor.commit();
         sendOrder();
-        Toast.makeText(getContext(), "Thank You!", Toast.LENGTH_SHORT).show();
     }
 
     private boolean validateEmail() {
@@ -244,11 +265,18 @@ public class CustomerInfoFragment extends Fragment {
         JSONObject order = createJSONOrder();
         mListener.startProgress();
         RequestsUtils.sendOrderRequest(getContext(), RequestsUtils.PROMOTION_ORDER, order, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                mListener.endProgressSuccessfully();
-            }
-        });
+                    @Override
+                    public void onResponse(String response) {
+                        mListener.endProgressSuccessfully();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mListener.endProgressWithError();
+                        Log.d("error",""+error.getLocalizedMessage());
+                    }
+                });
     }
     public JSONObject createJSONOrder() {
         JSONObject request = new JSONObject();
@@ -274,6 +302,7 @@ public class CustomerInfoFragment extends Fragment {
                     product.put("nome",p.getTitle());
                     product.put("quantita",""+p.getQuantity());
                     product.put("prezzo_promozione",String.format(Locale.ITALY,"%.2f",p.getPromotionPrice()));
+                    product.put("iva",""+p.getIVA());
                     prodotti.put(product);
                 }
             }

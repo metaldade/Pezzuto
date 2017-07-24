@@ -99,5 +99,6 @@
             android:inputType="textMultiLine"
             android:maxLength="300" />
     </android.support.design.widget.TextInputLayout>
+
 </LinearLayout>
 </ScrollView>

@@ -1,12 +1,15 @@
 package com.pezzuto.pezzuto;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
+import android.support.v4.util.ArraySet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pezzuto.pezzuto.items.Event;
+import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.requests.RequestsUtils;
 import com.squareup.picasso.Picasso;
 
@@ -17,9 +20,12 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Created by dade on 21/04/17.
@@ -70,4 +76,5 @@ public class Statics {
         array[i2] = array[i1];
         array[i1] = temp;
     }
+
 }

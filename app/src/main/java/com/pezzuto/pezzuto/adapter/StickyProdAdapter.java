@@ -68,8 +68,9 @@ public class StickyProdAdapter extends RecyclerView.Adapter<StickyProdAdapter.Vi
             @Override
             public void onClick(View view) {
                 listener.setSelectedProduct(p);
+                listener.collapseSearchView();
+                listener.removeSearchMenuVisibility();
                 listener.launchFragment(new ProductDetailFragment());
-
             }
         });
         viewHolder.title.setText(p.getTitle());

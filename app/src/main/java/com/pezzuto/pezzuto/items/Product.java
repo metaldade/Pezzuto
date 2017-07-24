@@ -20,6 +20,8 @@ public class Product {
     String thumbnail;
     private int id;
     private int idUser;
+    private boolean isModifying = false;
+    private boolean isRemoving = false;
     private double promotionPrice = 0;
     private int quantity = 0;
     public Product(int id, String code, String category, String title, String marca, double price, String measure, String thumbnail, String image, String description,
@@ -36,6 +38,14 @@ public class Product {
         this.description = description;
         this.featured = featured;
         this.IVA = IVA;
+    }
+    public Product(int id, String title, double price, double promotionPrice, int IVA, int quantity) {
+        this.id = id;
+        this.title = title;
+        this.price = price;
+        this.promotionPrice = promotionPrice;
+        this.IVA = IVA;
+        this.quantity = quantity;
     }
     public String getCategory() { return category; }
     public String getTitle() { return title; }
@@ -56,11 +66,23 @@ public class Product {
         return promotionPrice;
     }
     public void add() { quantity++; }
-    public void remove() { if (quantity > 0) quantity--; }
+    public void remove() { if (quantity > 1) quantity--; }
     public int getQuantity() { return quantity; }
     public void setCategory(String category) { this.category = category; }
     public void setLabel(String label) { this.label = label; }
     public String getLabel() { return label; }
     public String getThumbnail() { return thumbnail; }
     public int getId() { return id; }
+    public void goModify(boolean isModifying) {
+        this.isModifying = isModifying;
+    }
+    public void goRemove(boolean isRemoving) {
+        this.isRemoving = isRemoving;
+    }
+    public boolean isRemoving() {
+        return isRemoving;
+    }
+    public boolean isModifying() {
+        return isModifying;
+    }
 }

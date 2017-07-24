@@ -1,15 +1,25 @@
 package com.pezzuto.pezzuto;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.pezzuto.pezzuto.adapter.BuyProductListViewAdapter;
+import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
+import com.pezzuto.pezzuto.ui.GraphicUtils;
+import com.pezzuto.pezzuto.ui.UiUtils;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,9 +31,15 @@ import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
  */
 public class BottomBuyFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
-
+    private String type;
+    private List<Product> prods;
     private OnFragmentInteractionListener mListener;
-
+    private TextView total;
+    private TextView iva;
+    private TextView imponibile;
+    private ListView listViewProd;
+    private BuyProductListViewAdapter adapter;
+    private boolean isModifying = false;
     public BottomBuyFragment() {
         // Required empty public constructor
     }
@@ -32,21 +48,15 @@ public class BottomBuyFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment BottomBuyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BottomBuyFragment newInstance(String param1, String param2) {
-        BottomBuyFragment fragment = new BottomBuyFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        type = args.getString("type");
     }
 
     @Override
@@ -55,22 +65,67 @@ public class BottomBuyFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_bottom_buy, container, false);
         //get listView
-        ListView listViewProd = (ListView) v.findViewById(R.id.listViewProducts);
-
+        listViewProd = (ListView) v.findViewById(R.id.listViewProducts);
+        imponibile = (TextView) v.findViewById(R.id.priceImponibile);
+        total = (TextView) v.findViewById(R.id.priceTot);
+        iva = (TextView) v.findViewById(R.id.priceIva);
         //Set adapter
-        BuyProductListViewAdapter adapter = new BuyProductListViewAdapter(getContext(),R.layout.promotion_buy_list_item,mListener.getSelectedPromprod().getProducts());
+        if (type.equals("cart")) prods = SharedUtils.getProductsFromCart(getContext());
+        else prods = mListener.getSelectedPromprod().getProducts();
+        adapter = new BuyProductListViewAdapter(getContext(),R.layout.promotion_buy_list_item,prods,
+               imponibile, iva, total);
         listViewProd.setAdapter(adapter);
+        if (prods.size() > 0) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd);
         return v;
     }
-
+    public static BottomBuyFragment newInstance(String type) {
+        BottomBuyFragment f = new BottomBuyFragment();
+        // Supply index input as an argument.
+        Bundle args = new Bundle();
+        args.putString("type", type);
+        f.setArguments(args);
+        return f;
+    }
+    public void goModify(boolean modify) {
+        isModifying = modify;
+        for (Product p : prods) {
+            p.goModify(modify);
+        }
+        adapter.notifyDataSetChanged();
+    }
+    public boolean isModifying() {
+        return isModifying;
+    }
+    public boolean isAtLeastOneChecked() {
+        for (Product p : prods)
+            if (p.isRemoving()) return true;
+        return false;
+    }
+    public void undoRemoving() {
+        for (Product p : prods)
+            p.goRemove(false);
+    }
+    public void removeSelected() {
+        List<Product> prodsClone = new ArrayList<>();
+        prodsClone.addAll(prods);
+        for (Product p : prodsClone) {
+            if (p.isRemoving()) {
+                prods.remove(p);
+                SharedUtils.removeFromCart(getContext(),p);
+            }
+        }
+        adapter.notifyDataSetChanged();
+        if (prods.size() > 0) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd);
+    }
+    public boolean isCartEmpty() {
+        return prods.isEmpty();
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+        if (type != null && type.equals("cart")) return;
+        else if (context instanceof OnFragmentInteractionListener) {
+           mListener = (OnFragmentInteractionListener) context;
         }
     }
 

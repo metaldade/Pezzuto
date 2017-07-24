@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.pezzuto.pezzuto.MainActivity;
 import com.pezzuto.pezzuto.ParseUtils;
@@ -79,7 +80,7 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
     private ArrayList<String> categories;
     private StickyProdAdapter adapterProd;
     private StickyEventAdapter adapterEvent;
-
+    private String scope, query;
     private String type;
     private int category;
     @Override
@@ -130,15 +131,19 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
         Bundle args = getArguments();
         type = args.getString("type");
         category = args.getInt("category",NO_FILTER);
-
-        if (type.equals("promotions")) {
+        scope = args.getString("scope",null);
+        query = args.getString("query",null);
+        if (type.equals(MainActivity.PROMOTIONS)) {
             sendPromotionRequest();
             getActivity().setTitle("Promozioni");
             mListener.setFabVisible(false);
         }
-        else if (type.equals("products")) {
+        else if (type.equals(MainActivity.PRODUCTS)) {
             if (category != NO_FILTER) {
                 sendFilteredProductRequest();
+            }
+            else if (scope != null) {
+                sendSearchProdRequest(scope,query);
             }
             else {
                 sendProductRequest();
@@ -146,7 +151,7 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
             getActivity().setTitle("Prodotti");
             mListener.setProdFab();
         }
-        else if (type.equals("events")) {
+        else if (type.equals(MainActivity.EVENTS)) {
             getActivity().setTitle("Eventi");
             mListener.setFabVisible(false);
             sendEventRequest();
@@ -154,18 +159,18 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
     }
 
     public void refresh() {
-        if (type.equals("promotions")) {
+        if (type.equals(MainActivity.PROMOTIONS)) {
             sendPromotionRequest();
 
         }
-        else if (type.equals("products")) {
+        else if (type.equals(MainActivity.PRODUCTS)) {
             if (category != NO_FILTER) {
                 sendFilteredProductRequest();
             } else {
                 sendProductRequest();
             }
         }
-        if (type.equals("events")) {
+        if (type.equals(MainActivity.EVENTS)) {
             sendEventRequest();
 
         }
@@ -222,6 +227,17 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
         Bundle args = new Bundle();
         //category filter
         args.putInt("category", category);
+        args.putString("type", "products");
+        f.setArguments(args);
+        return f;
+    }
+    public static StickyHeaderFragment newProdInstance(String scope, String query) {
+        StickyHeaderFragment f = new StickyHeaderFragment();
+        // Supply index input as an argument.
+        Bundle args = new Bundle();
+        //category filter
+        args.putString("scope", scope);
+        args.putString("query", query);
         args.putString("type", "products");
         f.setArguments(args);
         return f;
@@ -312,7 +328,59 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
         }
     };
 
+public void sendSearchProdRequest(String scope, String query) {
+    RequestsUtils.sendSearchRequest(getContext(), createSearchJSON(scope, query), new Response.Listener<JSONArray>() {
+        @Override
+        public void onResponse(JSONArray response) {
+            Log.d("response",response.toString());
+            try {
+                JSONArray pr = response.getJSONObject(0).getJSONArray("prodotti");
+                prods.clear();
+                List<Product> products = ParseUtils.parseProducts(pr);
+                if (pr.length() == 0) mListener.setEmptyState(MainActivity.PROD_SEARCH);
+                //category division
+                TreeMap<String,List<Product>> catProducts = new TreeMap<>();
+                for (Product p : products) {
+                    String category = p.getCategory();
+                    List<Product> pros = new ArrayList<>();
+                    if (catProducts.containsKey(category)) pros = catProducts.get(category);
+                    pros.add(p);
+                    p.setLabel(category);
+                    catProducts.put(category,pros);
+                }
 
+                //insert in adapter
+                for (String cat : catProducts.keySet())
+                    for (Product p : catProducts.get(cat)) {
+                        prods.add(p);
+                    }
+
+
+                adapterProd.notifyDataSetChanged();
+            }
+            catch (JSONException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
+        }
+    });
+}
+    public JSONObject createSearchJSON(String scope, String query) {
+        JSONObject request = new JSONObject();
+        try {
+            JSONObject ricerca = new JSONObject();
+            ricerca.put("scope", scope);
+            ricerca.put("query",query);
+            request.put("ricerca",ricerca);
+        }
+
+        catch (JSONException ex ) {}
+        return request;
+    }
 
     @Override
     public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {

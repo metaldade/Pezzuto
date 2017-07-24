@@ -2,6 +2,7 @@ package com.pezzuto.pezzuto.listeners;
 
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
+import android.view.Menu;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.pezzuto.pezzuto.RefreshableFragment;
@@ -27,8 +28,10 @@ public interface OnFragmentInteractionListener {
     Product getSelectedProduct();
     Event getSelectedEvent();
 
-    //stop refreshing
+    //refreshing
     void stopRefresh();
+    void disableSwipeRefresh();
+    void enableSwipeRefresh();
 
     HashMap<String,Integer> getCategories();
 
@@ -56,4 +59,12 @@ public interface OnFragmentInteractionListener {
     void setProdFab();
     void setEmptyState(String type);
     void removeEmptyState();
+
+    //Menu
+    void setSearchVisible(boolean isVisible);
+    void setCartIconFull();
+    void setCartIconEmpty();
+    void removeSearchMenuVisibility();
+
+    void collapseSearchView();
 }

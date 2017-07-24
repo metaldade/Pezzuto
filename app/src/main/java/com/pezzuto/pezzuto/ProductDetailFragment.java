@@ -1,14 +1,17 @@
 package com.pezzuto.pezzuto;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.ArraySet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.pezzuto.pezzuto.items.Product;
@@ -21,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Locale;
+import java.util.Set;
 
 
 /**
@@ -35,7 +39,8 @@ public class ProductDetailFragment extends RefreshableFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private Product p;
-
+private SharedPreferences shre;
+    private SharedPreferences.Editor edit;
     private OnFragmentInteractionListener mListener;
     TextView category;
     TextView title;
@@ -65,6 +70,8 @@ private Product p;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         p = mListener.getSelectedProduct();
+        shre = getContext().getSharedPreferences(Statics.SHARED_PREF+"-cart",Context.MODE_PRIVATE);
+        edit = shre.edit();
     }
 
     @Override
@@ -79,11 +86,45 @@ private Product p;
         price = (TextView) v.findViewById(R.id.price);
         image = (ImageView) v.findViewById(R.id.image);
         mListener.setFabVisible(true);
-        mListener.getFab().setIcon(R.drawable.ic_cart);
+        mListener.disableSwipeRefresh();
         if (p == null) return v;
-
         fill();
+        if (checkIfInCart()) setFabRemove();
+        else setFabAdd();
         return v;
+    }
+    private void addToCart() {
+       SharedUtils.addToCart(getContext(),p);
+        mListener.setCartIconFull();
+        setFabRemove();
+    }
+    private void removeFromCart() {
+        SharedUtils.removeFromCart(getContext(),p);
+        if (SharedUtils.isCartEmpty(getContext())) mListener.setCartIconEmpty();
+        setFabAdd();
+    }
+    public void setFabAdd() {
+        mListener.getFab().setIcon(R.drawable.ic_add_shopping_cart);
+        mListener.getFab().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addToCart();
+            }
+        });
+    }
+    public void setFabRemove() {
+        mListener.getFab().setIcon(R.drawable.ic_remove_shopping_cart);
+        mListener.getFab().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeFromCart();
+            }
+        });
+    }
+    public boolean checkIfInCart() {
+        Set<String> products = shre.getStringSet("products", new ArraySet<String>());
+        if (products.contains(""+p.getId())) return true;
+        else return false;
     }
     public void fill() {
         category.setText(p.getCategory());
