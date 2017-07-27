@@ -122,7 +122,7 @@ public class PromotionDetailFragment extends RefreshableFragment {
             }
         });*/
 
-        GraphicUtils.setListViewHeightBasedOnChildren(listViewPromo);
+        GraphicUtils.setListViewHeightBasedOnChildren(listViewPromo,1);
         return v;
     }
 

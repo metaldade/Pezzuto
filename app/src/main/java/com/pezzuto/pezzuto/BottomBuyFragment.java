@@ -73,9 +73,10 @@ public class BottomBuyFragment extends Fragment {
         if (type.equals("cart")) prods = SharedUtils.getProductsFromCart(getContext());
         else prods = mListener.getSelectedPromprod().getProducts();
         adapter = new BuyProductListViewAdapter(getContext(),R.layout.promotion_buy_list_item,prods,
-               imponibile, iva, total);
+               imponibile, iva, total,type);
         listViewProd.setAdapter(adapter);
-        if (prods.size() > 0) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd);
+        if (prods.size() > 0 && type.equals("cart")) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
+        else GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,1);
         return v;
     }
     public static BottomBuyFragment newInstance(String type) {
@@ -115,7 +116,7 @@ public class BottomBuyFragment extends Fragment {
             }
         }
         adapter.notifyDataSetChanged();
-        if (prods.size() > 0) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd);
+        if (prods.size() > 0) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
     }
     public boolean isCartEmpty() {
         return prods.isEmpty();

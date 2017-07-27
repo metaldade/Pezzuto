@@ -39,9 +39,10 @@ public class Product {
         this.featured = featured;
         this.IVA = IVA;
     }
-    public Product(int id, String title, double price, double promotionPrice, int IVA, int quantity) {
+    public Product(int id, String title, String code, double price, double promotionPrice, int IVA, int quantity) {
         this.id = id;
         this.title = title;
+        this.code = code;
         this.price = price;
         this.promotionPrice = promotionPrice;
         this.IVA = IVA;
@@ -66,7 +67,7 @@ public class Product {
         return promotionPrice;
     }
     public void add() { quantity++; }
-    public void remove() { if (quantity > 1) quantity--; }
+    public void remove() { if (quantity > 0) quantity--; }
     public int getQuantity() { return quantity; }
     public void setCategory(String category) { this.category = category; }
     public void setLabel(String label) { this.label = label; }

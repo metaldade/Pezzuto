@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.ArraySet;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dd.CircularProgressButton;
 import com.pezzuto.pezzuto.adapter.CartListViewAdapter;
 import com.pezzuto.pezzuto.adapter.PromotionListViewAdapter;
 import com.pezzuto.pezzuto.items.Product;
@@ -31,6 +33,7 @@ import java.util.Set;
 
 public class CartActivity extends AppCompatActivity implements OnCartInteractionListener {
     Button order;
+    CircularProgressButton orderButton;
     int state = 1;
     BottomBuyFragment bottomBuyFragment = null;
     Menu menu;
@@ -43,8 +46,10 @@ public class CartActivity extends AppCompatActivity implements OnCartInteraction
             emptyIcon.setVisibility(View.VISIBLE);
         }
         else loadCartFragment();
-        order = (Button) findViewById(R.id.orderButton);
-        order.setText("Avanti");
+        order = (Button) findViewById(R.id.order);
+        orderButton = (CircularProgressButton) findViewById(R.id.orderButton);
+        orderButton.setText("Avanti");
+        orderButton.setIndeterminateProgressMode(true);
         setListeners();
     }
     public void loadCartFragment() {
@@ -53,20 +58,32 @@ public class CartActivity extends AppCompatActivity implements OnCartInteraction
         ft.replace(R.id.contentContainer, bottomBuyFragment).commit();
     }
     public void setListeners() {
-        order.setOnClickListener(new View.OnClickListener() {
+        orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (SharedUtils.isCartEmpty(getApplicationContext())) Toast.makeText(getApplicationContext(), "Inserisci almeno un elemento nel carrello per poter procedere",Toast.LENGTH_SHORT).show();
-                else {
+                else if (state == 1) {
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.contentContainer, CustomerInfoFragment.newInstance("cart")).commit();
-                    order.setText("Ordina");
+                    orderButton.setText("Ordina");
+                    menu.findItem(R.id.edit).setVisible(false);
                     state = 2;
                 }
             }
         });
     }
-    public Button getCartButton() { return order; }
+
+    public void startProgress() {
+        orderButton.setProgress(50);
+    }
+    public void endProgressSuccessfully() {
+        orderButton.setProgress(100);
+    }
+    public void endProgressWithError() {
+        Toast.makeText(this,"Errore, prego riprovare.",Toast.LENGTH_SHORT).show();
+        orderButton.setProgress(-1);
+    }
+    public CircularProgressButton getCartButton() { return orderButton; }
 
     @Override
     public void onBackPressed() {
@@ -78,6 +95,7 @@ public class CartActivity extends AppCompatActivity implements OnCartInteraction
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.contentContainer, bottomBuyFragment).commit();
             state = 1;
+            orderButton.setText("Avanti");
             setListeners();
         }
         else super.onBackPressed();
@@ -87,6 +105,9 @@ public class CartActivity extends AppCompatActivity implements OnCartInteraction
         bottomBuyFragment.goModify(false);
         menu.findItem(R.id.edit).setIcon(R.drawable.ic_edit);
         menu.findItem(R.id.remove).setVisible(false);
+    }
+    public void restoreCartButton() {
+        orderButton.setProgress(0);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

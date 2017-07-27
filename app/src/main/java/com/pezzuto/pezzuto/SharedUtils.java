@@ -24,6 +24,7 @@ public class SharedUtils {
             prods.add(new Product(
                             Integer.parseInt(id),
                             shre.getString(id+"_title",""),
+                            shre.getString(id+"_code",""),
                             (double) shre.getFloat(id+"_price",0),
                             (double) shre.getFloat(id+"_promotionPrice",0),
                             shre.getInt(id+"_IVA",0),
@@ -56,6 +57,7 @@ public class SharedUtils {
         edit.putInt(p.getId()+"_IVA",p.getIVA());
         edit.putFloat(p.getId()+"_price",(float) p.getPrice());
         edit.putInt(p.getId()+"_quantity",1);
+        edit.putString(p.getId()+"_code",p.getCode());
         edit.apply();
     }
     public static boolean isCartEmpty(Context context) {
@@ -70,6 +72,7 @@ public class SharedUtils {
         products.remove(""+p.getId());
         edit.remove(p.getId()+"_title");
         edit.remove(p.getId()+"_price");
+        edit.remove(p.getId()+"_code");
         edit.remove(p.getId()+"_quantity");
         edit.remove(p.getId()+"_promotionPrice");
         edit.remove(p.getId()+"_IVA");

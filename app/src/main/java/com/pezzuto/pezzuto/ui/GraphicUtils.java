@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
  */
 
 public class GraphicUtils {
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
+    public static void setListViewHeightBasedOnChildren(ListView listView, int type) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null)
             return;
@@ -24,7 +24,7 @@ public class GraphicUtils {
         view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
         view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-        totalHeight = view.getMeasuredHeight()*(listAdapter.getCount());
+        totalHeight = view.getMeasuredHeight()*(listAdapter.getCount()+type);
 
         /*for (int i = 0; i < listAdapter.getCount(); i++) {
             view = listAdapter.getView(i, view, listView);

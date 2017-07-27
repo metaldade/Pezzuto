@@ -10,8 +10,8 @@
         android:id="@+id/contentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="48dp"
-        />
+        android:layout_below="@+id/emptyIcon"
+        android:layout_toEndOf="@+id/emptyIcon" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,12 +20,32 @@
         android:drawableTop="@drawable/ic_cart_empty_black"
         android:visibility="gone"
         android:layout_centerInParent="true"/>
+    <com.dd.CircularProgressButton
+        android:id="@+id/orderButton"
+        android:layout_width="match_parent"
+        android:elevation="2dp"
+        android:layout_height="48dp"
+        android:textColor="@color/cpb_white"
+        android:text="Avanti"
+        android:textSize="18sp"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentBottom="true"
+        app:cpb_cornerRadius="8dp"
+        app:cpb_iconComplete="@drawable/ic_done"
+        app:cpb_iconError="@drawable/ic_close"
+        app:cpb_textIdle="Ordina"
+        app:cpb_selectorIdle="@drawable/idle_state_selector"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:text="Ordina"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
-        android:id="@+id/orderButton"
+        android:id="@+id/order"
         android:drawableLeft="@drawable/ic_cart"
         style="@style/Widget.AppCompat.Button.Colored" />
+
 </RelativeLayout>

@@ -62,7 +62,7 @@ public class CartFragment extends Fragment {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_cart, container, false);
         cart = (ListView) v.findViewById(R.id.listViewCart);
-        GraphicUtils.setListViewHeightBasedOnChildren(cart);
+        GraphicUtils.setListViewHeightBasedOnChildren(cart,1);
         shre = getContext().getSharedPreferences(Statics.SHARED_PREF+"-cart", Context.MODE_PRIVATE);
         edit = shre.edit();
         List<Product> prods = new ArrayList<>();

@@ -74,8 +74,8 @@ public class StickyProdAdapter extends RecyclerView.Adapter<StickyProdAdapter.Vi
             }
         });
         viewHolder.title.setText(p.getTitle());
-        viewHolder.category.setText(p.getCategory());
-        viewHolder.price.setText(String.format(Locale.ITALY,"%.2f",p.getPrice())+" €");
+        viewHolder.category.setText(p.getMarca());
+        viewHolder.price.setText(String.format(Locale.ITALY,"%.2f",p.getPrice())+" € /"+p.getMeasure());
         Statics.loadImage(context,p.getThumbnail(),viewHolder.image);
     }
 

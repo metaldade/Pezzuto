@@ -222,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
     public void doSearch(String scope, String query) {
         search_menu.findItem(R.id.search).collapseActionView();
+        removeEmptyState();
         launchProductFragment(scope,query);
     }
     @Override
@@ -420,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public FloatingActionButton getFab() { return fab; }
     public void launchSheet() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.bottomsheet, new BottomBuyFragment()).commit();
+        ft.replace(R.id.bottomsheet, BottomBuyFragment.newInstance("promotion")).commit();
         fab.setIcon(R.drawable.ic_arrow);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
@@ -459,15 +460,19 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
     public BottomSheetBehavior getBottomSheetBehavior() { return bottomSheetBehavior; }
     public void setProductSheetBehaviour() {
+
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN ||
+                        newState == BottomSheetBehavior.STATE_COLLAPSED) setFabVisible(true);
+                else setFabVisible(false);
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                fab.animate().scaleX(1 - slideOffset).scaleY(1 - slideOffset).setDuration(0).start();
             }
+
         });
     }
     public void setPromotionSheetBehaviour() {
@@ -476,9 +481,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_HIDDEN ||
                         newState == BottomSheetBehavior.STATE_COLLAPSED) fab.setIcon(R.drawable.ic_cart);
-                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+               /* if (newState == BottomSheetBehavior.STATE_DRAGGING) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                }
+                }*/
             }
 
             @Override

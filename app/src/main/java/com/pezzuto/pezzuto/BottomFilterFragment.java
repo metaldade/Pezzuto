@@ -68,7 +68,7 @@ public class BottomFilterFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int identifier = mListener.getCategories().get(cats[position]);
-                mListener.getBottomSheetBehavior().setState(BottomSheetBehavior.STATE_COLLAPSED);
+                mListener.getBottomSheetBehavior().setState(BottomSheetBehavior.STATE_HIDDEN);
                 mListener.launchProductFragment(identifier);
             }
         });

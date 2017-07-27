@@ -32,17 +32,19 @@ public class BuyProductListViewAdapter extends ArrayAdapter<Product> {
     TextView total;
     TextView imponibile;
     TextView iva;
+    String type;
     public BuyProductListViewAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
 
     public BuyProductListViewAdapter(Context context, int resource, List<Product> items,
-                                     TextView imponibile, TextView iva, TextView total) {
+                                     TextView imponibile, TextView iva, TextView total, String type) {
         super(context, resource, items);
         this.total = total;
         this.iva = iva;
         this.imponibile = imponibile;
         prods = items;
+        this.type = type;
     }
 
 
@@ -104,9 +106,12 @@ public class BuyProductListViewAdapter extends ArrayAdapter<Product> {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                p.remove();
+                if (type.equals("cart") && p.getQuantity() > 1) {
+                    p.remove();
+                    SharedUtils.removeQuantity(getContext().getSharedPreferences(Statics.SHARED_PREF+"-cart", Context.MODE_PRIVATE),p.getId());
+                }
+                else if (type.equals("promotion")) p.remove();
                 refreshQuantity(price,p);
-                if (p.getQuantity() > 1) SharedUtils.removeQuantity(getContext().getSharedPreferences(Statics.SHARED_PREF+"-cart", Context.MODE_PRIVATE),p.getId());
                 refreshQuantity(textViewQuantity,p.getQuantity());
                 refreshTotal();
             }

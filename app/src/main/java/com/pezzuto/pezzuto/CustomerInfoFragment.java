@@ -119,6 +119,12 @@ public class CustomerInfoFragment extends Fragment {
         else cartListener.getCartButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int progress = cartListener.getCartButton().getProgress();
+                if (progress == -1 || progress == 100) {
+                    cartListener.restoreCartButton();
+
+                    return;
+                }
                 submitForm();
             }
         });
@@ -263,17 +269,20 @@ public class CustomerInfoFragment extends Fragment {
     }
     public void sendOrder(){
         JSONObject order = createJSONOrder();
-        mListener.startProgress();
-        RequestsUtils.sendOrderRequest(getContext(), RequestsUtils.PROMOTION_ORDER, order, new Response.Listener<String>() {
+        if(type.equals("promotion")) mListener.startProgress();
+        if (type.equals("cart")) cartListener.startProgress();
+        RequestsUtils.sendOrderRequest(getContext(), type.equals("cart") ? RequestsUtils.PRODUCT_ORDER : RequestsUtils.PROMOTION_ORDER, order, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        mListener.endProgressSuccessfully();
+                       if (type.equals("promotion")) mListener.endProgressSuccessfully();
+                       if (type.equals("cart")) cartListener.endProgressSuccessfully();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        mListener.endProgressWithError();
+                        if (type.equals("promotion")) mListener.endProgressWithError();
+                        if (type.equals("cart")) cartListener.endProgressWithError();
                         Log.d("error",""+error.getLocalizedMessage());
                     }
                 });
@@ -287,28 +296,35 @@ public class CustomerInfoFragment extends Fragment {
             cliente.put("email",email.getText().toString().trim());
             cliente.put("tipo_consegna",spinner.getSelectedItemPosition() == 0 ? "Ritiro in negozio" : "Spedizione");
             cliente.put("note",note.getText().toString().trim());
-            JSONObject promozione = new JSONObject();
-
-            Promprod selectedPromprod = mListener.getSelectedPromprod();
-            promozione.put("id",selectedPromprod.getId());
-            promozione.put("nome",selectedPromprod.getTitle());
 
             JSONArray prodotti = new JSONArray();
-            for (Product p : selectedPromprod.getProducts()) {
+            List<Product> productsToInsert = type.equals("cart") ? SharedUtils.getProductsFromCart(getContext()) : mListener.getSelectedPromprod().getProducts();
+            for (Product p : productsToInsert) {
                 if (p.getQuantity() > 0) {
                     JSONObject product = new JSONObject();
                     product.put("id",p.getId());
                     product.put("codice",p.getCode());
                     product.put("nome",p.getTitle());
                     product.put("quantita",""+p.getQuantity());
-                    product.put("prezzo_promozione",String.format(Locale.ITALY,"%.2f",p.getPromotionPrice()));
+                    if (type.equals("promotion")) product.put("prezzo_promozione",String.format(Locale.ITALY,"%.2f",p.getPromotionPrice()));
+                    if (type.equals("cart")) product.put("prezzo",String.format(Locale.ITALY,"%.2f",p.getPromotionPrice() != 0 ? p.getPromotionPrice() : p.getPrice()));
                     product.put("iva",""+p.getIVA());
                     prodotti.put(product);
                 }
             }
-            promozione.put("prodotti",prodotti);
+            if (type.equals("promotion")) {
+                JSONObject promozione = new JSONObject();
+                promozione.put("id", mListener.getSelectedPromprod().getId());
+                promozione.put("nome", mListener.getSelectedPromprod().getTitle());
+                promozione.put("prodotti", prodotti);
+                request.put("promozione",promozione);
+            }
             request.put("cliente",cliente);
-            request.put("promozione",promozione);
+            if (type.equals("cart")) {
+                JSONObject items = new JSONObject();
+                items.put("items",prodotti);
+                request.put("prodotti",items);
+            }
 
         }
         catch (JSONException e) { e.printStackTrace(); }
