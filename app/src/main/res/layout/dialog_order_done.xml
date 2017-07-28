@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="L'ordine è stato inviato con successo. Ti aspettiamo in negozio per ritirare la merce."
+        android:text="L'ordine è stato inviato con successo"
         android:textAppearance="?android:textAppearanceMedium"
         android:textColor="@color/text_grey"
         android:gravity="center"/>

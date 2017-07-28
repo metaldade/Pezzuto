@@ -32,14 +32,17 @@ public interface OnFragmentInteractionListener {
     void stopRefresh();
     void disableSwipeRefresh();
     void enableSwipeRefresh();
+    void refreshCurrentFragment();
 
     HashMap<String,Integer> getCategories();
 
     //sheets
     void launchSheet();
     void launchFilterSheet();
+    void launchEventInfoFragment();
     void setPromotionSheetBehaviour();
     void setProductSheetBehaviour();
+    void setEventSheetBehaviour();
     BottomSheetBehavior getBottomSheetBehavior();
 
     //fragments

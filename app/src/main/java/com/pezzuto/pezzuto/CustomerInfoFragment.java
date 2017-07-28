@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -54,6 +55,7 @@ public class CustomerInfoFragment extends Fragment {
     private TextInputLayout emailLayout, ragioneSocialeLayout, pIVALayout;
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor editor;
+    private LinearLayout linearCustomer;
     String[] tipiConsegna = {"Ritiro in negozio","Spedizione"};
     Spinner spinner;
     String type;
@@ -110,6 +112,7 @@ public class CustomerInfoFragment extends Fragment {
         ragioneSociale.addTextChangedListener(new InfoTextWatcher(ragioneSociale));
         email.addTextChangedListener(new InfoTextWatcher(email));
         pIVA.addTextChangedListener(new InfoTextWatcher(pIVA));
+        linearCustomer = (LinearLayout) v.findViewById(R.id.linearCustomer);
         if (type.equals("promotion")) mListener.getFab().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -267,6 +270,9 @@ public class CustomerInfoFragment extends Fragment {
             }
         }
     }
+    public void setInvisible() {
+        linearCustomer.setVisibility(View.GONE);
+    }
     public void sendOrder(){
         JSONObject order = createJSONOrder();
         if(type.equals("promotion")) mListener.startProgress();
@@ -275,7 +281,9 @@ public class CustomerInfoFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                        if (type.equals("promotion")) mListener.endProgressSuccessfully();
-                       if (type.equals("cart")) cartListener.endProgressSuccessfully();
+                       if (type.equals("cart")) {
+                           cartListener.endOrderSuccessfully();
+                       }
                     }
                 },
                 new Response.ErrorListener() {

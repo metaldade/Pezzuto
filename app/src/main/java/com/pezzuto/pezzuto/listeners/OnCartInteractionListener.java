@@ -12,6 +12,8 @@ public interface OnCartInteractionListener {
     CircularProgressButton getCartButton();
     void startProgress();
     void endProgressSuccessfully();
+    void endOrderSuccessfully();
+    void goEmptyState(int state);
     void endProgressWithError();
     void restoreCartButton();
 }

@@ -7,11 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pezzuto.pezzuto.adapter.BuyProductListViewAdapter;
 import com.pezzuto.pezzuto.items.Product;
+import com.pezzuto.pezzuto.listeners.OnCartInteractionListener;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
 import com.pezzuto.pezzuto.ui.GraphicUtils;
 import com.pezzuto.pezzuto.ui.UiUtils;
@@ -34,6 +36,8 @@ public class BottomBuyFragment extends Fragment {
     private String type;
     private List<Product> prods;
     private OnFragmentInteractionListener mListener;
+    private OnCartInteractionListener cartListener;
+    LinearLayout linearBottomBuy;
     private TextView total;
     private TextView iva;
     private TextView imponibile;
@@ -69,6 +73,7 @@ public class BottomBuyFragment extends Fragment {
         imponibile = (TextView) v.findViewById(R.id.priceImponibile);
         total = (TextView) v.findViewById(R.id.priceTot);
         iva = (TextView) v.findViewById(R.id.priceIva);
+        linearBottomBuy = (LinearLayout) v.findViewById(R.id.linearBottomBuy);
         //Set adapter
         if (type.equals("cart")) prods = SharedUtils.getProductsFromCart(getContext());
         else prods = mListener.getSelectedPromprod().getProducts();
@@ -76,7 +81,7 @@ public class BottomBuyFragment extends Fragment {
                imponibile, iva, total,type);
         listViewProd.setAdapter(adapter);
         if (prods.size() > 0 && type.equals("cart")) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
-        else GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,1);
+        else GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
         return v;
     }
     public static BottomBuyFragment newInstance(String type) {
@@ -115,18 +120,26 @@ public class BottomBuyFragment extends Fragment {
                 SharedUtils.removeFromCart(getContext(),p);
             }
         }
-        adapter.notifyDataSetChanged();
-        if (prods.size() > 0) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
+        if (prods.isEmpty()) cartListener.goEmptyState(1);
+        if (prods.size() > 0) {
+            adapter.notifyDataSetChanged();
+            GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
+        }
     }
     public boolean isCartEmpty() {
         return prods.isEmpty();
     }
+    public void setInvisible() {
+        linearBottomBuy.setVisibility(View.GONE);
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (type != null && type.equals("cart")) return;
-        else if (context instanceof OnFragmentInteractionListener) {
+        if (context instanceof OnFragmentInteractionListener) {
            mListener = (OnFragmentInteractionListener) context;
+        }
+        else if (context instanceof OnCartInteractionListener) {
+            cartListener = (OnCartInteractionListener) context;
         }
     }
 

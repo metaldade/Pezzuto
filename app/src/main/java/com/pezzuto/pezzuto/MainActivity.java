@@ -86,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public static final String PROD_FILTER = "prod_filter";
     public static final String PROD_SEARCH = "prod_search";
 
+    //Activity requests
+    public static final int IS_CART_EMPTY= 1;
+
     private boolean isSearchVisible;
     Response.Listener<JSONArray> parseCatResponse = new Response.Listener<JSONArray>() {
         @Override
@@ -132,9 +135,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         // get the bottom sheet view
         llBottomSheet = (FrameLayout) findViewById(R.id.bottomsheet);
 
+
 // init the bottom sheet behavior
         bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
 
         bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -264,13 +269,24 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         switch (item.getItemId()) {
             case R.id.cartMenu:
                 Intent intent = new Intent(this,CartActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, IS_CART_EMPTY);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == IS_CART_EMPTY) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                search_menu.findItem(R.id.cartMenu).setIcon(R.drawable.ic_cart_empty);
+                if (lastFragment.getType().equals(PRODUCT_DETAIL)) fab.setIcon(R.drawable.ic_add_shopping_cart);
+            }
+            else search_menu.findItem(R.id.cartMenu).setIcon(R.drawable.ic_cart);
+        }
+    }
     private void hideKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -351,6 +367,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         ft.addToBackStack(null);
         lastFragment = f;
     }
+    public void refreshCurrentFragment() {
+        lastFragment.refresh();
+    }
     public void launchProductFragment(String scope, String query) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         RefreshableFragment f = StickyHeaderFragment.newProdInstance(scope,query);
@@ -430,6 +449,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         ft.replace(R.id.bottomsheet, CustomerInfoFragment.newInstance("promotion")).commit();
         fab.setIcon(R.drawable.ic_cart);
     }
+    public void launchEventInfoFragment() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.bottomsheet, new EventInfoFragment()).commit();
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
     public void launchFilterSheet() {
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -481,7 +505,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_HIDDEN ||
                         newState == BottomSheetBehavior.STATE_COLLAPSED) fab.setIcon(R.drawable.ic_cart);
-               /* if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+              /*  if (newState == BottomSheetBehavior.STATE_DRAGGING || newState == BottomSheetBehavior.STATE_SETTLING) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }*/
             }
@@ -496,6 +520,22 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                     fab.setIcon(R.drawable.ic_arrow);
                     fab.setOnClickListener(goOnListener);
                 }
+            }
+        });
+    }
+    public void setEventSheetBehaviour() {
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+              /*  if (newState == BottomSheetBehavior.STATE_DRAGGING || newState == BottomSheetBehavior.STATE_SETTLING
+                        || newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }*/
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
             }
         });
     }

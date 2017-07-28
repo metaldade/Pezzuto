@@ -68,14 +68,64 @@ public class SharedUtils {
     public static void removeFromCart(Context context, Product p) {
         SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF+"-cart", Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = shre.edit();
-        Set<String> products = shre.getStringSet("products", new ArraySet<String>());
-        products.remove(""+p.getId());
-        edit.remove(p.getId()+"_title");
-        edit.remove(p.getId()+"_price");
-        edit.remove(p.getId()+"_code");
-        edit.remove(p.getId()+"_quantity");
-        edit.remove(p.getId()+"_promotionPrice");
-        edit.remove(p.getId()+"_IVA");
+        removeFromCart(context,p.getId());
         edit.apply();
+    }
+    public static void removeFromCart(Context context, int id) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF+"-cart", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shre.edit();
+        Set<String> products = shre.getStringSet("products", new ArraySet<String>());
+        products.remove(""+id);
+        edit.remove(id+"_title");
+        edit.remove(id+"_price");
+        edit.remove(id+"_code");
+        edit.remove(id+"_quantity");
+        edit.remove(id+"_promotionPrice");
+        edit.remove(id+"_IVA");
+        edit.apply();
+    }
+    public static void emptyCart(Context context) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF+"-cart", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shre.edit();
+        Set<String> products = shre.getStringSet("products", new ArraySet<String>());
+        Set<String> prodClone = new ArraySet<>();
+        prodClone.addAll(products);
+        for (String id : prodClone) {
+            removeFromCart(context,Integer.parseInt(id));
+        }
+        //edit.putStringSet("products", new ArraySet<String>());
+    }
+    public static void addEvent(Context context, int idEvent, int participants) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF+"-events", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shre.edit();
+        Set<String> events = shre.getStringSet("events", new ArraySet<String>());
+        events.add(""+idEvent);
+        edit.putStringSet("events",events);
+        edit.putInt(idEvent+"_participants",participants);
+        edit.apply();
+    }
+    public static boolean removeEvent(Context context, int idEvent) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF+"-events", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shre.edit();
+        Set<String> events = shre.getStringSet("events", new ArraySet<String>());
+        if (events.contains(""+idEvent)) {
+            events.remove(""+idEvent);
+            edit.remove(idEvent+"_participants");
+            edit.putStringSet("events",events);
+            edit.apply();
+            return true;
+        }
+        else return false;
+    }
+    public static boolean isParticipating(Context context, int idEvent) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF+"-events", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shre.edit();
+        Set<String> events = shre.getStringSet("events", new ArraySet<String>());
+        if (events.contains(""+idEvent)) return true;
+        else return false;
+    }
+    public static int getParticipants(Context context, int idEvent) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF+"-events", Context.MODE_PRIVATE);
+        return shre.getInt(idEvent+"_participants",0);
     }
 }

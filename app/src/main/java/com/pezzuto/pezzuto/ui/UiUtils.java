@@ -16,7 +16,7 @@ public class UiUtils {
         // custom dialog
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_order_done);
-        dialog.setTitle("Title...");
+
 
         Button done = (Button) dialog.findViewById(R.id.buttonDone);
         // if button is clicked, close the custom dialog

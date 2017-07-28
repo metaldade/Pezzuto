@@ -1,16 +1,11 @@
-<ScrollView android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-
-    xmlns:tools="http://schemas.android.com/tools">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:id="@+id/linearCustomer"
-    android:padding="16dp"
-    tools:context="com.pezzuto.pezzuto.CustomerInfoFragment">
+    android:padding="8dp"
+    android:layout_height="match_parent"
+    tools:context="com.pezzuto.pezzuto.EventInfoFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -64,43 +59,31 @@
     </android.support.design.widget.TextInputLayout>
     <TextView
         android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
-        android:text="Queste informazioni serviranno per identificare il cliente e verranno richieste solo al primo ordine" />
-    <TextView
+        android:layout_marginTop="12dp"
+        android:text="Numero partecipanti"/>
+    <NumberPicker
+        android:id="@+id/np"
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        style="?android:textAppearanceMedium"
-        android:text="Informazioni ordine" />
-    <LinearLayout
+        />
+    <com.dd.CircularProgressButton
+        android:id="@+id/participateButton"
+        android:layout_width="match_parent"
+        android:elevation="2dp"
+        android:layout_height="48dp"
+        android:textColor="@color/cpb_white"
+        android:textSize="18sp"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
         android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Tipo di consegna" />
-        <Spinner
-            android:id="@+id/tipo_consegna"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/layout_note"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <EditText
-            android:id="@+id/note"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:hint="Note"
-            android:inputType="textMultiLine"
-            android:maxLength="300" />
-    </android.support.design.widget.TextInputLayout>
-
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentBottom="true"
+        app:cpb_cornerRadius="8dp"
+        app:cpb_iconComplete="@drawable/ic_done"
+        app:cpb_iconError="@drawable/ic_close"
+        app:cpb_textIdle="Partecipa"
+        app:cpb_selectorIdle="@drawable/idle_state_selector"/>
 </LinearLayout>
-</ScrollView>

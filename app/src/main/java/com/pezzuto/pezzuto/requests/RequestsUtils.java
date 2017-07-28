@@ -28,6 +28,8 @@ public class RequestsUtils {
     public static String CATEGORIE = "categorie";
     public static String EVENTI = "eventi";
     public static String CERCA = "cerca";
+    public static String PARTECIPA = "partecipa";
+    public static String NO_MORE = "nomore";
 
     //Filtri
     public static String FILTER_CATEGORIA = "filtro/";
@@ -112,8 +114,11 @@ public class RequestsUtils {
         });
         VolleySingleton.getInstance(context).getRequestQueue().add(request);
     }
-    public static void participateEventRequest(final Context context, int id, Response.Listener<String> response) {
-        StringRequest request = new StringRequest(Request.Method.GET,BASE_URL+EVENTI+"/"+id+"/"+EVENT_PARTICIPATE, response,null);
+    public static void sendEventRequest(final Context context, JSONObject eventRequest,
+                                        Response.Listener<String> response, Response.ErrorListener error, boolean isParticipating) {
+        LaravelObjRequest request =  new LaravelObjRequest(Request.Method.POST, BASE_URL + EVENTI+"/"+(isParticipating ? PARTECIPA : NO_MORE), eventRequest, response, error);
         VolleySingleton.getInstance(context).getRequestQueue().add(request);
     }
+
+
 }
