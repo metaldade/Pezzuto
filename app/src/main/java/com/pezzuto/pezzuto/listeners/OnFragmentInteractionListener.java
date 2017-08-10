@@ -70,4 +70,8 @@ public interface OnFragmentInteractionListener {
     void removeSearchMenuVisibility();
 
     void collapseSearchView();
+
+    void goOnProm();
+
+    void hideCartMenu();
 }

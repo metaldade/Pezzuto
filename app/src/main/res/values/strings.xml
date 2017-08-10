@@ -13,5 +13,11 @@
     <string name="err_msg_ragione_sociale">Inserisci la ragione sociale</string>
     <string name="err_msg_email">Inserisci un indirizzo email valido</string>
     <string name="err_msg_piva_empty">Inserisci la partita IVA</string>
+    <string name="err_msg_code_empty">Inserisci il codice cliente</string>
     <string name="err_msg_piva_characters">La partita deve essere di 11 cifre</string>
+    <string name="pezzuto">Pezzuto Osvaldo &amp; C. S.R.L.</string>
+    <string name="welcome_text">L\'applicazione è dedicata ai possessori di partita IVA ed ai privati.</string>
+    <string name="events_text">Tutte le informazioni sui nostri eventi e gli incontri con le aziende a portata di tap.</string>
+    <string name="remain_updated_text">Attiva le notifiche per rimanere sempre aggiornato sulle nostre promozioni e non perdere mai l\'occasione di risparmiare
+        sul tuo prossimo acquisto.</string>
 </resources>

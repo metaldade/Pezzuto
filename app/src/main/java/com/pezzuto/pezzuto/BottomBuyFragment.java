@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.dd.CircularProgressButton;
 import com.pezzuto.pezzuto.adapter.BuyProductListViewAdapter;
 import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.listeners.OnCartInteractionListener;
@@ -44,6 +45,11 @@ public class BottomBuyFragment extends Fragment {
     private ListView listViewProd;
     private BuyProductListViewAdapter adapter;
     private boolean isModifying = false;
+    private CircularProgressButton goOn;
+
+    private static final String CART = "cart";
+    private static final String PROMOTION = "promotion";
+
     public BottomBuyFragment() {
         // Required empty public constructor
     }
@@ -74,13 +80,26 @@ public class BottomBuyFragment extends Fragment {
         total = (TextView) v.findViewById(R.id.priceTot);
         iva = (TextView) v.findViewById(R.id.priceIva);
         linearBottomBuy = (LinearLayout) v.findViewById(R.id.linearBottomBuy);
+
+        //set goOnButton
+        goOn = (CircularProgressButton) v.findViewById(R.id.goOnButton);
+        if (type.equals(PROMOTION)) goOn.setVisibility(View.VISIBLE);
+        goOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.goOnProm();
+            }
+        });
+
         //Set adapter
-        if (type.equals("cart")) prods = SharedUtils.getProductsFromCart(getContext());
+        if (type.equals(CART)) prods = SharedUtils.getProductsFromCart(getContext());
         else prods = mListener.getSelectedPromprod().getProducts();
-        adapter = new BuyProductListViewAdapter(getContext(),R.layout.promotion_buy_list_item,prods,
+        if (type.equals(PROMOTION)) adapter = new BuyProductListViewAdapter(getContext(),R.layout.promotion_buy_list_item,prods,
                imponibile, iva, total,type);
+        else adapter = new BuyProductListViewAdapter(getContext(),R.layout.promotion_buy_list_item,prods,
+                imponibile, iva, total,type, cartListener);
         listViewProd.setAdapter(adapter);
-        if (prods.size() > 0 && type.equals("cart")) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
+        if (prods.size() > 0 && type.equals(CART)) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
         else GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
         return v;
     }
@@ -142,7 +161,9 @@ public class BottomBuyFragment extends Fragment {
             cartListener = (OnCartInteractionListener) context;
         }
     }
-
+    public void adjustListView() {
+        GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
+    }
     @Override
     public void onDetach() {
         super.onDetach();

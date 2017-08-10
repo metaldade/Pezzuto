@@ -1,6 +1,7 @@
 <ScrollView android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -90,5 +91,23 @@
             android:layout_marginBottom="8dp"
             android:text="2786.48€" />
     </RelativeLayout>
+    <com.dd.CircularProgressButton
+        android:id="@+id/goOnButton"
+        android:layout_width="match_parent"
+        android:elevation="2dp"
+        android:layout_height="48dp"
+        android:textColor="@color/cpb_white"
+        android:textSize="18sp"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentBottom="true"
+        app:cpb_cornerRadius="8dp"
+        app:cpb_iconComplete="@drawable/ic_done"
+        app:cpb_iconError="@drawable/ic_close"
+        app:cpb_textIdle="Avanti"
+        app:cpb_selectorIdle="@drawable/idle_state_selector"/>
 </LinearLayout>
 </ScrollView>

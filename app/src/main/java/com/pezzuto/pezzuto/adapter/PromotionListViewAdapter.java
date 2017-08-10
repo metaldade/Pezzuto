@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.pezzuto.pezzuto.R;
+import com.pezzuto.pezzuto.SharedUtils;
+import com.pezzuto.pezzuto.Statics;
 import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.items.Promotion;
 
@@ -20,12 +22,14 @@ import java.util.Locale;
  */
 
 public class PromotionListViewAdapter extends ArrayAdapter<Product> {
+    Context context;
     public PromotionListViewAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
 
     public PromotionListViewAdapter(Context context, int resource, List<Product> items) {
         super(context, resource, items);
+        this.context = context;
     }
 
     @Override
@@ -38,7 +42,7 @@ public class PromotionListViewAdapter extends ArrayAdapter<Product> {
             vi = LayoutInflater.from(getContext());
             v = vi.inflate(R.layout.promotion_list_item, null);
         }
-
+        boolean isPrivate = SharedUtils.isPrivateMember(context);
         Product p = getItem(position);
 
         if (p != null) {
@@ -52,11 +56,11 @@ public class PromotionListViewAdapter extends ArrayAdapter<Product> {
             }
 
             if (oldPrice != null) {
-                oldPrice.setText(String.format(Locale.ITALY,"%.2f",p.getPrice()));
+                oldPrice.setText(String.format(Locale.ITALY,"%.2f",(isPrivate ? Statics.privateSurplus(p.getPrice()) : p.getPrice())));
             }
 
             if (price != null) {
-                price.setText(String.format (Locale.ITALY,"%.2f", p.getPromotionPrice()));
+                price.setText(String.format (Locale.ITALY,"%.2f", (isPrivate ? Statics.privateSurplus(p.getPromotionPrice()) : p.getPromotionPrice())));
             }
         }
 

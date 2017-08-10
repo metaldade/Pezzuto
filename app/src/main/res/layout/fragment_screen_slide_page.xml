@@ -1,0 +1,69 @@
+<!-- fragment_screen_slide_page.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".50"
+        android:background="#FFF"/>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight=".50">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/divider1"
+        android:background="#22000000"/>
+    <TextView style="?android:textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/divider1"
+        android:id="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:text="Benvenuto" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:id="@+id/text1"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_below="@id/title"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:text="Quest'app è dedicata a possessori di partita IVA e privati." />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp"
+        android:orientation="vertical">
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Avanti"
+        android:id="@+id/goOnButton"
+        style="@style/Base.Widget.AppCompat.Button.Colored" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textAllCaps="false"
+            android:visibility="invisible"
+            android:text="Non voglio rimanere aggiornato"
+            android:id="@+id/notUpdatedButton"
+            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+            />
+    </LinearLayout>
+</RelativeLayout>
+</LinearLayout>

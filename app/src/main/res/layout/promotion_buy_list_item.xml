@@ -49,11 +49,14 @@
         android:src="@drawable/ic_remove"
         style="?android:attr/borderlessButtonStyle"
         />
-    <CheckBox android:id="@+id/selectedCheck"
+    <ImageButton android:id="@+id/removeItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:visibility="gone"
-        android:layout_marginRight="12dp"/>
+        android:background="@null"
+        android:src="@drawable/ic_delete_red"
+        android:visibility="visible"
+        android:layout_marginRight="16dp"/>
 </RelativeLayout>

@@ -19,6 +19,7 @@ package com.pezzuto.pezzuto.adapter;
 import android.content.Context;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 import com.pezzuto.pezzuto.ProductDetailFragment;
 import com.pezzuto.pezzuto.PromotionDetailFragment;
 import com.pezzuto.pezzuto.R;
+import com.pezzuto.pezzuto.SharedUtils;
 import com.pezzuto.pezzuto.Statics;
 import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.items.Promprod;
@@ -73,9 +75,12 @@ public class StickyProdAdapter extends RecyclerView.Adapter<StickyProdAdapter.Vi
                 listener.launchFragment(new ProductDetailFragment());
             }
         });
+        boolean isPrivate = SharedUtils.isPrivateMember(context);
         viewHolder.title.setText(p.getTitle());
         viewHolder.category.setText(p.getMarca());
-        viewHolder.price.setText(String.format(Locale.ITALY,"%.2f",p.getPrice())+" € /"+p.getMeasure());
+        viewHolder.price.setText(String.format(Locale.ITALY,"%.2f", (isPrivate ? Statics.privateSurplus(p.getPrice()) : p.getPrice())
+        )+" € / "+p.getMeasure());
+        Log.d("prezzo",""+p.getPrice());
         Statics.loadImage(context,p.getThumbnail(),viewHolder.image);
     }
 

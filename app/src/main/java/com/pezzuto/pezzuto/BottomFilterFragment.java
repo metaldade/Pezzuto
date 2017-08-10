@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
@@ -32,6 +33,7 @@ public class BottomFilterFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private ListView categories;
+    private Button primoPianoButton;
     public BottomFilterFragment() {
         // Required empty public constructor
     }
@@ -54,13 +56,23 @@ public class BottomFilterFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_bottom_filter, container, false);
         categories = (ListView) v.findViewById(R.id.categories);
+        primoPianoButton = (Button) v.findViewById(R.id.primoPiano);
         cats = new String[mListener.getCategories().keySet().size()];
         mListener.getCategories().keySet().toArray(cats);
 
-        //Individua primo piano e SWAPPA
+        //Individua primo piano e rimuovi
+        Arrays.sort(cats);
         int primoPiano = Arrays.binarySearch(cats,"In primo piano");
-        Statics.swap(cats,0,primoPiano);
+        cats = removeIndex(cats,primoPiano);
 
+        primoPianoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int identifier = mListener.getCategories().get("In primo piano");
+                mListener.getBottomSheetBehavior().setState(BottomSheetBehavior.STATE_HIDDEN);
+                mListener.launchProductFragment(identifier);
+            }
+        });
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_list_item_1, android.R.id.text1,cats);
         categories.setAdapter(adapter);
@@ -74,7 +86,14 @@ public class BottomFilterFragment extends Fragment {
         });
         return v;
     }
-
+    public String[] removeIndex(String[] original, int index) {
+        String[] arr = new String[original.length-1];
+        for (int i = 0; i < index; i++)
+            arr[i] = original[i];
+        for (int i = index+1; i < original.length; i++)
+            arr[i-1] = original[i];
+        return arr;
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

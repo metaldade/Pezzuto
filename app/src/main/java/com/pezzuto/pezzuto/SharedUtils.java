@@ -128,4 +128,24 @@ public class SharedUtils {
         SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF+"-events", Context.MODE_PRIVATE);
         return shre.getInt(idEvent+"_participants",0);
     }
+    public static boolean isFirstRun(Context context) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF+"-cart", Context.MODE_PRIVATE);
+        return shre.getBoolean("first_run",true);
+    }
+    public static void noMoreFirstRun(Context context) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shre.edit();
+        edit.putBoolean("first_run", false);
+        edit.apply();
+    }
+    public static boolean isPrivateMember(Context context) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF, Context.MODE_PRIVATE);
+        return shre.getBoolean("private_member",true);
+    }
+    public static void setPrivateMember(Context context, boolean isPrivate) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shre.edit();
+        edit.putBoolean("private_member",isPrivate);
+        edit.apply();
+    }
 }

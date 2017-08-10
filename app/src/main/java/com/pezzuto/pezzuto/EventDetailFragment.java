@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -149,6 +150,14 @@ public class EventDetailFragment extends RefreshableFragment {
         }
         else {
             Statics.loadImage(getContext(), event.getImage(),image);
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(),ImageViewerActivity.class);
+                    intent.putExtra("image",event.getImage());
+                    startActivity(intent);
+                }
+            });
             insertParticipateButton(true);
         }
 
@@ -191,7 +200,6 @@ public class EventDetailFragment extends RefreshableFragment {
     public void insertParticipateButton(boolean withImage) {
         //create button
         b = new Button(getContext());
-        if (SharedUtils.isParticipating(getContext(),mListener.getSelectedEvent().getId()))
             checkParticipateButton();
 
         RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);

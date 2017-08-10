@@ -1,0 +1,116 @@
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.pezzuto.pezzuto.ClientAuthenticationFragment">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/close"
+        android:textAllCaps="false"
+        android:layout_gravity="right"
+        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
+        android:text="Chiudi"/>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:textAppearance="?android:textAppearanceLarge"
+    android:text="Autenticazione cliente"
+    android:layout_gravity="center_horizontal"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="32dp"
+        android:layout_marginLeft="32dp"
+        android:text="Inserisci i dati della tua azienda per conoscere i prezzi a te riservati"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"/>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/layout_ragione_sociale"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/ragione_sociale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:inputType="text"
+            android:maxLines="1"
+            android:hint="Ragione sociale" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/layout_partita_iva"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/partita_iva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Partita iva"
+            android:inputType="number"
+            android:maxLength="11" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/layout_email"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/layout_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp">
+
+        <EditText
+            android:id="@+id/code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Codice azienda"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:maxLines="1" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:id="@+id/login"
+        style="@style/Base.Widget.AppCompat.Button.Colored"
+        android:text="Accedi"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="Non conosci il tuo codice azienda?"
+        android:layout_marginBottom="32dp"
+        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"/>
+
+</LinearLayout>
+</ScrollView>

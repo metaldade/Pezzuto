@@ -1,6 +1,7 @@
 package com.pezzuto.pezzuto;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -90,6 +91,14 @@ public class PromotionDetailFragment extends RefreshableFragment {
 
         //load image
         Statics.loadImage(getContext(),p.getImage(),image);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),ImageViewerActivity.class);
+                intent.putExtra("image",p.getImage());
+                startActivity(intent);
+            }
+        });
         Log.d("image:",p.getImage());
 
         //get listView

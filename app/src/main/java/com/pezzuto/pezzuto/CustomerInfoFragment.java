@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.TextViewCompat;
@@ -23,12 +24,14 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.dd.CircularProgressButton;
 import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.items.Promprod;
 import com.pezzuto.pezzuto.listeners.OnCartInteractionListener;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
 import com.pezzuto.pezzuto.requests.RequestsUtils;
 import com.pezzuto.pezzuto.ui.StickyHeaderFragment;
+import com.pezzuto.pezzuto.ui.UiUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +59,7 @@ public class CustomerInfoFragment extends Fragment {
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor editor;
     private LinearLayout linearCustomer;
+    private CircularProgressButton orderButton;
     String[] tipiConsegna = {"Ritiro in negozio","Spedizione"};
     Spinner spinner;
     String type;
@@ -107,6 +111,22 @@ public class CustomerInfoFragment extends Fragment {
         email = (EditText) v.findViewById(R.id.email);
         note = (EditText) v.findViewById(R.id.note);
         emailLayout = (TextInputLayout) v.findViewById(R.id.layout_email);
+
+        //set order button
+        orderButton = (CircularProgressButton) v.findViewById(R.id.orderButton);
+        if (type.equals("promotion")) {
+            orderButton.setVisibility(View.VISIBLE);
+            orderButton.setIndeterminateProgressMode(true);
+            orderButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int progress = orderButton.getProgress();
+                    if (progress == -1) orderButton.setProgress(0);
+                    submitForm();
+                }
+            });
+        }
+
         ragioneSocialeLayout = (TextInputLayout) v.findViewById(R.id.layout_ragione_sociale);
         pIVALayout = (TextInputLayout) v.findViewById(R.id.layout_partita_iva);
         ragioneSociale.addTextChangedListener(new InfoTextWatcher(ragioneSociale));
@@ -275,12 +295,15 @@ public class CustomerInfoFragment extends Fragment {
     }
     public void sendOrder(){
         JSONObject order = createJSONOrder();
-        if(type.equals("promotion")) mListener.startProgress();
+        if(type.equals("promotion")) orderButton.setProgress(50);
         if (type.equals("cart")) cartListener.startProgress();
         RequestsUtils.sendOrderRequest(getContext(), type.equals("cart") ? RequestsUtils.PRODUCT_ORDER : RequestsUtils.PROMOTION_ORDER, order, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                       if (type.equals("promotion")) mListener.endProgressSuccessfully();
+                       if (type.equals("promotion")) {
+                           orderButton.setProgress(100);
+                           UiUtils.createOrderDoneDialog(getContext(),mListener);
+                       }
                        if (type.equals("cart")) {
                            cartListener.endOrderSuccessfully();
                        }
@@ -289,7 +312,10 @@ public class CustomerInfoFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if (type.equals("promotion")) mListener.endProgressWithError();
+                        if (type.equals("promotion")) {
+                            orderButton.setProgress(-1);
+                            //mListener.endProgressWithError();
+                        }
                         if (type.equals("cart")) cartListener.endProgressWithError();
                         Log.d("error",""+error.getLocalizedMessage());
                     }

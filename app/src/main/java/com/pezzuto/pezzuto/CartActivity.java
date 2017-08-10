@@ -45,7 +45,7 @@ public class CartActivity extends AppCompatActivity implements OnCartInteraction
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
         emptyIcon = (TextView) findViewById(R.id.emptyIcon);
-
+        setTitle("Carrello");
         order = (Button) findViewById(R.id.order);
         orderButton = (CircularProgressButton) findViewById(R.id.orderButton);
         orderButton.setText("Avanti");
@@ -108,6 +108,9 @@ public class CartActivity extends AppCompatActivity implements OnCartInteraction
     private void removeAllFragments() {
         getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentById(R.id.contentContainer)).commit();
     }
+    public void adjustListView() {
+        bottomBuyFragment.adjustListView();
+    }
     public void startProgress() {
         orderButton.setProgress(50);
     }
@@ -146,7 +149,6 @@ public class CartActivity extends AppCompatActivity implements OnCartInteraction
         bottomBuyFragment.undoRemoving();
         bottomBuyFragment.goModify(false);
         menu.findItem(R.id.edit).setIcon(R.drawable.ic_edit);
-        menu.findItem(R.id.remove).setVisible(false);
     }
     public void restoreCartButton() {
         orderButton.setProgress(0);
@@ -155,7 +157,6 @@ public class CartActivity extends AppCompatActivity implements OnCartInteraction
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.modify, menu);
-        menu.findItem(R.id.remove).setVisible(false);
         if (SharedUtils.isCartEmpty(this)) menu.findItem(R.id.edit).setVisible(false);
         this.menu = menu;
         return true;
@@ -173,14 +174,6 @@ public class CartActivity extends AppCompatActivity implements OnCartInteraction
                 else {
                     bottomBuyFragment.goModify(true);
                     menu.findItem(R.id.edit).setIcon(R.drawable.ic_close);
-                    menu.findItem(R.id.remove).setVisible(true);
-                }
-                return super.onOptionsItemSelected(item);
-            case R.id.remove:
-                if (!bottomBuyFragment.isAtLeastOneChecked()) Toast.makeText(this,"Selezionare almeno un elemento da eliminare", Toast.LENGTH_SHORT).show();
-                else {
-                    bottomBuyFragment.removeSelected();
-                    restoreBaseState();
                 }
                 return super.onOptionsItemSelected(item);
             default:

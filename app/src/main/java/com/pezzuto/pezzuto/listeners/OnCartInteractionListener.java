@@ -16,4 +16,5 @@ public interface OnCartInteractionListener {
     void goEmptyState(int state);
     void endProgressWithError();
     void restoreCartButton();
+    void adjustListView();
 }

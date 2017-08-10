@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public static final String PROD_FILTER = "prod_filter";
     public static final String PROD_SEARCH = "prod_search";
 
+    public static final int FIRST_RUN_CODE = 0;
+
     //Activity requests
     public static final int IS_CART_EMPTY= 1;
 
@@ -126,6 +128,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         emptyState = (TextView) findViewById(R.id.emptyIcon);
         progressCircle = (FABProgressCircle) findViewById(R.id.fabProgressCircle);
         progressCircle.attachListener(this);
+
+        //First Run Check
+        if (SharedUtils.isFirstRun(this)) {
+            Intent intent = new Intent(this, FirstRunActivity.class);
+            startActivityForResult(intent,FIRST_RUN_CODE);
+        }
 
         handleIntent(getIntent());
 
@@ -235,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.cart, menu);
         inflater.inflate(R.menu.search_menu, menu);
+        inflater.inflate(R.menu.contacts, menu);
         search_menu = menu;
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         checkCartIcon();
@@ -260,8 +269,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         return true;
     }
     public void checkCartIcon() {
-        if (isCartEmpty()) search_menu.findItem(R.id.cartMenu).setIcon(R.drawable.ic_cart_empty);
+        if (lastFragment.getType().equals(PROMOTIONS) || lastFragment.getType().equals(EVENTS)) search_menu.findItem(R.id.cartMenu).setVisible(false);
+        else if (isCartEmpty()) search_menu.findItem(R.id.cartMenu).setIcon(R.drawable.ic_cart_empty);
         else search_menu.findItem(R.id.cartMenu).setIcon(R.drawable.ic_cart);
+    }
+    public void hideCartMenu() {
+        search_menu.findItem(R.id.cartMenu).setVisible(false);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -270,6 +283,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case R.id.cartMenu:
                 Intent intent = new Intent(this,CartActivity.class);
                 startActivityForResult(intent, IS_CART_EMPTY);
+                return true;
+            case R.id.contactsMenu:
+                Intent intent2 = new Intent(this,ContactsActivity.class);
+                startActivity(intent2);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -285,6 +302,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 if (lastFragment.getType().equals(PRODUCT_DETAIL)) fab.setIcon(R.drawable.ic_add_shopping_cart);
             }
             else search_menu.findItem(R.id.cartMenu).setIcon(R.drawable.ic_cart);
+        }
+        if (requestCode == FIRST_RUN_CODE) {
+            if (resultCode == FirstRunActivity.CLOSE_APP) finish();
         }
     }
     private void hideKeyboard() {
@@ -473,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             launchFragment(PRODUCTS);
         }
         else {
-            super.onBackPressed();
+            finish();
         }
     }
     public void stopRefresh() {
@@ -503,11 +523,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_HIDDEN ||
-                        newState == BottomSheetBehavior.STATE_COLLAPSED) fab.setIcon(R.drawable.ic_cart);
+               // if (newState == BottomSheetBehavior.STATE_HIDDEN ||
+                   //     newState == BottomSheetBehavior.STATE_COLLAPSED) fab.setIcon(R.drawable.ic_cart);
               /*  if (newState == BottomSheetBehavior.STATE_DRAGGING || newState == BottomSheetBehavior.STATE_SETTLING) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }*/
+                if (newState == BottomSheetBehavior.STATE_HIDDEN ||
+                        newState == BottomSheetBehavior.STATE_COLLAPSED) setFabVisible(true);
+                else setFabVisible(false);
             }
 
             @Override
@@ -542,11 +565,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     View.OnClickListener goOnListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (isAlmostOneSelected(selected.getProducts()))
-                launchSheetInfoFragment();
-            else Toast.makeText(getApplicationContext(),"Scegli almeno un prodotto",Toast.LENGTH_SHORT).show();
+            goOnProm();
         }
     };
+    public void goOnProm(){
+        if (isAlmostOneSelected(selected.getProducts()))
+            launchSheetInfoFragment();
+        else Toast.makeText(getApplicationContext(),"Scegli almeno un prodotto",Toast.LENGTH_SHORT).show();
+    }
     View.OnClickListener sheetListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

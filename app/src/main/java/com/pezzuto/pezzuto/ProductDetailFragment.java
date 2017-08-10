@@ -1,6 +1,7 @@
 package com.pezzuto.pezzuto;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -133,6 +134,14 @@ private SharedPreferences shre;
         marca.setText(p.getMarca());
         price.setText(String.format(Locale.ITALY,"%.2f",p.getPromotionPrice() == 0 ? p.getPrice() : p.getPromotionPrice())+"€ /"+p.getMeasure()+" + "+p.getIVA()+"% IVA");
         Statics.loadImage(getContext(),p.getImage(),image);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),ImageViewerActivity.class);
+                intent.putExtra("image",p.getImage());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

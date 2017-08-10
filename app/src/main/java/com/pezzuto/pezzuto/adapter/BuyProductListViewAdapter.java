@@ -19,6 +19,7 @@ import com.pezzuto.pezzuto.R;
 import com.pezzuto.pezzuto.SharedUtils;
 import com.pezzuto.pezzuto.Statics;
 import com.pezzuto.pezzuto.items.Product;
+import com.pezzuto.pezzuto.listeners.OnCartInteractionListener;
 
 import java.util.List;
 import java.util.Locale;
@@ -33,6 +34,7 @@ public class BuyProductListViewAdapter extends ArrayAdapter<Product> {
     TextView imponibile;
     TextView iva;
     String type;
+    OnCartInteractionListener mListener;
     public BuyProductListViewAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
@@ -45,6 +47,16 @@ public class BuyProductListViewAdapter extends ArrayAdapter<Product> {
         this.imponibile = imponibile;
         prods = items;
         this.type = type;
+    }
+    public BuyProductListViewAdapter(Context context, int resource, List<Product> items,
+                                     TextView imponibile, TextView iva, TextView total, String type, OnCartInteractionListener mListener) {
+        super(context, resource, items);
+        this.total = total;
+        this.iva = iva;
+        this.imponibile = imponibile;
+        prods = items;
+        this.type = type;
+        this.mListener = mListener;
     }
 
 
@@ -64,7 +76,17 @@ public class BuyProductListViewAdapter extends ArrayAdapter<Product> {
         TextView title = (TextView) v.findViewById(R.id.title);
         final TextView price = (TextView) v.findViewById(R.id.price);
         final TextView textViewQuantity = (TextView) v.findViewById(R.id.quantity);
-        final CheckBox check = (CheckBox) v.findViewById(R.id.selectedCheck);
+        final ImageButton delete = (ImageButton) v.findViewById(R.id.removeItem);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedUtils.removeFromCart(getContext(),p);
+                prods.remove(p);
+                notifyDataSetChanged();
+                refreshTotal();
+                mListener.adjustListView();
+            }
+        });
 
         ImageButton add = (ImageButton) v.findViewById(R.id.add);
         ImageButton remove = (ImageButton) v.findViewById(R.id.remove);
@@ -74,20 +96,13 @@ public class BuyProductListViewAdapter extends ArrayAdapter<Product> {
         if (p.isModifying()) {
             add.setVisibility(View.GONE);
             remove.setVisibility(View.GONE);
-            check.setVisibility(View.VISIBLE);
+            delete.setVisibility(View.VISIBLE);
         }
         else {
             add.setVisibility(View.VISIBLE);
             remove.setVisibility(View.VISIBLE);
-            check.setVisibility(View.GONE);
+            delete.setVisibility(View.GONE);
         }
-        check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) p.goRemove(true);
-                else p.goRemove(false);
-            }
-        });
         //Refresh quantities
         refreshQuantity(textViewQuantity,p.getQuantity());
         refreshQuantity(price,p);

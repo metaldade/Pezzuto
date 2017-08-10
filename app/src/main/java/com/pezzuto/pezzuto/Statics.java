@@ -76,5 +76,7 @@ public class Statics {
         array[i2] = array[i1];
         array[i1] = temp;
     }
-
+    public static double privateSurplus(double price) {
+        return price + price*(10.52)/100;
+    }
 }
