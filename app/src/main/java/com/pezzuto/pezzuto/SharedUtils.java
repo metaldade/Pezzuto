@@ -148,4 +148,14 @@ public class SharedUtils {
         edit.putBoolean("private_member",isPrivate);
         edit.apply();
     }
+    public static void setNotificationsActive(Context context, boolean isActive) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shre.edit();
+        edit.putBoolean("notifications",isActive);
+        edit.apply();
+    }
+    public static boolean isNotificationActive(Context context) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF, Context.MODE_PRIVATE);
+        return shre.getBoolean("notifications",true);
+    }
 }

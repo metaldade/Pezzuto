@@ -146,7 +146,7 @@ public class EventDetailFragment extends RefreshableFragment {
         date.setText(Statics.getFormattedEventDate(event));
         if (event.getImage().equals("null")) {
             image.setVisibility(View.GONE);
-            insertParticipateButton(false);
+            if (!SharedUtils.isPrivateMember(getContext())) insertParticipateButton(false);
         }
         else {
             Statics.loadImage(getContext(), event.getImage(),image);
@@ -158,7 +158,7 @@ public class EventDetailFragment extends RefreshableFragment {
                     startActivity(intent);
                 }
             });
-            insertParticipateButton(true);
+            if (!SharedUtils.isPrivateMember(getContext())) insertParticipateButton(true);
         }
 
         Log.d("image",event.getImage());
@@ -298,7 +298,7 @@ public class EventDetailFragment extends RefreshableFragment {
         else
             setParticipateButton(b);
     }
-    public String getType() { return ""; }
+    public String getType() { return MainActivity.EVENT_DETAIL; }
     @Override
     public void onDetach() {
         super.onDetach();

@@ -18,6 +18,8 @@
     <string name="pezzuto">Pezzuto Osvaldo &amp; C. S.R.L.</string>
     <string name="welcome_text">L\'applicazione è dedicata ai possessori di partita IVA ed ai privati.</string>
     <string name="events_text">Tutte le informazioni sui nostri eventi e gli incontri con le aziende a portata di tap.</string>
+    <string name="order_info">Selezione la quantità di prodotti da ordinare tramite i pulsanti + | -.\nUna volta scelti i tuoi prodotti, premi il pulsante Avanti per continuare.</string>
     <string name="remain_updated_text">Attiva le notifiche per rimanere sempre aggiornato sulle nostre promozioni e non perdere mai l\'occasione di risparmiare
         sul tuo prossimo acquisto.</string>
+
 </resources>

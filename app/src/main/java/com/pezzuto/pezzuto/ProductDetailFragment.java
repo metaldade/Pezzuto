@@ -132,7 +132,9 @@ private SharedPreferences shre;
         title.setText(p.getTitle());
         description.setText(p.getDescription());
         marca.setText(p.getMarca());
-        price.setText(String.format(Locale.ITALY,"%.2f",p.getPromotionPrice() == 0 ? p.getPrice() : p.getPromotionPrice())+"€ /"+p.getMeasure()+" + "+p.getIVA()+"% IVA");
+        double finalPrice = p.getPromotionPrice() == 0 ? p.getPrice() : p.getPromotionPrice();
+        finalPrice = SharedUtils.isPrivateMember(getContext()) ? Statics.privateSurplus(finalPrice) : finalPrice;
+        price.setText(String.format(Locale.ITALY,"%.2f",finalPrice)+"€ / "+p.getMeasure()+" + "+p.getIVA()+"% IVA");
         Statics.loadImage(getContext(),p.getImage(),image);
         image.setOnClickListener(new View.OnClickListener() {
             @Override

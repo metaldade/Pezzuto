@@ -60,6 +60,7 @@ public class CustomerInfoFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private LinearLayout linearCustomer;
     private CircularProgressButton orderButton;
+    private boolean isPrivate;
     String[] tipiConsegna = {"Ritiro in negozio","Spedizione"};
     Spinner spinner;
     String type;
@@ -101,7 +102,7 @@ public class CustomerInfoFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-
+        isPrivate = SharedUtils.isPrivateMember(getContext());
         sharedPref = getContext().getSharedPreferences(
                 "pezzuto", Context.MODE_PRIVATE);
         editor = sharedPref.edit();
@@ -340,8 +341,13 @@ public class CustomerInfoFragment extends Fragment {
                     product.put("codice",p.getCode());
                     product.put("nome",p.getTitle());
                     product.put("quantita",""+p.getQuantity());
-                    if (type.equals("promotion")) product.put("prezzo_promozione",String.format(Locale.ITALY,"%.2f",p.getPromotionPrice()));
-                    if (type.equals("cart")) product.put("prezzo",String.format(Locale.ITALY,"%.2f",p.getPromotionPrice() != 0 ? p.getPromotionPrice() : p.getPrice()));
+                    if (type.equals("promotion")) product.put("prezzo_promozione",String.format(Locale.ITALY,"%.2f",
+                            (isPrivate ? Statics.privateSurplus(p.getPromotionPrice()): p.getPromotionPrice() )));
+                    if (type.equals("cart")) {
+                        double finalPrice = p.getPromotionPrice() != 0 ? p.getPromotionPrice() : p.getPrice();
+                        finalPrice = isPrivate ? Statics.privateSurplus(finalPrice) : finalPrice;
+                        product.put("prezzo",String.format(Locale.ITALY,"%.2f",finalPrice));
+                    }
                     product.put("iva",""+p.getIVA());
                     prodotti.put(product);
                 }

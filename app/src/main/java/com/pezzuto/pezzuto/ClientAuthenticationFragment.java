@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.GetChars;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,10 +17,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pezzuto.pezzuto.listeners.OnFirstRunInteractionListener;
+import com.pezzuto.pezzuto.ui.GraphicUtils;
 
 
 public class ClientAuthenticationFragment extends Fragment {
@@ -28,6 +32,9 @@ public class ClientAuthenticationFragment extends Fragment {
 
     private SharedPreferences shre;
     SharedPreferences.Editor editor;
+    private ScrollView auth;
+    private LinearLayout choice;
+    private Button installatore, privato;
     private EditText ragioneSociale, pIVA, email, code;
     private TextInputLayout emailLayout, ragioneSocialeLayout, pIVALayout, codeLayout;
     OnFirstRunInteractionListener mListener;
@@ -55,7 +62,10 @@ public class ClientAuthenticationFragment extends Fragment {
         shre =  getContext().getSharedPreferences(Statics.SHARED_PREF, Context.MODE_PRIVATE);
         editor = shre.edit();
 
-
+        installatore = (Button) v.findViewById(R.id.installatore);
+        privato = (Button) v.findViewById(R.id.privato);
+        auth = (ScrollView) v.findViewById(R.id.auth);
+        choice = (LinearLayout) v.findViewById(R.id.choice);
 
         ragioneSociale = (EditText) v.findViewById(R.id.ragione_sociale);
         ragioneSocialeLayout = (TextInputLayout) v.findViewById(R.id.layout_ragione_sociale);
@@ -72,7 +82,8 @@ public class ClientAuthenticationFragment extends Fragment {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                GraphicUtils.setVisibleWithFading(getContext(),choice,true);
+                GraphicUtils.setVisibleWithFading(getContext(),auth,false);
             }
         });
         Button login = (Button) v.findViewById(R.id.login);
@@ -80,6 +91,21 @@ public class ClientAuthenticationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 submitForm();
+            }
+        });
+        installatore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GraphicUtils.setVisibleWithFading(getContext(),choice,false);
+                GraphicUtils.setVisibleWithFading(getContext(),auth,true);
+            }
+        });
+        privato.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedUtils.noMoreFirstRun(getContext());
+                SharedUtils.setPrivateMember(getContext(),true);
+                getActivity().finish();
             }
         });
         return v;

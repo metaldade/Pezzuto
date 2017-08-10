@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     //type of fragments
     public static final String PROMOTION_DETAIL = "promotion_detail";
     public static final String PRODUCT_DETAIL = "product_detail";
+    public static final String EVENT_DETAIL = "event_detail";
     public static final String PROMOTIONS = "promotions";
     public static final String PRODUCTS = "products";
     public static final String EVENTS = "events";
@@ -366,6 +367,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             setFabVisible(false);
         }
         RefreshableFragment f = (RefreshableFragment) getSupportFragmentManager().findFragmentByTag(key);
+        if (f == null) {
+            launchFragment(StickyHeaderFragment.newInstance(key),key);
+            if (key.equals(PRODUCTS)) bottomBar.selectTabAtPosition(1);
+            return;
+        }
         if (f.hasEmptySet(key)) setEmptyState(key);
         else removeEmptyState();
         launchFragment(f);
@@ -491,6 +497,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
         else if (lastFragment.getType().equals(PRODUCT_DETAIL)) {
             launchFragment(PRODUCTS);
+        }
+        else if (lastFragment.getType().equals(EVENT_DETAIL)) {
+            launchFragment(EVENTS);
         }
         else {
             finish();

@@ -66,7 +66,7 @@ public abstract class BaseDecorationFragment extends RefreshableFragment {
         final DividerDecoration divider = new DividerDecoration.Builder(this.getActivity())
                 .setHeight(R.dimen.default_divider_height)
                 .setPadding(R.dimen.default_divider_padding)
-                .setColorResource(R.color.default_header_color)
+                .setColorResource(R.color.divider_color)
                 .build();
 
         mList.setHasFixedSize(true);

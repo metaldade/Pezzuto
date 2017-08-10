@@ -1,5 +1,35 @@
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/choice"
+    android:orientation="vertical">
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/installatore"
+        android:textAllCaps="false"
+        android:text="Sono un installatore"
+        android:textColor="#FFF"
+        android:background="@color/colorAccent"
+        android:layout_weight=".45"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/privato"
+        android:textAllCaps="false"
+        android:textColor="#FFF"
+        android:text="Sono un privato"
+        android:background="@color/colorPrimary"
+        android:layout_weight=".45"
+        android:layout_marginBottom="48dp"/>
+</LinearLayout>
 <ScrollView android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:visibility="gone"
+    android:id="@+id/auth"
     xmlns:android="http://schemas.android.com/apk/res/android" >
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -114,3 +144,4 @@
 
 </LinearLayout>
 </ScrollView>
+</RelativeLayout>

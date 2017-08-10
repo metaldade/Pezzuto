@@ -19,18 +19,29 @@
        android:gravity="center"
         android:textAppearance="?android:textAppearanceLarge"
         />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@color/colorAccent"
+            android:id="@+id/imageEvent"
+            android:src="@drawable/ic_event_white"/>
     <TextView
         android:paddingRight="16dp"
-        android:paddingLeft="16dp"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:text="Valida dal 13 marzo al 25 aprile o fino ad esaurimento scorte"
         android:textColor="@color/colorAccent"
+        android:gravity="center_vertical"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/imageEvent"
         android:id="@+id/validity"
-        android:drawableLeft="@drawable/ic_event_red_24px"
-        android:drawableStart="@drawable/ic_event_red_24px"
         android:textStyle="bold"
         />
+    </RelativeLayout>
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -41,20 +52,21 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="12dp"
         android:id="@+id/description"
         android:text="@string/lorem200"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:paddingRight="16dp"
-        android:paddingLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"
         android:text="Prodotti in promozione"
-        android:textColor="@color/text_grey"
+        android:textColor="#333333"
         android:textAppearance="?android:textAppearanceMedium"/>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:divider="@color/divider_color"
         android:id="@+id/listViewPromotions"
         />
 

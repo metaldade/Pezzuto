@@ -135,8 +135,10 @@ public class BuyProductListViewAdapter extends ArrayAdapter<Product> {
         return v;
     }
     public void refreshQuantity(TextView v, Product p) {
+        double finalPrice =  p.getPromotionPrice() != 0 ? p.getPromotionPrice()*p.getQuantity() : p.getPrice()*p.getQuantity();
+        finalPrice = (SharedUtils.isPrivateMember(getContext()) ? Statics.privateSurplus(finalPrice) : finalPrice);
         v.setText(String.format("%.2f",
-                p.getPromotionPrice() != 0 ? p.getPromotionPrice()*p.getQuantity() : p.getPrice()*p.getQuantity())+"€");
+                finalPrice)+"€");
     }
     private void refreshQuantity(TextView v, int quantity) {
         v.setText("Quantità: "+quantity);
@@ -144,10 +146,13 @@ public class BuyProductListViewAdapter extends ArrayAdapter<Product> {
     public void refreshTotal() {
         double num_imp = 0;
         double num_iva = 0;
+
         for (Product p : prods) {
-            num_imp += (p.getPromotionPrice() != 0) ? p.getPromotionPrice()*p.getQuantity() : p.getPrice()*p.getQuantity();
-            num_iva += (p.getPromotionPrice() != 0) ? (p.getPromotionPrice()*p.getIVA()/100)*p.getQuantity() :
-                    (p.getPrice()*p.getIVA()/100)*p.getQuantity();
+            double finalPrice =  p.getPromotionPrice() != 0 ? p.getPromotionPrice()*p.getQuantity() : p.getPrice()*p.getQuantity();
+            finalPrice = (SharedUtils.isPrivateMember(getContext()) ? Statics.privateSurplus(finalPrice) : finalPrice);
+
+            num_imp += finalPrice;
+            num_iva += finalPrice*p.getIVA()/100;
         }
         imponibile.setText(String.format("%.2f",num_imp)+"€");
         iva.setText("+"+String.format("%.2f",num_iva)+"€");

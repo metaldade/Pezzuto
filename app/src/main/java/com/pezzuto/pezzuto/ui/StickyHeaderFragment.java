@@ -91,14 +91,17 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
         adapterEvent = new StickyEventAdapter(this.getActivity(),events,mListener);
         if (type.equals(MainActivity.PROMOTIONS)) {
             decor = new StickyHeaderDecoration(adapterProm);
+            getActivity().setTitle("Promozioni");
             list.setAdapter(adapterProm);
         }
         else if (type.equals(MainActivity.PRODUCTS)) {
             decor = new StickyHeaderDecoration(adapterProd);
+            getActivity().setTitle("Prodotti");
             list.setAdapter(adapterProd);
         }
         else if (type.equals(MainActivity.EVENTS)) {
             decor = new StickyHeaderDecoration(adapterEvent);
+            getActivity().setTitle("Eventi");
             list.setAdapter(adapterEvent);
         }
         setHasOptionsMenu(true);

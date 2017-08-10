@@ -1,10 +1,15 @@
 package com.pezzuto.pezzuto.ui;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+
+import com.pezzuto.pezzuto.R;
 
 /**
  * Created by dade on 09/05/17.
@@ -38,5 +43,31 @@ public class GraphicUtils {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
+    public static void setVisibleWithFading(Context context, final View view, boolean isVisible) {
+        Animation animationFadeIn = AnimationUtils.loadAnimation(context, R.anim.fadein);
+        Animation animationFadeOut = AnimationUtils.loadAnimation(context, R.anim.fadeout);
+        animationFadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        if (isVisible) {
+            view.setVisibility(View.VISIBLE);
+            view.startAnimation(animationFadeIn);
+        }
+        else {
+            view.startAnimation(animationFadeOut);
+        }
+    }
 }

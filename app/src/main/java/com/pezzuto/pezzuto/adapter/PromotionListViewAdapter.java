@@ -23,6 +23,7 @@ import java.util.Locale;
 
 public class PromotionListViewAdapter extends ArrayAdapter<Product> {
     Context context;
+    boolean isPrivate;
     public PromotionListViewAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
@@ -30,6 +31,7 @@ public class PromotionListViewAdapter extends ArrayAdapter<Product> {
     public PromotionListViewAdapter(Context context, int resource, List<Product> items) {
         super(context, resource, items);
         this.context = context;
+        isPrivate = SharedUtils.isPrivateMember(context);
     }
 
     @Override
@@ -42,7 +44,7 @@ public class PromotionListViewAdapter extends ArrayAdapter<Product> {
             vi = LayoutInflater.from(getContext());
             v = vi.inflate(R.layout.promotion_list_item, null);
         }
-        boolean isPrivate = SharedUtils.isPrivateMember(context);
+
         Product p = getItem(position);
 
         if (p != null) {
