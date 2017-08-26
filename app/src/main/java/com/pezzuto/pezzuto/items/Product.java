@@ -39,10 +39,11 @@ public class Product {
         this.featured = featured;
         this.IVA = IVA;
     }
-    public Product(int id, String title, String code, double price, double promotionPrice, int IVA, int quantity) {
+    public Product(int id, String title, String code, String category, double price, double promotionPrice, int IVA, int quantity) {
         this.id = id;
         this.title = title;
         this.code = code;
+        this.category = category;
         this.price = price;
         this.promotionPrice = promotionPrice;
         this.IVA = IVA;

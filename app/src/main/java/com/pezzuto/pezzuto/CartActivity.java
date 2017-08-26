@@ -133,6 +133,7 @@ public class CartActivity extends AppCompatActivity implements OnCartInteraction
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.contentContainer, bottomBuyFragment).commit();
             state = 1;
+            menu.findItem(R.id.edit).setVisible(true);
             orderButton.setText("Avanti");
             setListeners();
         }

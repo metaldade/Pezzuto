@@ -55,7 +55,6 @@ public class LaravelObjRequest extends StringRequest {
         String responseString = "";
         if (response != null) {
             responseString = String.valueOf(response.statusCode);
-
         }
         return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
     }

@@ -1,6 +1,7 @@
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -126,14 +127,24 @@
             android:ellipsize="end"
             android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginTop="32dp"
+    <com.dd.CircularProgressButton
         android:id="@+id/login"
-        style="@style/Base.Widget.AppCompat.Button.Colored"
-        android:text="Accedi"/>
+        android:layout_width="match_parent"
+        android:elevation="2dp"
+        android:layout_height="56dp"
+        android:textColor="@color/cpb_white"
+        android:text="Accedi"
+        android:textSize="18sp"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_alignParentBottom="true"
+        app:cpb_cornerRadius="2dp"
+        app:cpb_iconComplete="@drawable/ic_done"
+        app:cpb_iconError="@drawable/ic_close"
+        app:cpb_textIdle="Accedi"
+        app:cpb_selectorIdle="@drawable/idle_state_selector"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

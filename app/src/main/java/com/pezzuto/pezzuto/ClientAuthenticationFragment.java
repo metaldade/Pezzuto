@@ -22,7 +22,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.dd.CircularProgressButton;
 import com.pezzuto.pezzuto.listeners.OnFirstRunInteractionListener;
+import com.pezzuto.pezzuto.requests.RequestsUtils;
 import com.pezzuto.pezzuto.ui.GraphicUtils;
 
 
@@ -35,6 +39,7 @@ public class ClientAuthenticationFragment extends Fragment {
     private ScrollView auth;
     private LinearLayout choice;
     private Button installatore, privato;
+    private CircularProgressButton login;
     private EditText ragioneSociale, pIVA, email, code;
     private TextInputLayout emailLayout, ragioneSocialeLayout, pIVALayout, codeLayout;
     OnFirstRunInteractionListener mListener;
@@ -86,11 +91,13 @@ public class ClientAuthenticationFragment extends Fragment {
                 GraphicUtils.setVisibleWithFading(getContext(),auth,false);
             }
         });
-        Button login = (Button) v.findViewById(R.id.login);
+        login = (CircularProgressButton) v.findViewById(R.id.login);
+        login.setIndeterminateProgressMode(true);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitForm();
+                if (login.getProgress() == -1) login.setProgress(0);
+                else submitForm();
             }
         });
         installatore.setOnClickListener(new View.OnClickListener() {
@@ -162,15 +169,27 @@ public class ClientAuthenticationFragment extends Fragment {
         if (!validateCode()) {
             return;
         }
-        if (!code.getText().toString().equals("prova")) {
-            Toast.makeText(getContext(),"Il codice è errato",Toast.LENGTH_SHORT).show();
-            return;
-        }
+        login.setProgress(50);
+        RequestsUtils.sendCodeRequest(getContext(), code.getText().toString(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                SharedUtils.setPrivateMember(getContext(), false);
+                login.setProgress(100);
+                editor.commit();
+                editor.apply();
+                Toast.makeText(getContext(),"Benvenuto!",Toast.LENGTH_SHORT).show();
+                getActivity().finish();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                login.setProgress(-1);
+                if (error.networkResponse.statusCode == 400)  Toast.makeText(getContext(),"Codice errato",Toast.LENGTH_SHORT).show();
+                else Toast.makeText(getContext(),"Errore di connessione, prego riprovare",Toast.LENGTH_SHORT).show();
+            }
+        });
         //SharedUtils.setPrivateMember(getContext(),false);
-        SharedUtils.setPrivateMember(getContext(),false);
-        editor.commit();
-        editor.apply();
-        getActivity().finish();
+
 
     }
     private boolean validateEmail() {

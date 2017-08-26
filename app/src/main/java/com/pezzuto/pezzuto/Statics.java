@@ -79,4 +79,18 @@ public class Statics {
     public static double privateSurplus(double price) {
         return price + price*(10.52)/100;
     }
+    public static double getFinalPrice(Context c, Product p) {
+        if (p.getCategory().toLowerCase().equals("pellet"))
+            return p.getPromotionPrice() == 0 ? p.getPrice() : p.getPromotionPrice();
+        else if (SharedUtils.isPrivateMember(c))
+            return p.getPromotionPrice() == 0 ? privateSurplus(p.getPrice()) : privateSurplus(p.getPromotionPrice());
+        else return p.getPromotionPrice() == 0 ? p.getPrice() : p.getPromotionPrice();
+    }
+    public static double getFinalOriginalPrice(Context c, Product p) {
+        if (p.getCategory().toLowerCase().equals("pellet"))
+            return p.getPrice();
+        else if (SharedUtils.isPrivateMember(c))
+            return privateSurplus(p.getPrice());
+        else return p.getPrice();
+    }
 }

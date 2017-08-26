@@ -25,6 +25,7 @@ public class SharedUtils {
                             Integer.parseInt(id),
                             shre.getString(id+"_title",""),
                             shre.getString(id+"_code",""),
+                            shre.getString(id+"_category",""),
                             (double) shre.getFloat(id+"_price",0),
                             (double) shre.getFloat(id+"_promotionPrice",0),
                             shre.getInt(id+"_IVA",0),
@@ -57,6 +58,7 @@ public class SharedUtils {
         edit.putInt(p.getId()+"_IVA",p.getIVA());
         edit.putFloat(p.getId()+"_price",(float) p.getPrice());
         edit.putInt(p.getId()+"_quantity",1);
+        edit.putString(p.getId()+"_category",p.getCategory());
         edit.putString(p.getId()+"_code",p.getCode());
         edit.apply();
     }
@@ -80,6 +82,7 @@ public class SharedUtils {
         edit.remove(id+"_price");
         edit.remove(id+"_code");
         edit.remove(id+"_quantity");
+        edit.remove(id+"_category");
         edit.remove(id+"_promotionPrice");
         edit.remove(id+"_IVA");
         edit.apply();

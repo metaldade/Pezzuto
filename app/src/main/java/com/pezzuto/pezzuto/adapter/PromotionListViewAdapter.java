@@ -58,11 +58,11 @@ public class PromotionListViewAdapter extends ArrayAdapter<Product> {
             }
 
             if (oldPrice != null) {
-                oldPrice.setText(String.format(Locale.ITALY,"%.2f",(isPrivate ? Statics.privateSurplus(p.getPrice()) : p.getPrice())));
+                oldPrice.setText(String.format(Locale.ITALY,"%.2f",Statics.getFinalOriginalPrice(context,p)));
             }
 
             if (price != null) {
-                price.setText(String.format (Locale.ITALY,"%.2f", (isPrivate ? Statics.privateSurplus(p.getPromotionPrice()) : p.getPromotionPrice())));
+                price.setText(String.format (Locale.ITALY,"%.2f", Statics.getFinalPrice(context,p)));
             }
         }
 

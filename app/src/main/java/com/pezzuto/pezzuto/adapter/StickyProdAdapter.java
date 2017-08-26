@@ -78,9 +78,8 @@ public class StickyProdAdapter extends RecyclerView.Adapter<StickyProdAdapter.Vi
         boolean isPrivate = SharedUtils.isPrivateMember(context);
         viewHolder.title.setText(p.getTitle());
         viewHolder.category.setText(p.getMarca());
-        viewHolder.price.setText(String.format(Locale.ITALY,"%.2f", (isPrivate ? Statics.privateSurplus(p.getPrice()) : p.getPrice())
+        viewHolder.price.setText(String.format(Locale.ITALY,"%.2f", Statics.getFinalPrice(context,p)
         )+" € / "+p.getMeasure());
-        Log.d("prezzo",""+p.getPrice());
         Statics.loadImage(context,p.getThumbnail(),viewHolder.image);
     }
 

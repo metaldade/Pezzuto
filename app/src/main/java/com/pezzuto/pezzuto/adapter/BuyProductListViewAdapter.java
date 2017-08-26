@@ -135,8 +135,7 @@ public class BuyProductListViewAdapter extends ArrayAdapter<Product> {
         return v;
     }
     public void refreshQuantity(TextView v, Product p) {
-        double finalPrice =  p.getPromotionPrice() != 0 ? p.getPromotionPrice()*p.getQuantity() : p.getPrice()*p.getQuantity();
-        finalPrice = (SharedUtils.isPrivateMember(getContext()) ? Statics.privateSurplus(finalPrice) : finalPrice);
+        double finalPrice =  Statics.getFinalPrice(getContext(),p)*p.getQuantity();
         v.setText(String.format("%.2f",
                 finalPrice)+"€");
     }
@@ -148,8 +147,7 @@ public class BuyProductListViewAdapter extends ArrayAdapter<Product> {
         double num_iva = 0;
 
         for (Product p : prods) {
-            double finalPrice =  p.getPromotionPrice() != 0 ? p.getPromotionPrice()*p.getQuantity() : p.getPrice()*p.getQuantity();
-            finalPrice = (SharedUtils.isPrivateMember(getContext()) ? Statics.privateSurplus(finalPrice) : finalPrice);
+            double finalPrice =  Statics.getFinalPrice(getContext(),p)*p.getQuantity();
 
             num_imp += finalPrice;
             num_iva += finalPrice*p.getIVA()/100;

@@ -14,6 +14,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.pezzuto.pezzuto.LaravelObjRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -119,6 +120,14 @@ public class RequestsUtils {
         LaravelObjRequest request =  new LaravelObjRequest(Request.Method.POST, BASE_URL + EVENTI+"/"+(isParticipating ? PARTECIPA : NO_MORE), eventRequest, response, error);
         VolleySingleton.getInstance(context).getRequestQueue().add(request);
     }
-
+    public static void sendCodeRequest(final Context context, String code, Response.Listener<String> response, Response.ErrorListener error) {
+        JSONObject reqJSON = new JSONObject();
+        try {
+            reqJSON.put("codice",code);
+        }
+        catch (JSONException ex) { ex.printStackTrace(); }
+        LaravelObjRequest request =  new LaravelObjRequest(Request.Method.POST, BASE_URL + "codice", reqJSON, response, error);
+        VolleySingleton.getInstance(context).getRequestQueue().add(request);
+    }
 
 }
