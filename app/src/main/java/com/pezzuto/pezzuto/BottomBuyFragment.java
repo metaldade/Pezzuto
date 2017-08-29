@@ -100,7 +100,7 @@ public class BottomBuyFragment extends Fragment {
                 imponibile, iva, total,type, cartListener);
         listViewProd.setAdapter(adapter);
         if (prods.size() > 0 && type.equals(CART)) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
-        else GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
+        else if (prods.size() > 0 && !type.equals(CART)) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
         return v;
     }
     public static BottomBuyFragment newInstance(String type) {

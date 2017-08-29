@@ -54,8 +54,8 @@ public class CustomerInfoFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private OnCartInteractionListener cartListener;
-    private EditText ragioneSociale, pIVA, email, note;
-    private TextInputLayout emailLayout, ragioneSocialeLayout, pIVALayout;
+    private EditText ragioneSociale, pIVA, email, note, cognome,phone;
+    private TextInputLayout emailLayout, ragioneSocialeLayout, pIVALayout, cognomeLayout, phoneLayout;
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor editor;
     private LinearLayout linearCustomer;
@@ -111,7 +111,11 @@ public class CustomerInfoFragment extends Fragment {
         pIVA = (EditText) v.findViewById(R.id.partita_iva);
         email = (EditText) v.findViewById(R.id.email);
         note = (EditText) v.findViewById(R.id.note);
+        cognome = (EditText) v.findViewById(R.id.cognome);
+        phone = (EditText) v.findViewById(R.id.phone);
         emailLayout = (TextInputLayout) v.findViewById(R.id.layout_email);
+        cognomeLayout = (TextInputLayout) v.findViewById(R.id.layout_cognome);
+        phoneLayout = (TextInputLayout) v.findViewById(R.id.layout_phone);
 
         //set order button
         orderButton = (CircularProgressButton) v.findViewById(R.id.orderButton);
@@ -133,6 +137,8 @@ public class CustomerInfoFragment extends Fragment {
         ragioneSociale.addTextChangedListener(new InfoTextWatcher(ragioneSociale));
         email.addTextChangedListener(new InfoTextWatcher(email));
         pIVA.addTextChangedListener(new InfoTextWatcher(pIVA));
+        cognome.addTextChangedListener(new InfoTextWatcher(pIVA));
+        phone.addTextChangedListener(new InfoTextWatcher(pIVA));
         linearCustomer = (LinearLayout) v.findViewById(R.id.linearCustomer);
         if (type.equals("promotion")) mListener.getFab().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,9 +158,26 @@ public class CustomerInfoFragment extends Fragment {
                 submitForm();
             }
         });
+        if (SharedUtils.isPrivateMember(getContext())) {
+            pIVALayout.setVisibility(View.GONE);
+            cognomeLayout.setVisibility(View.VISIBLE);
+            phoneLayout.setVisibility(View.VISIBLE);
+            ragioneSociale.setHint("Nome");
+            ragioneSocialeLayout.setHint("Nome");
+        }
+        else {
+            cognomeLayout.setVisibility(View.GONE);
+            phoneLayout.setVisibility(View.GONE);
+            pIVALayout.setVisibility(View.VISIBLE);
+            ragioneSociale.setHint("Ragione Sociale");
+            ragioneSocialeLayout.setHint("Ragione Sociale");
+        }
+
         if (sharedPref.contains("ragione_sociale")) ragioneSociale.setText(sharedPref.getString("ragione_sociale",""));
         if (sharedPref.contains("partita_iva")) pIVA.setText(sharedPref.getString("partita_iva",""));
         if (sharedPref.contains("email")) email.setText(sharedPref.getString("email",""));
+        if (sharedPref.contains("cognome")) cognome.setText(sharedPref.getString("cognome",""));
+        if (sharedPref.contains("phone")) phone.setText(sharedPref.getString("phone",""));
 
         return v;
     }
@@ -194,11 +217,34 @@ public class CustomerInfoFragment extends Fragment {
      */
     private boolean validateRagioneSociale() {
         if (ragioneSociale.getText().toString().trim().isEmpty()) {
-            ragioneSocialeLayout.setError(getString(R.string.err_msg_ragione_sociale));
+            if (SharedUtils.isPrivateMember(getContext())) ragioneSocialeLayout.setError(getString(R.string.err_msg_nome));
+            else ragioneSocialeLayout.setError(getString(R.string.err_msg_ragione_sociale));
             requestFocus(ragioneSociale);
             return false;
         } else {
             ragioneSocialeLayout.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateCognome() {
+        if (cognome.getText().toString().trim().isEmpty()) {
+            cognomeLayout.setError(getString(R.string.err_msg_cognome));
+            requestFocus(cognome);
+            return false;
+        } else {
+            cognomeLayout.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validatePhone() {
+        if (phone.getText().toString().trim().isEmpty()) {
+            phoneLayout.setError(getString(R.string.err_msg_phone));
+            requestFocus(phone);
+            return false;
+        } else {
+            phoneLayout.setErrorEnabled(false);
         }
 
         return true;
@@ -230,7 +276,13 @@ public class CustomerInfoFragment extends Fragment {
             return;
         }
 
-        if (!validatePIVA()) {
+        if (!SharedUtils.isPrivateMember(getContext()) && !validatePIVA()) {
+            return;
+        }
+        if (!SharedUtils.isPrivateMember(getContext()) && !validatePhone()) {
+            return;
+        }
+        if (SharedUtils.isPrivateMember(getContext()) && !validateCognome()) {
             return;
         }
         editor.apply();
@@ -288,6 +340,14 @@ public class CustomerInfoFragment extends Fragment {
                     validatePIVA();
                     editor.putString("partita_iva",pIVA.getText().toString().trim());
                     break;
+                case R.id.cognome:
+                    validateCognome();
+                    editor.putString("cognome",cognome.getText().toString().trim());
+                    break;
+                case R.id.phone:
+                    validatePhone();
+                    editor.putString("phone",phone.getText().toString().trim());
+                    break;
             }
         }
     }
@@ -326,8 +386,17 @@ public class CustomerInfoFragment extends Fragment {
         JSONObject request = new JSONObject();
         try {
             JSONObject cliente = new JSONObject();
-            cliente.put("ragione_sociale", ragioneSociale.getText().toString().trim());
-            cliente.put("partita_iva",pIVA.getText().toString().trim());
+            if (SharedUtils.isPrivateMember(getContext())) {
+                cliente.put("tipo","privato");
+                cliente.put("nome", ragioneSociale.getText().toString().trim());
+                cliente.put("cognome",cognome.getText().toString().trim());
+                cliente.put("telefono",phone.getText().toString().trim());
+            }
+            else {
+                cliente.put("tipo","partita_iva");
+                cliente.put("ragione_sociale", ragioneSociale.getText().toString().trim());
+                cliente.put("partita_iva",pIVA.getText().toString().trim());
+            }
             cliente.put("email",email.getText().toString().trim());
             cliente.put("tipo_consegna",spinner.getSelectedItemPosition() == 0 ? "Ritiro in negozio" : "Spedizione");
             cliente.put("note",note.getText().toString().trim());
@@ -341,12 +410,10 @@ public class CustomerInfoFragment extends Fragment {
                     product.put("codice",p.getCode());
                     product.put("nome",p.getTitle());
                     product.put("quantita",""+p.getQuantity());
-                    if (type.equals("promotion")) product.put("prezzo_promozione",String.format(Locale.ITALY,"%.2f",
-                            (isPrivate ? Statics.privateSurplus(p.getPromotionPrice()): p.getPromotionPrice() )));
+                    if (type.equals("promotion")) product.put("prezzo_promozione",String.format(Locale.ITALY,"%.3f",
+                            Statics.getFinalPrice(getContext(),p)));
                     if (type.equals("cart")) {
-                        double finalPrice = p.getPromotionPrice() != 0 ? p.getPromotionPrice() : p.getPrice();
-                        finalPrice = isPrivate ? Statics.privateSurplus(finalPrice) : finalPrice;
-                        product.put("prezzo",String.format(Locale.ITALY,"%.2f",finalPrice));
+                        product.put("prezzo",String.format(Locale.ITALY,"%.3f",Statics.getFinalPrice(getContext(),p)));
                     }
                     product.put("iva",""+p.getIVA());
                     prodotti.put(product);
@@ -362,8 +429,8 @@ public class CustomerInfoFragment extends Fragment {
             request.put("cliente",cliente);
             if (type.equals("cart")) {
                 JSONObject items = new JSONObject();
-                items.put("items",prodotti);
-                request.put("prodotti",items);
+                items.put("prodotti",prodotti);
+                request.put("carrello",items);
             }
 
         }

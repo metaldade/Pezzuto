@@ -3,9 +3,14 @@ package com.pezzuto.pezzuto;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.util.ArraySet;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.pezzuto.pezzuto.items.Product;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,5 +165,16 @@ public class SharedUtils {
     public static boolean isNotificationActive(Context context) {
         SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF, Context.MODE_PRIVATE);
         return shre.getBoolean("notifications",true);
+    }
+    public static void saveOrari(Context context, JSONArray orari) throws JSONException {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shre.edit();
+        for (int i = 0; i < orari.length(); i++) {
+            JSONObject orario = orari.getJSONObject(i);
+            edit.putString("orario"+orario.getString("nome")+"Infra",orario.getString("infrasettimanale"));
+            edit.putString("orario"+orario.getString("nome")+"WE",orario.getString("weekend"));
+        }
+        edit.apply();
+        Log.d("or",shre.getString("orarioShowroomInfra",""));
     }
 }

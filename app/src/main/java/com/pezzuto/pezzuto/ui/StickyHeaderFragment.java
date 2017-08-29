@@ -39,6 +39,7 @@ import com.pezzuto.pezzuto.MainActivity;
 import com.pezzuto.pezzuto.ParseUtils;
 import com.pezzuto.pezzuto.PromotionDetailFragment;
 import com.pezzuto.pezzuto.R;
+import com.pezzuto.pezzuto.SharedUtils;
 import com.pezzuto.pezzuto.Statics;
 import com.pezzuto.pezzuto.adapter.StickyEventAdapter;
 import com.pezzuto.pezzuto.adapter.StickyProdAdapter;
@@ -191,12 +192,12 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
         @Override
         public void onResponse(JSONArray response) {
             try {
+                JSONArray eventsResp = response.getJSONObject(0).getJSONArray("eventi");
                 events.clear();
                 if (response.length() == 0) mListener.setEmptyState(MainActivity.EVENTS);
                 else mListener.removeEmptyState();
-              for (int i = 0; i < response.length(); i++) {
-
-                    JSONObject event = response.getJSONObject(i);
+              for (int i = 0; i < eventsResp.length(); i++) {
+                    JSONObject event = eventsResp.getJSONObject(i);
                     Event e = parseEvent(event);
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(e.getStartDate());
@@ -206,10 +207,12 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
                 }
                 adapterEvent.notifyDataSetChanged();
                 mListener.stopRefresh();
+                SharedUtils.saveOrari(getContext(),response.getJSONObject(1).getJSONArray("orari"));
             }
             catch(JSONException e) { e.printStackTrace(); }
         }
     };
+
     public Event parseEvent(JSONObject event) throws JSONException {
      Event e = new Event(event.getInt("id"),
              event.getString("nome"),

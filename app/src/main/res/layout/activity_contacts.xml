@@ -124,11 +124,39 @@
         android:id="@+id/divider3"
         android:layout_height="1dp"
         android:background="#22000000"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/orario"
+        android:src="@drawable/ic_orari"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="12dp"
+        android:layout_below="@id/divider3" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/orari"
+        android:divider="@null"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_below="@id/divider3"
+        android:layout_toRightOf="@id/orario"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_toRightOf="@id/orario"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_below="@id/orari"
+        android:id="@+id/divider4"
+        android:layout_height="1dp"
+        android:background="#22000000"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/conditions"
-        android:layout_below="@id/divider3"
+        android:layout_below="@id/divider4"
         android:layout_marginTop="8dp"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:text="Condizioni di vendita"/>
