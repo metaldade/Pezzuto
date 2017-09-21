@@ -17,6 +17,7 @@
 package com.pezzuto.pezzuto.adapter;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -75,14 +76,22 @@ public class StickyProdAdapter extends RecyclerView.Adapter<StickyProdAdapter.Vi
                 listener.launchFragment(new ProductDetailFragment());
             }
         });
-        boolean isPrivate = SharedUtils.isPrivateMember(context);
         viewHolder.title.setText(p.getTitle());
         viewHolder.category.setText(p.getMarca());
+        if (p.getPromotionPrice() == 0) hideOldPrice(viewHolder);
+        else {
+            viewHolder.oldPrice.setText(String.format(Locale.ITALY,"%.2f", Statics.getFinalOriginalPrice(context,p)
+            )+" €");
+            viewHolder.oldPrice.setPaintFlags(viewHolder.oldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
         viewHolder.price.setText(String.format(Locale.ITALY,"%.2f", Statics.getFinalPrice(context,p)
         )+" € / "+p.getMeasure());
         Statics.loadImage(context,p.getThumbnail(),viewHolder.image);
     }
-
+    private void hideOldPrice(ViewHolder holder) {
+        holder.oldPrice.setVisibility(View.GONE);
+        holder.rightArrow.setVisibility(View.GONE);
+    }
     @Override
     public int getItemCount() {
         return products.size();
@@ -113,6 +122,8 @@ public class StickyProdAdapter extends RecyclerView.Adapter<StickyProdAdapter.Vi
         public TextView title;
         public TextView category;
         public TextView price;
+        public TextView oldPrice;
+        public ImageView rightArrow;
         public ImageView image;
         public RelativeLayout product_layout;
 
@@ -120,6 +131,8 @@ public class StickyProdAdapter extends RecyclerView.Adapter<StickyProdAdapter.Vi
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.title);
             category = (TextView) itemView.findViewById(R.id.category);
+            oldPrice = (TextView) itemView.findViewById(R.id.oldPrice);
+            rightArrow = (ImageView) itemView.findViewById(R.id.right_arrow);
             price = (TextView) itemView.findViewById(R.id.price);
             product_layout = (RelativeLayout) itemView.findViewById(R.id.product_layout);
             image = (ImageView) itemView.findViewById(R.id.image);
@@ -131,7 +144,6 @@ public class StickyProdAdapter extends RecyclerView.Adapter<StickyProdAdapter.Vi
 
         public HeaderHolder(View itemView) {
             super(itemView);
-
             header = (TextView) itemView;
         }
     }

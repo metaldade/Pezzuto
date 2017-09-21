@@ -60,6 +60,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:layout_gravity="center_horizontal"
+        android:id="@+id/textView1"
         android:text="Prodotti in promozione"
         android:textColor="#333333"
         android:textAppearance="?android:textAppearanceMedium"/>

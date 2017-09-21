@@ -129,6 +129,10 @@ public class RequestsUtils {
         LaravelObjRequest request =  new LaravelObjRequest(Request.Method.POST, BASE_URL + "codice", reqJSON, response, error);
         VolleySingleton.getInstance(context).getRequestQueue().add(request);
     }
+    public static void obtainCodeRequest(final Context context, JSONObject reqJSON, Response.Listener<String> response, Response.ErrorListener error) {
+        LaravelObjRequest request =  new LaravelObjRequest(Request.Method.POST, BASE_URL + "codice/richiesta", reqJSON, response, error);
+        VolleySingleton.getInstance(context).getRequestQueue().add(request);
+    }
     public static void sendOrariRequest(final Context context, Response.Listener<JSONArray> response, Response.ErrorListener error) {
         JsonArrayRequest request = new JsonArrayRequest
                 (Request.Method.GET,

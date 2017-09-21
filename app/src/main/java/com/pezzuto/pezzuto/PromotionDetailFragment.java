@@ -82,13 +82,18 @@ public class PromotionDetailFragment extends RefreshableFragment {
         TextView title = (TextView) v.findViewById(R.id.title);
         TextView description = (TextView) v.findViewById(R.id.description);
         TextView validity = (TextView) v.findViewById(R.id.validity);
+        TextView textView1 = (TextView) v.findViewById(R.id.textView1);
         ImageView image = (ImageView) v.findViewById(R.id.image);
 
         //Pupulate fields
         title.setText(p.getTitle());
         description.setText(p.getDescription());
         validity.setText("Promozione valida dal "+Statics.getSimpleDate(p.getValidaDal())+" al "+Statics.getSimpleDate(p.getValidaAl())+(p.isEsaurimento() ? " o esaurimento scorte" : ""));
-
+        if (p.getProducts().isEmpty()) {
+            textView1.setVisibility(View.GONE);
+            mListener.getFab().setVisibility(View.GONE);
+        }
+        else mListener.getFab().setVisibility(View.VISIBLE);
         //load image
         Statics.loadImage(getContext(),p.getImage(),image);
         image.setOnClickListener(new View.OnClickListener() {

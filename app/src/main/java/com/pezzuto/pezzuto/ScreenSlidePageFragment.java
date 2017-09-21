@@ -25,7 +25,7 @@ public class ScreenSlidePageFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     OnFirstRunInteractionListener mListener;
-    Button goOn, notUpdated;
+    Button goOn;
     private String type;
     public ScreenSlidePageFragment() {
         // Required empty public constructor
@@ -56,7 +56,6 @@ public class ScreenSlidePageFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
         goOn = (Button) v.findViewById(R.id.goOnButton);
-        notUpdated = (Button) v.findViewById(R.id.notUpdatedButton);
         goOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,27 +73,17 @@ public class ScreenSlidePageFragment extends Fragment {
             content.setText(R.string.welcome_text);
             title.setText("Benvenuto nell'app di Pezzuto");
             goOn.setText("Avanti");
-            notUpdated.setVisibility(View.INVISIBLE);
         }
         if (type.equals("remain_updated")) {
             content.setText(R.string.remain_updated_text);
             title.setText("Rimani aggiornato sulle nostre promozioni");
-            goOn.setText("Attiva le notifiche");
-            notUpdated.setVisibility(View.VISIBLE);
+            goOn.setText("Avanti");
         }
         if (type.equals("events")) {
             title.setText("Eventi");
             content.setText(R.string.events_text);
             goOn.setText("Avanti");
-            notUpdated.setVisibility(View.INVISIBLE);
         }
-        notUpdated.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedUtils.setNotificationsActive(getContext(),false);
-                mListener.goOn();
-            }
-        });
 
         return v;
     }

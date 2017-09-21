@@ -162,7 +162,8 @@ public class BottomBuyFragment extends Fragment {
         }
     }
     public void adjustListView() {
-        GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
+        if (listViewProd.getCount() == 0) cartListener.goEmptyState(1);
+        else GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
     }
     @Override
     public void onDetach() {

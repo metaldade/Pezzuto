@@ -18,7 +18,7 @@ import com.pezzuto.pezzuto.R;
 public class GraphicUtils {
     public static void setListViewHeightBasedOnChildren(ListView listView, int type) {
         ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
+        if (listAdapter == null || listAdapter.getCount() == 0)
             return;
 
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);

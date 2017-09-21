@@ -137,7 +137,7 @@ public class SharedUtils {
         return shre.getInt(idEvent+"_participants",0);
     }
     public static boolean isFirstRun(Context context) {
-        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF+"-cart", Context.MODE_PRIVATE);
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF, Context.MODE_PRIVATE);
         return shre.getBoolean("first_run",true);
     }
     public static void noMoreFirstRun(Context context) {
@@ -176,5 +176,23 @@ public class SharedUtils {
         }
         edit.apply();
         Log.d("or",shre.getString("orarioShowroomInfra",""));
+    }
+    public static int nextNotificationId(Context context) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shre.edit();
+        int lastId = shre.getInt("notification_id",0);
+        edit.putInt("notification_id",lastId+1);
+        edit.apply();
+        return lastId+1;
+    }
+    public static void setCodeRequestSent(Context context) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = shre.edit();
+        edit.putBoolean("code_request_sent",true);
+        edit.apply();
+    }
+    public static boolean isCodeRequestSent(Context context) {
+        SharedPreferences shre = context.getSharedPreferences(Statics.SHARED_PREF, Context.MODE_PRIVATE);
+        return shre.getBoolean("code_request_sent",false);
     }
 }

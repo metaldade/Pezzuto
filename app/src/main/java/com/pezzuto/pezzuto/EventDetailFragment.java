@@ -141,6 +141,12 @@ public class EventDetailFragment extends RefreshableFragment {
     }
     public void fill() {
         event = mListener.getSelectedEvent();
+        askInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Statics.sendMail(getContext(),"eventipezzuto@gmail.com",event.getName());
+            }
+        });
         title.setText(event.getName());
         description.setText(event.getDescription());
         date.setText(Statics.getFormattedEventDate(event));

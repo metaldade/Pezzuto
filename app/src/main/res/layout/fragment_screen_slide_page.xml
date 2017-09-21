@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="60dp"
         android:orientation="vertical">
     <Button
         android:layout_width="match_parent"
@@ -56,15 +56,6 @@
         android:text="Avanti"
         android:id="@+id/goOnButton"
         style="@style/Base.Widget.AppCompat.Button.Colored" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:textAllCaps="false"
-            android:visibility="invisible"
-            android:text="Non voglio rimanere aggiornato"
-            android:id="@+id/notUpdatedButton"
-            style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
-            />
     </LinearLayout>
 </RelativeLayout>
 </LinearLayout>

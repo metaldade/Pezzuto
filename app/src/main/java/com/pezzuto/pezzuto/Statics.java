@@ -1,6 +1,7 @@
 package com.pezzuto.pezzuto;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.support.v4.util.ArraySet;
@@ -92,5 +93,12 @@ public class Statics {
         else if (SharedUtils.isPrivateMember(c))
             return privateSurplus(p.getPrice());
         else return p.getPrice();
+    }
+    public static void sendMail(Context context, String mail, String subject) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc822");
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{ mail});
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        context.startActivity(Intent.createChooser(intent, "Send Email"));
     }
 }

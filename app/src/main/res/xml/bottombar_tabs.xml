@@ -1,12 +1,12 @@
 <tabs>
     <tab
-        id="@+id/tab_promozioni"
-        icon="@drawable/ic_grade_black_24px"
-        title="Promozioni" />
-    <tab
         id="@+id/tab_prodotti"
         icon="@drawable/ic_local_offer_black_24px"
         title="Prodotti" />
+    <tab
+        id="@+id/tab_promozioni"
+        icon="@drawable/ic_grade_black_24px"
+        title="Promozioni" />
     <tab
         id="@+id/tab_eventi"
         icon="@drawable/ic_event_black_24px"

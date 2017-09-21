@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "585814036843",
+    "firebase_url": "https://pezzuto-961eb.firebaseio.com",
+    "project_id": "pezzuto-961eb",
+    "storage_bucket": "pezzuto-961eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585814036843:android:6bf4b12ffd460357",
+        "android_client_info": {
+          "package_name": "com.pezzuto.pezzuto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585814036843-mtlfmhvek9s7c7ck741srofinanveoef.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pezzuto.pezzuto",
+            "certificate_hash": "766873a3c90b3e68de78d6a6913210db151c1886"
+          }
+        },
+        {
+          "client_id": "585814036843-qc4io6dg9ouqc33q05kr41gmd7mp26ja.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGaKT_mFwJ2QYcoy3Gbp8b2cdpSscPg2Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "585814036843-1j7q1vkroormqsrqfi483j6ofg40fqdf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "it.pezzuto.Pezzuto"
+              }
+            },
+            {
+              "client_id": "585814036843-qc4io6dg9ouqc33q05kr41gmd7mp26ja.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

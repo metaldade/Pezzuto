@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -106,7 +107,7 @@ public class CustomerInfoFragment extends Fragment {
         sharedPref = getContext().getSharedPreferences(
                 "pezzuto", Context.MODE_PRIVATE);
         editor = sharedPref.edit();
-
+        isPrivate = SharedUtils.isPrivateMember(getContext());
         ragioneSociale = (EditText) v.findViewById(R.id.ragione_sociale);
         pIVA = (EditText) v.findViewById(R.id.partita_iva);
         email = (EditText) v.findViewById(R.id.email);
@@ -137,8 +138,8 @@ public class CustomerInfoFragment extends Fragment {
         ragioneSociale.addTextChangedListener(new InfoTextWatcher(ragioneSociale));
         email.addTextChangedListener(new InfoTextWatcher(email));
         pIVA.addTextChangedListener(new InfoTextWatcher(pIVA));
-        cognome.addTextChangedListener(new InfoTextWatcher(pIVA));
-        phone.addTextChangedListener(new InfoTextWatcher(pIVA));
+        cognome.addTextChangedListener(new InfoTextWatcher(cognome));
+        phone.addTextChangedListener(new InfoTextWatcher(phone));
         linearCustomer = (LinearLayout) v.findViewById(R.id.linearCustomer);
         if (type.equals("promotion")) mListener.getFab().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,14 +163,12 @@ public class CustomerInfoFragment extends Fragment {
             pIVALayout.setVisibility(View.GONE);
             cognomeLayout.setVisibility(View.VISIBLE);
             phoneLayout.setVisibility(View.VISIBLE);
-            ragioneSociale.setHint("Nome");
             ragioneSocialeLayout.setHint("Nome");
         }
         else {
             cognomeLayout.setVisibility(View.GONE);
             phoneLayout.setVisibility(View.GONE);
             pIVALayout.setVisibility(View.VISIBLE);
-            ragioneSociale.setHint("Ragione Sociale");
             ragioneSocialeLayout.setHint("Ragione Sociale");
         }
 
@@ -235,7 +234,6 @@ public class CustomerInfoFragment extends Fragment {
         } else {
             cognomeLayout.setErrorEnabled(false);
         }
-
         return true;
     }
     private boolean validatePhone() {
@@ -276,17 +274,16 @@ public class CustomerInfoFragment extends Fragment {
             return;
         }
 
-        if (!SharedUtils.isPrivateMember(getContext()) && !validatePIVA()) {
+        if (!isPrivate && !validatePIVA()) {
             return;
         }
-        if (!SharedUtils.isPrivateMember(getContext()) && !validatePhone()) {
+        if (!isPrivate && !validatePhone()) {
             return;
         }
-        if (SharedUtils.isPrivateMember(getContext()) && !validateCognome()) {
+        if (isPrivate && !validateCognome()) {
             return;
         }
         editor.apply();
-        editor.commit();
         sendOrder();
     }
 
@@ -305,7 +302,9 @@ public class CustomerInfoFragment extends Fragment {
     }
     private void requestFocus(View view) {
         if (view.requestFocus()) {
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            //getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 
@@ -342,7 +341,7 @@ public class CustomerInfoFragment extends Fragment {
                     break;
                 case R.id.cognome:
                     validateCognome();
-                    editor.putString("cognome",cognome.getText().toString().trim());
+                    editor.putString("cognome",cognome.getText().toString());
                     break;
                 case R.id.phone:
                     validatePhone();

@@ -5,8 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import com.jsibbold.zoomage.ZoomageView;
+
 public class ImageViewerActivity extends AppCompatActivity {
-    ImageView imageView;
+    ZoomageView zoomageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -14,7 +16,7 @@ public class ImageViewerActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String image = intent.getStringExtra("image");
         getSupportActionBar().hide();
-        imageView = (ImageView) findViewById(R.id.image);
-        Statics.loadImage(this,image,imageView);
+        zoomageView = (ZoomageView) findViewById(R.id.image);
+        Statics.loadImage(this,image,zoomageView);
     }
 }

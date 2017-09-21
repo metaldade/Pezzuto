@@ -1,32 +1,109 @@
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#FFF"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<LinearLayout
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/choice"
+    android:background="#FFF"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerVertical="true">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipologia cliente"
+        android:layout_gravity="center"
+        android:textAppearance="?android:textAppearanceLarge"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:text="L\'applicazione personalizza i contenuti in base alla tipologia di cliente: professionista o privato"
+        android:layout_gravity="center"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/installatoreBox"
+        android:background="@drawable/professionista_box"
+        android:layout_marginTop="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Professionista"
+
+            android:layout_gravity="center"
+            android:textColor="@color/colorAccent"
+            android:textAppearance="?android:textAppearanceLarge"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:textColor="#000"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Sei il titolare di un'azienda, oppure  un professionista in possesso della propria partita IVA."
+            android:layout_gravity="center"/>
+    </LinearLayout>
     <Button
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="42dp"
         android:id="@+id/installatore"
         android:textAllCaps="false"
         android:text="Sono un installatore"
         android:textColor="#FFF"
-        android:background="@color/colorAccent"
-        android:layout_weight=".45"/>
+        android:background="@color/colorAccent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/privatoBox"
+        android:background="@drawable/privato_box"
+        android:layout_marginTop="12dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Privato"
+
+            android:layout_gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textAppearance="?android:textAppearanceLarge"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:textColor="#000"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:text="Sei un privato che non ha la partita IVA, ma che vuole conoscere tutte le nostre promozioni e sfogliare il nostro catalogo prodotti"
+            android:layout_gravity="center"/>
+    </LinearLayout>
     <Button
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="42dp"
         android:id="@+id/privato"
         android:textAllCaps="false"
         android:textColor="#FFF"
         android:text="Sono un privato"
-        android:background="@color/colorPrimary"
-        android:layout_weight=".45"
-        android:layout_marginBottom="48dp"/>
-</LinearLayout>
+        android:background="@color/colorPrimary"/>
+    </LinearLayout>
+</RelativeLayout>
 <ScrollView android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:visibility="gone"
@@ -131,27 +208,32 @@
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:elevation="2dp"
-        android:layout_height="56dp"
+        android:layout_height="48dp"
         android:textColor="@color/cpb_white"
         android:text="Accedi"
         android:textSize="18sp"
         android:layout_marginRight="4dp"
         android:layout_marginLeft="4dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
-        android:layout_alignParentBottom="true"
         app:cpb_cornerRadius="2dp"
         app:cpb_iconComplete="@drawable/ic_done"
         app:cpb_iconError="@drawable/ic_close"
         app:cpb_textIdle="Accedi"
         app:cpb_selectorIdle="@drawable/idle_state_selector"/>
-    <Button
+    <com.dd.CircularProgressButton
+        android:id="@+id/codiceAzienda"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="38dp"
+        android:layout_marginTop="8dp"
         android:textAllCaps="false"
-        android:text="Non conosci il tuo codice azienda?"
-        android:layout_marginBottom="32dp"
-        style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"/>
+        android:textColor="@color/colorAccent"
+        android:elevation="0dp"
+        app:cpb_cornerRadius="2dp"
+        app:cpb_iconComplete="@drawable/ic_done"
+        app:cpb_iconError="@drawable/ic_close"
+        app:cpb_textIdle="Non conosci il tuo codice azienda?"
+        app:cpb_selectorIdle="@drawable/idle_state_selector_code"/>
 
 </LinearLayout>
 </ScrollView>

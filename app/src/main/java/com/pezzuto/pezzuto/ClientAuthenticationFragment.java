@@ -2,6 +2,7 @@ package com.pezzuto.pezzuto;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -18,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,10 @@ import com.dd.CircularProgressButton;
 import com.pezzuto.pezzuto.listeners.OnFirstRunInteractionListener;
 import com.pezzuto.pezzuto.requests.RequestsUtils;
 import com.pezzuto.pezzuto.ui.GraphicUtils;
+import com.pezzuto.pezzuto.ui.UiUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class ClientAuthenticationFragment extends Fragment {
@@ -37,9 +43,10 @@ public class ClientAuthenticationFragment extends Fragment {
     private SharedPreferences shre;
     SharedPreferences.Editor editor;
     private ScrollView auth;
-    private LinearLayout choice;
+    private RelativeLayout choice;
     private Button installatore, privato;
-    private CircularProgressButton login;
+    LinearLayout installatoreBox, privatoBox;
+    private CircularProgressButton login, codiceAzienda;
     private EditText ragioneSociale, pIVA, email, code;
     private TextInputLayout emailLayout, ragioneSocialeLayout, pIVALayout, codeLayout;
     OnFirstRunInteractionListener mListener;
@@ -69,8 +76,10 @@ public class ClientAuthenticationFragment extends Fragment {
 
         installatore = (Button) v.findViewById(R.id.installatore);
         privato = (Button) v.findViewById(R.id.privato);
+        installatoreBox = (LinearLayout) v.findViewById(R.id.installatoreBox);
+        privatoBox = (LinearLayout) v.findViewById(R.id.privatoBox);
         auth = (ScrollView) v.findViewById(R.id.auth);
-        choice = (LinearLayout) v.findViewById(R.id.choice);
+        choice = (RelativeLayout) v.findViewById(R.id.choice);
 
         ragioneSociale = (EditText) v.findViewById(R.id.ragione_sociale);
         ragioneSocialeLayout = (TextInputLayout) v.findViewById(R.id.layout_ragione_sociale);
@@ -92,6 +101,9 @@ public class ClientAuthenticationFragment extends Fragment {
             }
         });
         login = (CircularProgressButton) v.findViewById(R.id.login);
+        codiceAzienda = (CircularProgressButton) v.findViewById(R.id.codiceAzienda);
+        codiceAzienda.setIndeterminateProgressMode(true);
+        codiceAzienda.setBackgroundColor(Color.WHITE);
         login.setIndeterminateProgressMode(true);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,23 +112,34 @@ public class ClientAuthenticationFragment extends Fragment {
                 else submitForm();
             }
         });
-        installatore.setOnClickListener(new View.OnClickListener() {
+        installatore.setOnClickListener(installatoreListener);
+        privato.setOnClickListener(privatoListener);
+        installatoreBox.setOnClickListener(installatoreListener);
+        privatoBox.setOnClickListener(privatoListener);
+        codiceAzienda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GraphicUtils.setVisibleWithFading(getContext(),choice,false);
-                GraphicUtils.setVisibleWithFading(getContext(),auth,true);
-            }
-        });
-        privato.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedUtils.noMoreFirstRun(getContext());
-                SharedUtils.setPrivateMember(getContext(),true);
-                getActivity().finish();
+                if (SharedUtils.isCodeRequestSent(getContext())) UiUtils.createCodeRequestSentDialog(getContext());
+                else submitCodeRequest();
             }
         });
         return v;
     }
+    private  View.OnClickListener installatoreListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            GraphicUtils.setVisibleWithFading(getContext(),choice,false);
+            GraphicUtils.setVisibleWithFading(getContext(),auth,true);
+        }
+    };
+    private  View.OnClickListener privatoListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            SharedUtils.noMoreFirstRun(getContext());
+            SharedUtils.setPrivateMember(getContext(),true);
+            getActivity().finish();
+        }
+    };
     private boolean validateRagioneSociale() {
         if (ragioneSociale.getText().toString().trim().isEmpty()) {
             ragioneSocialeLayout.setError(getString(R.string.err_msg_ragione_sociale));
@@ -192,6 +215,36 @@ public class ClientAuthenticationFragment extends Fragment {
 
 
     }
+    private void submitCodeRequest() {
+        if (!validateRagioneSociale()) {
+            return;
+        }
+
+        if (!validateEmail()) {
+            return;
+        }
+
+        if (!validatePIVA()) {
+            return;
+        }
+        codiceAzienda.setProgress(50);
+        RequestsUtils.obtainCodeRequest(getContext(), createJSONCodeRequest(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                codiceAzienda.setProgress(0);
+                SharedUtils.setCodeRequestSent(getContext());
+                editor.commit();
+                editor.apply();
+                UiUtils.createCodeRequestDoneDialog(getContext(),email.getText().toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                codiceAzienda.setProgress(0);
+                Toast.makeText(getContext(),"Errore di connessione, prego riprovare",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private boolean validateEmail() {
         String e = email.getText().toString().trim();
 
@@ -263,5 +316,18 @@ public class ClientAuthenticationFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
+private JSONObject createJSONCodeRequest() {
+    JSONObject request = new JSONObject();
+    try {
+        JSONObject cliente = new JSONObject();
+        cliente.put("ragione_sociale",ragioneSociale.getText());
+        cliente.put("partita_iva",pIVA.getText());
+        cliente.put("email",email.getText());
+        request.put("cliente",cliente);
+    }
+    catch (JSONException ex) {
+        ex.printStackTrace();
+    }
+    return request;
+}
 }

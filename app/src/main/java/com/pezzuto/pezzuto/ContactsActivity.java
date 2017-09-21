@@ -205,27 +205,27 @@ public class ContactsActivity extends AppCompatActivity {
 
         Map<String, String> datum1 = new HashMap<String, String>(2);
         datum1.put("type","Showroom (Lun-Ven)");
-        datum1.put("content",shre.getString("orarioShowroomInfra",""));
+        datum1.put("content",shre.getString("orarioShowroomInfra","8:00 - 13:00 / 16:00 - 19:00"));
 
         Map<String, String> datum2 = new HashMap<String, String>(2);
         datum2.put("type","Showroom (Sab)");
-        datum2.put("content", shre.getString("orarioShowroomWE",""));
+        datum2.put("content", shre.getString("orarioShowroomWE","8:00 - 12:00"));
 
         Map<String, String> datum3 = new HashMap<String, String>(2);
         datum3.put("type","Uffici (Lun-Ven)");
-        datum3.put("content", shre.getString("orarioUfficiInfra",""));
+        datum3.put("content", shre.getString("orarioUfficiInfra","8:00 - 13:00 / 16:00 - 19:00"));
 
         Map<String, String> datum4 = new HashMap<String, String>(2);
         datum4.put("type","Uffici (Sab)");
-        datum4.put("content", shre.getString("orarioUfficiWE",""));
+        datum4.put("content", shre.getString("orarioUfficiWE","8:00 - 12:00"));
 
         Map<String, String> datum5 = new HashMap<String, String>(2);
         datum5.put("type","Magazzino (Lun-Ven)");
-        datum5.put("content", shre.getString("orarioMagazzinoInfra",""));
+        datum5.put("content", shre.getString("orarioMagazzinoInfra","8:00 - 19:00"));
 
         Map<String, String> datum6 = new HashMap<String, String>(2);
         datum6.put("type","Magazzino (Sab)");
-        datum6.put("content", shre.getString("orarioMagazzinoWE",""));
+        datum6.put("content", shre.getString("orarioMagazzinoWE","8:00 - 12:00"));
 
         data.add(datum1);
         data.add(datum2);

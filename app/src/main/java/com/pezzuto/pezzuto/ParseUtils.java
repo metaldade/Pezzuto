@@ -34,6 +34,9 @@ public class ParseUtils {
                 obj.getInt("id_iva") == 1 ? 10 : 22
         );
         if (obj.has("pivot")) p.setPromotionPrice(obj.getJSONObject("pivot").getDouble("prezzo_promozione"));
+        if (obj.has("promozioni") && obj.getJSONArray("promozioni").length() > 0) {
+            p.setPromotionPrice(obj.getJSONArray("promozioni").getJSONObject(0).getJSONObject("pivot").getDouble("prezzo_promozione"));
+        }
         return p;
     }
     public static List<Product> parseProducts(JSONArray arr) throws JSONException {

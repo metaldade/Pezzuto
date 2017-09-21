@@ -131,10 +131,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         progressCircle.attachListener(this);
 
         //First Run Check
-        if (SharedUtils.isFirstRun(this)) {
+       // if (SharedUtils.isFirstRun(this)) {
             Intent intent = new Intent(this, FirstRunActivity.class);
             startActivityForResult(intent,FIRST_RUN_CODE);
-        }
+//        }
 
         handleIntent(getIntent());
 
@@ -219,6 +219,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 }
             }
         });
+
+
     }
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
@@ -240,6 +242,21 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         launchProductFragment(scope,query);
     }
     @Override
+    public void onResume(){
+        super.onResume();
+        checkNotificationType();
+    }
+    public void checkNotificationType() {
+        if (getIntent().getExtras() != null) {
+            String type = getIntent().getExtras().getString("type");
+            if (type != null) {
+                if (type.equals("eventi")) bottomBar.selectTabAtPosition(2);
+                else if (type.equals("prodotti")) bottomBar.selectTabAtPosition(0);
+                else bottomBar.selectTabAtPosition(1);
+            }
+        }
+    }
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.cart, menu);
@@ -248,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         search_menu = menu;
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         checkCartIcon();
+        checkContactIcon();
         final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -270,9 +288,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         return true;
     }
     public void checkCartIcon() {
-        if (lastFragment.getType().equals(PROMOTIONS) || lastFragment.getType().equals(EVENTS)) search_menu.findItem(R.id.cartMenu).setVisible(false);
+        if (!(lastFragment.getType().equals(PRODUCTS) || lastFragment.getType().equals(PRODUCT_DETAIL))) search_menu.findItem(R.id.cartMenu).setVisible(false);
         else if (isCartEmpty()) search_menu.findItem(R.id.cartMenu).setIcon(R.drawable.ic_cart_empty);
         else search_menu.findItem(R.id.cartMenu).setIcon(R.drawable.ic_cart);
+    }
+    public void checkContactIcon() {
+        if (lastFragment.getType().equals(EVENTS)) showContactMenu();
+        else hideContactMenu();
     }
     public void hideCartMenu() {
         search_menu.findItem(R.id.cartMenu).setVisible(false);
@@ -650,5 +672,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
     public void setCartIconEmpty() {
         search_menu.findItem(R.id.cartMenu).setIcon(R.drawable.ic_cart_empty);
+    }
+    public void hideContactMenu() {
+        search_menu.findItem(R.id.contactsMenu).setVisible(false);
+    }
+    public void showContactMenu() {
+        search_menu.findItem(R.id.contactsMenu).setVisible(true);
     }
 }
