@@ -1,3 +1,4 @@
+
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFF"
@@ -62,7 +63,7 @@
         android:layout_height="42dp"
         android:id="@+id/installatore"
         android:textAllCaps="false"
-        android:text="Sono un installatore"
+        android:text="Sono un professionista"
         android:textColor="#FFF"
         android:background="@color/colorAccent" />
 
@@ -112,7 +113,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context="com.pezzuto.pezzuto.ClientAuthenticationFragment">
     <Button
@@ -228,7 +229,8 @@
         android:layout_marginTop="8dp"
         android:textAllCaps="false"
         android:textColor="@color/colorAccent"
-        android:elevation="0dp"
+        android:background="@null"
+        android:layout_marginBottom="48dp"
         app:cpb_cornerRadius="2dp"
         app:cpb_iconComplete="@drawable/ic_done"
         app:cpb_iconError="@drawable/ic_close"

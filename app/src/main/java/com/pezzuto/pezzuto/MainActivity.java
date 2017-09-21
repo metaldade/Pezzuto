@@ -131,10 +131,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         progressCircle.attachListener(this);
 
         //First Run Check
-       // if (SharedUtils.isFirstRun(this)) {
+       if (SharedUtils.isFirstRun(this)) {
             Intent intent = new Intent(this, FirstRunActivity.class);
             startActivityForResult(intent,FIRST_RUN_CODE);
-//        }
+         }
 
         handleIntent(getIntent());
 
