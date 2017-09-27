@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -34,8 +36,10 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.pezzuto.pezzuto.items.Event;
+import com.pezzuto.pezzuto.items.PezzutoObject;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
 import com.pezzuto.pezzuto.requests.RequestsUtils;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -97,6 +101,7 @@ public class EventDetailFragment extends RefreshableFragment {
         description = (TextView) v.findViewById(R.id.description);
         eventLayout = (RelativeLayout) v.findViewById(R.id.event_detail_layout);
         mListener.disableSwipeRefresh();
+        mListener.setImageLoading(true);
         fill();
         shre = getContext().getSharedPreferences(Statics.SHARED_PREF,Context.MODE_PRIVATE);
         edit = shre.edit();
@@ -139,6 +144,12 @@ public class EventDetailFragment extends RefreshableFragment {
         return l_uri;
 
     }
+    public PezzutoObject getRelatedObject() {
+        return event;
+    }
+    public Bitmap getImageBitmap() {
+        return ((BitmapDrawable) image.getDrawable()).getBitmap();
+    }
     public void fill() {
         event = mListener.getSelectedEvent();
         askInfo.setOnClickListener(new View.OnClickListener() {
@@ -153,9 +164,20 @@ public class EventDetailFragment extends RefreshableFragment {
         if (event.getImage().equals("null")) {
             image.setVisibility(View.GONE);
             if (!SharedUtils.isPrivateMember(getContext())) insertParticipateButton(false);
+            mListener.setImageLoading(false);
         }
         else {
-            Statics.loadImage(getContext(), event.getImage(),image);
+            Statics.loadImage(getContext(), event.getImage(), image, new Callback() {
+                @Override
+                public void onSuccess() {
+                    mListener.setImageLoading(false);
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            });
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -164,6 +186,7 @@ public class EventDetailFragment extends RefreshableFragment {
                     startActivity(intent);
                 }
             });
+
             if (!SharedUtils.isPrivateMember(getContext())) insertParticipateButton(true);
         }
 

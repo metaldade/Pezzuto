@@ -3,6 +3,8 @@ package com.pezzuto.pezzuto;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Environment;
 import android.support.v4.util.ArraySet;
 import android.view.View;
@@ -12,10 +14,12 @@ import android.widget.TextView;
 import com.pezzuto.pezzuto.items.Event;
 import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.requests.RequestsUtils;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -26,6 +30,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -65,12 +70,33 @@ public class Statics {
         DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss",Locale.ITALIAN);
         return df.format(d);
     }
-    public static void loadImage(Context context, String path, ImageView v) {
+    public static void loadImage(Context context, String path, final ImageView v) {
         Picasso.with(context).load(path.contains("http") ? path: RequestsUtils.BASE_STORAGE_URL+path).into(v);
     }
+    public static void loadImage(Context context, String path, final ImageView v, Callback callback) {
+        Picasso.with(context).load(path.contains("http") ? path: RequestsUtils.BASE_STORAGE_URL+path).into(v,callback);
+    }
+
     public static String getFormattedEventDate(Event e) {
         return e.getEndDate() == null ? Statics.getDayMonth(e.getStartDate()) :
                 "Dal "+Statics.getDayMonth(e.getStartDate())+" al "+Statics.getDayMonth(e.getEndDate());
+    }
+    public static void  saveImageToExternal(Bitmap bm, String type, int id) {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/req_images");
+        myDir.mkdirs();
+        String fname = type+"-"+id;
+        File file = new File(myDir, fname);
+        if (file.exists())
+            file.delete();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public static void swap(String[] array,int i1,int i2) {
         String temp = array[i2];
@@ -101,4 +127,5 @@ public class Statics {
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         context.startActivity(Intent.createChooser(intent, "Send Email"));
     }
+
 }

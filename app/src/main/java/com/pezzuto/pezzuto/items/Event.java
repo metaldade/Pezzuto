@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by dade on 28/05/17.
  */
 
-public class Event {
+public class Event extends PezzutoObject {
     private String name, description, briefDescription, place, image, month;
     Date startDate, endDate;
     private int id,participants;
@@ -23,6 +23,7 @@ public class Event {
         this.image = image;
     }
     public String getName() { return name; }
+    public String getTitle() { return name; }
     public String getDescription() { return description; };
     public String getBriefDescription() { return briefDescription; };
     public String getPlace() { return place; }

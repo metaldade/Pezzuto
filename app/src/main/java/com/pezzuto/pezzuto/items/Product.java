@@ -4,7 +4,7 @@ package com.pezzuto.pezzuto.items;
  * Created by dade on 31/03/17.
  */
 
-public class Product {
+public class Product extends PezzutoObject {
     private String category;
     private String code;
     private String marca;

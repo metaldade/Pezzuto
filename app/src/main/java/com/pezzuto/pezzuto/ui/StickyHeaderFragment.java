@@ -17,6 +17,7 @@
 package com.pezzuto.pezzuto.ui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -45,6 +46,7 @@ import com.pezzuto.pezzuto.adapter.StickyEventAdapter;
 import com.pezzuto.pezzuto.adapter.StickyProdAdapter;
 import com.pezzuto.pezzuto.adapter.StickyTestAdapter;
 import com.pezzuto.pezzuto.items.Event;
+import com.pezzuto.pezzuto.items.PezzutoObject;
 import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.items.Promprod;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
@@ -334,6 +336,12 @@ public class StickyHeaderFragment extends BaseDecorationFragment implements Recy
         }
     };
 
+public PezzutoObject getRelatedObject() {
+    return null;
+}
+public Bitmap getImageBitmap() {
+    return null;
+}
 public void sendSearchProdRequest(String scope, String query) {
     RequestsUtils.sendSearchRequest(getContext(), createSearchJSON(scope, query), new Response.Listener<JSONArray>() {
         @Override

@@ -3,6 +3,7 @@ package com.pezzuto.pezzuto.listeners;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.pezzuto.pezzuto.RefreshableFragment;
@@ -74,4 +75,7 @@ public interface OnFragmentInteractionListener {
     void goOnProm();
 
     void hideCartMenu();
+    MenuItem getShareMenu();
+
+    void setImageLoading(boolean isImageLoading);
 }

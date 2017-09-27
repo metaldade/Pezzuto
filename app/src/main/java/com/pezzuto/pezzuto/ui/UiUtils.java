@@ -1,14 +1,27 @@
 package com.pezzuto.pezzuto.ui;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.design.widget.BottomSheetBehavior;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareButton;
+import com.facebook.share.widget.ShareDialog;
 import com.pezzuto.pezzuto.R;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
+
+import java.io.File;
 
 /**
  * Created by dade on 19/06/17.
@@ -59,4 +72,29 @@ public class UiUtils {
         // if button is clicked, close the custom dialog
         dialog.show();
     }
+    public static void createShareDialog(final Bitmap image, final Activity activity, View.OnClickListener moreListener) {
+        // custom dialog
+        final Dialog dialog = new Dialog(activity);
+        dialog.setContentView(R.layout.dialog_share);
+        ImageButton fbShare = (ImageButton) dialog.findViewById(R.id.fbShare);
+        Button moreShare = (Button) dialog.findViewById(R.id.moreShare);
+
+        fbShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharePhoto photo = new SharePhoto.Builder()
+                        .setBitmap(image)
+                        .build();
+                SharePhotoContent content = new SharePhotoContent.Builder()
+                        .addPhoto(photo)
+                        .build();
+                ShareDialog shareDialog = new ShareDialog(activity);
+                shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
+            }
+        });
+        moreShare.setOnClickListener(moreListener);
+        // if button is clicked, close the custom dialog
+        dialog.show();
+    }
+
 }

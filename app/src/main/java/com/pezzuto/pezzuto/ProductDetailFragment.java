@@ -1,13 +1,22 @@
 package com.pezzuto.pezzuto;
 
+import android.*;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.ArraySet;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,9 +24,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
 import com.pezzuto.pezzuto.requests.RequestsUtils;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -39,6 +52,7 @@ import java.util.Set;
 public class ProductDetailFragment extends RefreshableFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
 private Product p;
 private SharedPreferences shre;
     private SharedPreferences.Editor edit;
@@ -74,7 +88,9 @@ private SharedPreferences shre;
         shre = getContext().getSharedPreferences(Statics.SHARED_PREF+"-cart",Context.MODE_PRIVATE);
         edit = shre.edit();
     }
-
+    public Bitmap getImageBitmap() {
+        return ((BitmapDrawable) image.getDrawable()).getBitmap();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,8 +102,18 @@ private SharedPreferences shre;
         marca = (TextView) v.findViewById(R.id.marca);
         price = (TextView) v.findViewById(R.id.price);
         image = (ImageView) v.findViewById(R.id.image);
+        mListener.setImageLoading(true);
         mListener.setFabVisible(true);
         mListener.disableSwipeRefresh();
+      /*  mListener.getShareMenu().setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.d("prova","prova");
+                share(getImage());
+                return false;
+            }
+        });*/
+
         if (p == null) return v;
         fill();
         if (checkIfInCart()) setFabRemove();
@@ -99,6 +125,7 @@ private SharedPreferences shre;
         mListener.setCartIconFull();
         setFabRemove();
     }
+
     private void removeFromCart() {
         SharedUtils.removeFromCart(getContext(),p);
         if (SharedUtils.isCartEmpty(getContext())) mListener.setCartIconEmpty();
@@ -127,6 +154,9 @@ private SharedPreferences shre;
         if (products.contains(""+p.getId())) return true;
         else return false;
     }
+    public Product getRelatedObject() {
+        return p;
+    }
     public void fill() {
         category.setText(p.getCategory());
         title.setText(p.getTitle());
@@ -134,7 +164,17 @@ private SharedPreferences shre;
         marca.setText(p.getMarca());
         double finalPrice = Statics.getFinalPrice(getContext(),p);
         price.setText(String.format(Locale.ITALY,"%.2f",finalPrice)+"€ / "+p.getMeasure()+" + "+p.getIVA()+"% IVA");
-        Statics.loadImage(getContext(),p.getImage(),image);
+        Statics.loadImage(getContext(), p.getImage(), image, new Callback() {
+            @Override
+            public void onSuccess() {
+                mListener.setImageLoading(false);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,7 +195,9 @@ private SharedPreferences shre;
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
+public String getImageUrl() {
+    return p.getImage();
+}
     @Override
     public void onDetach() {
         super.onDetach();

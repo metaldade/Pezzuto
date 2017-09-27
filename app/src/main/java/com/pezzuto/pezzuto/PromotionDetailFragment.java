@@ -2,6 +2,8 @@ package com.pezzuto.pezzuto;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,9 +16,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pezzuto.pezzuto.adapter.PromotionListViewAdapter;
+import com.pezzuto.pezzuto.items.PezzutoObject;
 import com.pezzuto.pezzuto.items.Promprod;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
 import com.pezzuto.pezzuto.ui.GraphicUtils;
+import com.squareup.picasso.Callback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +34,7 @@ public class PromotionDetailFragment extends RefreshableFragment {
     // TODO: Rename parameter arguments, choose names that match
 
     private Promprod p;
+    private ImageView image;
 
     private OnFragmentInteractionListener mListener;
 
@@ -77,13 +82,14 @@ public class PromotionDetailFragment extends RefreshableFragment {
             }
         });
         mListener.disableSwipeRefresh();
+        mListener.setImageLoading(true);
         View v = inflater.inflate(R.layout.fragment_promotion_detail, container, false);
 
         TextView title = (TextView) v.findViewById(R.id.title);
         TextView description = (TextView) v.findViewById(R.id.description);
         TextView validity = (TextView) v.findViewById(R.id.validity);
         TextView textView1 = (TextView) v.findViewById(R.id.textView1);
-        ImageView image = (ImageView) v.findViewById(R.id.image);
+        image = (ImageView) v.findViewById(R.id.image);
 
         //Pupulate fields
         title.setText(p.getTitle());
@@ -95,7 +101,17 @@ public class PromotionDetailFragment extends RefreshableFragment {
         }
         else mListener.getFab().setVisibility(View.VISIBLE);
         //load image
-        Statics.loadImage(getContext(),p.getImage(),image);
+        Statics.loadImage(getContext(), p.getImage(), image, new Callback() {
+            @Override
+            public void onSuccess() {
+                mListener.setImageLoading(false);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,8 +155,12 @@ public class PromotionDetailFragment extends RefreshableFragment {
         GraphicUtils.setListViewHeightBasedOnChildren(listViewPromo,1);
         return v;
     }
-
-
+    public PezzutoObject getRelatedObject() {
+        return p;
+    }
+    public Bitmap getImageBitmap() {
+        return ((BitmapDrawable) image.getDrawable()).getBitmap();
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

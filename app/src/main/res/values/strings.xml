@@ -24,5 +24,5 @@
     <string name="order_info">Selezione la quantità di prodotti da ordinare tramite i pulsanti + | -.\nUna volta scelti i tuoi prodotti, premi il pulsante Avanti per continuare.</string>
     <string name="remain_updated_text">Attiva le notifiche per rimanere sempre aggiornato sulle nostre promozioni e non perdere mai l\'occasione di risparmiare
         sul tuo prossimo acquisto.</string>
-
+    <string name="facebook_app_id">305961909885168</string>
 </resources>

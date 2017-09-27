@@ -7,7 +7,7 @@ import java.util.List;
  * Created by dade on 24/03/17.
  */
 
-public class Promprod {
+public class Promprod extends PezzutoObject {
     private String title;
     private String description;
     private String category;

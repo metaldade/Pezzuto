@@ -1,15 +1,24 @@
 package com.pezzuto.pezzuto;
 
 
+import android.*;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -36,10 +45,20 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.ShareMediaContent;
+import com.facebook.share.model.ShareOpenGraphAction;
+import com.facebook.share.model.ShareOpenGraphContent;
+import com.facebook.share.model.ShareOpenGraphObject;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.github.jorgecastilloprz.FABProgressCircle;
 import com.github.jorgecastilloprz.listeners.FABProgressListener;
 import com.pezzuto.pezzuto.items.Event;
+import com.pezzuto.pezzuto.items.PezzutoObject;
 import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.items.Promprod;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
@@ -54,9 +73,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener,FABProgressListener {
     private Promprod selected;
@@ -68,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private boolean firstAccessProm = true;
     private boolean firstAccessProd = true;
     private boolean firstAccessEvent = true;
+    private boolean imageLoading = false;
     private FABProgressCircle progressCircle;
     private SwipeRefreshLayout swipe;
     private RefreshableFragment lastFragment;
@@ -86,7 +112,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public static final String EVENTS = "events";
     public static final String PROD_FILTER = "prod_filter";
     public static final String PROD_SEARCH = "prod_search";
-
+    public static final int REQUEST_WRITE_EXTERNAL = 10;
+    public static final int REQUEST_WRITE_EXTERNAL_SHARE = 10;
     public static final int FIRST_RUN_CODE = 0;
 
     //Activity requests
@@ -123,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 lastFragment.refresh();
             }
         });
-
         //categories request
         RequestsUtils.sendRequest(this,RequestsUtils.CATEGORIE,RequestsUtils.NO_FILTER,null,parseCatResponse);
         emptyState = (TextView) findViewById(R.id.emptyIcon);
@@ -241,6 +267,25 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         removeEmptyState();
         launchProductFragment(scope,query);
     }
+    public void checkWritePermission() {
+        if (ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_EXTERNAL);
+        } else {
+        }
+    }
+    public void checkShareWritePermission() {
+        if (ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_EXTERNAL_SHARE);
+        } else {
+            shareIntent();
+        }
+    }
     @Override
     public void onResume(){
         super.onResume();
@@ -262,10 +307,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         inflater.inflate(R.menu.cart, menu);
         inflater.inflate(R.menu.search_menu, menu);
         inflater.inflate(R.menu.contacts, menu);
+        inflater.inflate(R.menu.share, menu);
         search_menu = menu;
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         checkCartIcon();
         checkContactIcon();
+        checkShareIcon();
         final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -287,6 +334,34 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         setSearchVisible(isSearchVisible);
         return true;
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_WRITE_EXTERNAL_SHARE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    shareIntent();
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    Toast.makeText(this, "Non è possibile condividere senza autorizzare il permesso di scrittura.",Toast.LENGTH_SHORT).show();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+    public void shareIntent() {
+        createInstagramIntent(lastFragment.getImageBitmap(),lastFragment.getRelatedObject());
+    }
+
     public void checkCartIcon() {
         if (!(lastFragment.getType().equals(PRODUCTS) || lastFragment.getType().equals(PRODUCT_DETAIL))) search_menu.findItem(R.id.cartMenu).setVisible(false);
         else if (isCartEmpty()) search_menu.findItem(R.id.cartMenu).setIcon(R.drawable.ic_cart_empty);
@@ -295,6 +370,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void checkContactIcon() {
         if (lastFragment.getType().equals(EVENTS)) showContactMenu();
         else hideContactMenu();
+    }
+    public void checkShareIcon() {
+        if (!(lastFragment.getType().equals(PRODUCT_DETAIL) || lastFragment.getType().equals(EVENT_DETAIL) || lastFragment.getType().equals(PROMOTION_DETAIL)))
+            search_menu.findItem(R.id.shareMenu).setVisible(false);
     }
     public void hideCartMenu() {
         search_menu.findItem(R.id.cartMenu).setVisible(false);
@@ -311,9 +390,55 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 Intent intent2 = new Intent(this,ContactsActivity.class);
                 startActivity(intent2);
                 return true;
+            case R.id.shareMenu:
+                if (imageLoading) Toast.makeText(this,"Attendere il completamento dell'immagine per condividere",Toast.LENGTH_SHORT).show();
+                else createShareDialog();
+                //UiUtils.createShareDialog(this,((ProductDetailFragment)lastFragment).getImage(),this);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    private void createShareDialog() {
+        UiUtils.createShareDialog(lastFragment.getImageBitmap(), this, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkShareWritePermission();
+            }
+        });
+    }
+    private void createInstagramIntent(Bitmap bm, PezzutoObject p){
+        String pathofBmp = MediaStore.Images.Media.insertImage(getContentResolver(), bm,"title", null);
+        Uri bmpUri = Uri.parse(pathofBmp);
+        // Create the new Intent using the 'Send' action.
+        Intent share = new Intent(Intent.ACTION_SEND);
+        String type = "image/*";
+        // Set the MIME type
+        share.setType(type);
+        // Create the URI from the media
+        // Add the URI to the Intent.
+        share.putExtra(Intent.EXTRA_STREAM, bmpUri);
+        share.putExtra(Intent.EXTRA_TEXT, makeShareTitle(p));
+        share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        // Broadcast the Intent.
+
+
+        startActivity(Intent.createChooser(share, "Condividi.."));
+    }
+    public String makeShareTitle(PezzutoObject p) {
+        String tmp = p.getTitle()+"\n";
+        if (p instanceof Promprod) {
+            tmp += "Promozione valida dal "+Statics.getSimpleDate(((Promprod)p).getValidaDal())+" al "+Statics.getSimpleDate(((Promprod)p).getValidaAl())+(((Promprod)p).isEsaurimento() ? " o esaurimento scorte" : "");
+        }
+        if (p instanceof Product) {
+            double finalPrice = Statics.getFinalPrice(this,(Product)p);
+            tmp += String.format(Locale.ITALY,"%.2f",finalPrice)+"€ / "+((Product)p).getMeasure()+" + "+((Product)p).getIVA()+"% IVA";
+        }
+        if (p instanceof Event) {
+            tmp +=Statics.getFormattedEventDate((Event)p);
+        }
+        return tmp;
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -550,6 +675,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         });
     }
+    public void setImageLoading(boolean isImageLoading) {
+        this.imageLoading = isImageLoading;
+    }
     public void setPromotionSheetBehaviour() {
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -678,5 +806,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
     public void showContactMenu() {
         search_menu.findItem(R.id.contactsMenu).setVisible(true);
+    }
+    public MenuItem getShareMenu() {
+        return search_menu.findItem(R.id.shareMenu);
     }
 }
