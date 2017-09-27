@@ -49,7 +49,7 @@ android:gravity="center_vertical"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="Gli articoli in primo piano sono in continuo aggiornamento e vengono accuratamente scelti
-per presentarti i nostri nuovi prodotti  e quelli più acquistati in questo periodo dell'anno"
+per presentarti i nostri nuovi prodotti e quelli più acquistati in questo periodo dell'anno"
         android:paddingTop="8dp"/>
     <TextView
         android:layout_width="wrap_content"
