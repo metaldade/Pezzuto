@@ -26,8 +26,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.pezzuto.pezzuto.MainActivity;
 import com.pezzuto.pezzuto.PromotionDetailFragment;
 import com.pezzuto.pezzuto.R;
+import com.pezzuto.pezzuto.RefreshableFragment;
 import com.pezzuto.pezzuto.Statics;
 import com.pezzuto.pezzuto.items.Product;
 import com.pezzuto.pezzuto.items.Promprod;
@@ -67,8 +69,8 @@ public class StickyTestAdapter extends RecyclerView.Adapter<StickyTestAdapter.Vi
             @Override
             public void onClick(View view) {
                 listener.setSelectedPromprod(p);
-                listener.launchFragment(new PromotionDetailFragment());
-
+                RefreshableFragment f = new PromotionDetailFragment();
+                listener.launchFragment(f,MainActivity.PROMOTION_DETAIL);
             }
         });
         viewHolder.title.setText(p.getTitle());

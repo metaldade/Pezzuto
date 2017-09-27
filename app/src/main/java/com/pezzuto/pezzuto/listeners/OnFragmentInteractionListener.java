@@ -48,6 +48,7 @@ public interface OnFragmentInteractionListener {
 
     //fragments
     void launchFragment(RefreshableFragment fragment);
+    void launchFragment(RefreshableFragment fragment, String key);
     void launchFragment(String key);
     void launchProductFragment(int category);
     void launchSheetInfoFragment();
@@ -78,4 +79,7 @@ public interface OnFragmentInteractionListener {
     MenuItem getShareMenu();
 
     void setImageLoading(boolean isImageLoading);
+
+    void setSelectedCategory(String category);
+    String getSelectedCategory();
 }

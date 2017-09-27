@@ -16,13 +16,21 @@
         android:layout_height="wrap_content"
         android:text="SCEGLI QUALI PRODOTTI PRENOTARE"/>
     <!-- TODO: Update blank fragment layout -->
-    <ListView
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
         android:layout_marginTop="8dp"
+        android:background="@color/divider_color"/>
+    <ListView
         android:layout_width="match_parent"
         android:background="#FFF"
         android:layout_height="wrap_content"
         android:id="@+id/listViewProducts"
         />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,9 +45,13 @@
         android:layout_marginTop="16dp"
         android:id="@+id/total"
         android:text="RIEPILOGO TOTALE"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/divider_color"/>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="8dp"
         android:background="#FFF"
         android:paddingRight="16dp"
         android:paddingLeft="16dp"
@@ -47,6 +59,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="8dp"
             android:text="Imponibile: "
             android:id="@+id/imponibile"/>
         <TextView
@@ -99,7 +112,12 @@
             android:textStyle="bold"
             android:layout_marginBottom="8dp"
             android:text="2786.48€" />
+
     </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color"/>
     <com.dd.CircularProgressButton
         android:id="@+id/goOnButton"
         android:layout_width="match_parent"
@@ -109,10 +127,9 @@
         android:textSize="18sp"
         android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:visibility="gone"
         android:layout_marginBottom="8dp"
-        android:layout_alignParentBottom="true"
         app:cpb_cornerRadius="8dp"
         app:cpb_iconComplete="@drawable/ic_done"
         app:cpb_iconError="@drawable/ic_close"

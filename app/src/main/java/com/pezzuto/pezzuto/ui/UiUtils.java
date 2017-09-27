@@ -72,7 +72,7 @@ public class UiUtils {
         // if button is clicked, close the custom dialog
         dialog.show();
     }
-    public static void createShareDialog(final Bitmap image, final Activity activity, View.OnClickListener moreListener) {
+    public static void createShareDialog(final Bitmap image, final Activity activity, final View.OnClickListener moreListener) {
         // custom dialog
         final Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.dialog_share);
@@ -90,9 +90,17 @@ public class UiUtils {
                         .build();
                 ShareDialog shareDialog = new ShareDialog(activity);
                 shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
+                dialog.dismiss();
             }
         });
-        moreShare.setOnClickListener(moreListener);
+        moreShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moreListener.onClick(v);
+                dialog.dismiss();
+            }
+        });
+        //moreShare.setOnClickListener(moreListener);
         // if button is clicked, close the custom dialog
         dialog.show();
     }

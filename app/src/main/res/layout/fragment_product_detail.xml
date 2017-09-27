@@ -15,12 +15,12 @@
         android:text="Tubazioni"
         android:id="@+id/category"
         android:textColor="@color/colorAccent"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:textAppearance="?android:textAppearanceLarge"
         android:id="@+id/title"
         android:text="R999L tubo multi strato isolato o20x2 rosso"/>

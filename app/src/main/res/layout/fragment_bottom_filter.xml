@@ -1,23 +1,72 @@
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.pezzuto.pezzuto.BottomFilterFragment">
-<Button
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF">
+<TextView
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="52dp"
+android:gravity="center_vertical"
     android:text="In primo piano"
-    style="@style/Widget.AppCompat.Button.Borderless"
     android:textAllCaps="false"
-    android:layout_marginLeft="3dp"
-    android:textSize="16sp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:textStyle="bold"
+    android:textSize="18sp"
+
     android:textColor="#c9000000"
     android:id="@+id/primoPiano"/>
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_done"
+            android:tint="@color/colorAccent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:id="@+id/done1"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/divider_color"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Gli articoli in primo piano sono in continuo aggiornamento e vengono accuratamente scelti
+per presentarti i nostri nuovi prodotti  e quelli più acquistati in questo periodo dell'anno"
+        android:paddingTop="8dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginStart="16dp"
+        android:text="TUTTE LE CATEGORIE"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/divider_color"/>
 <ListView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
+
     android:id="@+id/categories"/>
 
 </LinearLayout>
+</ScrollView>

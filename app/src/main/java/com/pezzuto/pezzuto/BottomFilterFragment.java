@@ -1,6 +1,7 @@
 package com.pezzuto.pezzuto;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
@@ -11,9 +12,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.pezzuto.pezzuto.adapter.CategoriesListViewAdapter;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
+import com.pezzuto.pezzuto.ui.GraphicUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +38,7 @@ public class BottomFilterFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private ListView categories;
-    private Button primoPianoButton;
+    private TextView primoPianoButton;
     public BottomFilterFragment() {
         // Required empty public constructor
     }
@@ -56,10 +61,14 @@ public class BottomFilterFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_bottom_filter, container, false);
         categories = (ListView) v.findViewById(R.id.categories);
-        primoPianoButton = (Button) v.findViewById(R.id.primoPiano);
+        primoPianoButton = (TextView) v.findViewById(R.id.primoPiano);
         cats = new String[mListener.getCategories().keySet().size()];
         mListener.getCategories().keySet().toArray(cats);
-
+        ImageView done = (ImageView) v.findViewById(R.id.done1);
+        if (!mListener.getSelectedCategory().equals("")) {
+            primoPianoButton.setTypeface(Typeface.DEFAULT);
+            done.setVisibility(View.GONE);
+        }
         //Individua primo piano e rimuovi
         Arrays.sort(cats);
         int primoPiano = Arrays.binarySearch(cats,"In primo piano");
@@ -69,12 +78,13 @@ public class BottomFilterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int identifier = mListener.getCategories().get("In primo piano");
+                mListener.setSelectedCategory("");
                 mListener.getBottomSheetBehavior().setState(BottomSheetBehavior.STATE_HIDDEN);
                 mListener.launchProductFragment(identifier);
             }
         });
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_1, android.R.id.text1,cats);
+        final CategoriesListViewAdapter adapter = new CategoriesListViewAdapter(getContext(),
+                R.layout.category_list_item, cats, mListener.getSelectedCategory());
         categories.setAdapter(adapter);
         categories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -82,8 +92,10 @@ public class BottomFilterFragment extends Fragment {
                 int identifier = mListener.getCategories().get(cats[position]);
                 mListener.getBottomSheetBehavior().setState(BottomSheetBehavior.STATE_HIDDEN);
                 mListener.launchProductFragment(identifier);
+                mListener.setSelectedCategory(cats[position]);
             }
         });
+        GraphicUtils.setListViewHeightBasedOnChildren(categories,0);
         return v;
     }
     public String[] removeIndex(String[] original, int index) {

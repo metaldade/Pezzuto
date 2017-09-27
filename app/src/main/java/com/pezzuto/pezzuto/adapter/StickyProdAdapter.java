@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.pezzuto.pezzuto.MainActivity;
 import com.pezzuto.pezzuto.ProductDetailFragment;
 import com.pezzuto.pezzuto.PromotionDetailFragment;
 import com.pezzuto.pezzuto.R;
@@ -73,7 +74,9 @@ public class StickyProdAdapter extends RecyclerView.Adapter<StickyProdAdapter.Vi
                 listener.setSelectedProduct(p);
                 listener.collapseSearchView();
                 listener.removeSearchMenuVisibility();
-                listener.launchFragment(new ProductDetailFragment());
+                ProductDetailFragment f = new ProductDetailFragment();
+                f.setBackwards(MainActivity.PRODUCTS);
+                listener.launchFragment(f);
             }
         });
         viewHolder.title.setText(p.getTitle());

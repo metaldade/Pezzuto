@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private boolean firstAccessProd = true;
     private boolean firstAccessEvent = true;
     private boolean imageLoading = false;
+    private String selectedCategory = "";
     private FABProgressCircle progressCircle;
     private SwipeRefreshLayout swipe;
     private RefreshableFragment lastFragment;
@@ -643,7 +644,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             launchFragment(PROMOTIONS);
         }
         else if (lastFragment.getType().equals(PRODUCT_DETAIL)) {
-            launchFragment(PRODUCTS);
+            if (((ProductDetailFragment) lastFragment).getBackwards().equals(MainActivity.PROMOTION_DETAIL))
+                launchFragment(PROMOTION_DETAIL);
+            else launchFragment(PRODUCTS);
         }
         else if (lastFragment.getType().equals(EVENT_DETAIL)) {
             launchFragment(EVENTS);
@@ -674,6 +677,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             }
 
         });
+    }
+    public void setSelectedCategory(String category) {
+        selectedCategory = category;
+    }
+    public String getSelectedCategory() {
+        return selectedCategory;
     }
     public void setImageLoading(boolean isImageLoading) {
         this.imageLoading = isImageLoading;

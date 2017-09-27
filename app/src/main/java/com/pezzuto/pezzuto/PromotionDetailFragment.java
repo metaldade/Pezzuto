@@ -89,6 +89,7 @@ public class PromotionDetailFragment extends RefreshableFragment {
         TextView description = (TextView) v.findViewById(R.id.description);
         TextView validity = (TextView) v.findViewById(R.id.validity);
         TextView textView1 = (TextView) v.findViewById(R.id.textView1);
+        TextView category = (TextView) v.findViewById(R.id.category);
         image = (ImageView) v.findViewById(R.id.image);
 
         //Pupulate fields
@@ -100,6 +101,7 @@ public class PromotionDetailFragment extends RefreshableFragment {
             mListener.getFab().setVisibility(View.GONE);
         }
         else mListener.getFab().setVisibility(View.VISIBLE);
+        category.setText(p.getCategory());
         //load image
         Statics.loadImage(getContext(), p.getImage(), image, new Callback() {
             @Override
@@ -133,7 +135,9 @@ public class PromotionDetailFragment extends RefreshableFragment {
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                mListener.setSelectedProduct(p.getProducts().get(position));
-               mListener.launchFragment(new ProductDetailFragment());
+               ProductDetailFragment f = new ProductDetailFragment();
+               f.setBackwards(MainActivity.PROMOTION_DETAIL);
+               mListener.launchFragment(f);
            }
        });
 

@@ -63,6 +63,7 @@ private SharedPreferences shre;
     TextView marca;
     TextView price;
     ImageView image;
+    String backwards;
     public ProductDetailFragment() {
         // Required empty public constructor
     }
@@ -184,7 +185,12 @@ private SharedPreferences shre;
             }
         });
     }
-
+    public String getBackwards() {
+        return backwards;
+    }
+    public void setBackwards(String backwards) {
+        this.backwards = backwards;
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
