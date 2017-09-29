@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                         ft.replace(R.id.contentContainer,f , PROMOTIONS).commit();
                         lastFragment = f;
                         ft.addToBackStack(null);
+
                         firstAccessProm = false;
                     }
                     else {
@@ -517,7 +518,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         RefreshableFragment f = (RefreshableFragment) getSupportFragmentManager().findFragmentByTag(key);
         if (f == null) {
             launchFragment(StickyHeaderFragment.newInstance(key),key);
-            if (key.equals(PRODUCTS)) bottomBar.selectTabAtPosition(1);
+            if (key.equals(PRODUCTS)) bottomBar.selectTabAtPosition(0);
             return;
         }
         if (f.hasEmptySet(key)) setEmptyState(key);

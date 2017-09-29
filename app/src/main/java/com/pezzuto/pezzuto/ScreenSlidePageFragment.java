@@ -4,10 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pezzuto.pezzuto.listeners.OnFirstRunInteractionListener;
@@ -26,6 +28,8 @@ public class ScreenSlidePageFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     OnFirstRunInteractionListener mListener;
     Button goOn;
+    TextView text1;
+    ImageView slideImage;
     private String type;
     public ScreenSlidePageFragment() {
         // Required empty public constructor
@@ -56,6 +60,8 @@ public class ScreenSlidePageFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
         goOn = (Button) v.findViewById(R.id.goOnButton);
+        slideImage = (ImageView) v.findViewById(R.id.slideImage);
+        text1 = (TextView) v.findViewById(R.id.text1);
         goOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,16 +78,20 @@ public class ScreenSlidePageFragment extends Fragment {
         if (type.equals("welcome")) {
             content.setText(R.string.welcome_text);
             title.setText("Benvenuto nell'app di Pezzuto");
+            slideImage.setImageResource(R.drawable.pezzuto);
             goOn.setText("Avanti");
         }
         if (type.equals("remain_updated")) {
             content.setText(R.string.remain_updated_text);
             title.setText("Rimani aggiornato sulle nostre promozioni");
+            slideImage.setImageResource(R.drawable.promozioni);
+            text1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
             goOn.setText("Avanti");
         }
         if (type.equals("events")) {
             title.setText("Eventi");
             content.setText(R.string.events_text);
+            slideImage.setImageResource(R.drawable.eventi);
             goOn.setText("Avanti");
         }
 

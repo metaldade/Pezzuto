@@ -66,6 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2284.0€"
+            android:layout_marginTop="8dp"
             android:textColor="#000"
             android:layout_alignParentRight="true"
             android:id="@+id/priceImponibile"/>

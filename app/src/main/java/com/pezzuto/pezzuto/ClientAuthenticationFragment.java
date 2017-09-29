@@ -201,6 +201,7 @@ public class ClientAuthenticationFragment extends Fragment {
                 editor.commit();
                 editor.apply();
                 Toast.makeText(getContext(),"Benvenuto!",Toast.LENGTH_SHORT).show();
+                SharedUtils.noMoreFirstRun(getContext());
                 getActivity().finish();
             }
         }, new Response.ErrorListener() {
