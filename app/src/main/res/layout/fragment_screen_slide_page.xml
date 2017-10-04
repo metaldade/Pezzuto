@@ -1,10 +1,11 @@
 <!-- fragment_screen_slide_page.xml -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/content"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -49,14 +50,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="48dp"
         android:orientation="vertical">
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:text="Avanti"
-        android:id="@+id/goOnButton"
-        style="@style/Base.Widget.AppCompat.Button.Colored" />
+        <com.dd.CircularProgressButton
+            android:id="@+id/goOnButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textColor="@color/cpb_white"
+            android:textSize="18sp"
+            android:layout_marginTop="24dp"
+            app:cpb_cornerRadius="0dp"
+            app:cpb_iconComplete="@drawable/ic_done"
+            app:cpb_iconError="@drawable/ic_close"
+            app:cpb_textIdle="Avanti"
+            app:cpb_selectorIdle="@drawable/idle_state_selector"/>
     </LinearLayout>
 </RelativeLayout>
 </LinearLayout>

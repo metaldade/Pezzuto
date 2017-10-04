@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="#FFF"
     android:id="@+id/event_detail_layout"
     tools:context="com.pezzuto.pezzuto.EventDetailFragment">
 
@@ -26,11 +27,14 @@
         android:layout_below="@id/title"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:background="@color/colorAccent"
-            android:tint="#FFF"
-            android:src="@drawable/ic_event_white_48px"
+            android:paddingTop="4dp"
+            android:paddingRight="2dp"
+            android:paddingLeft="2dp"
+            android:paddingBottom="2dp"
+            android:src="@drawable/ic_event_white"
             android:layout_gravity="center"/>
         <TextView
             android:layout_width="match_parent"

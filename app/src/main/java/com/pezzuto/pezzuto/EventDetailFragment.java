@@ -20,10 +20,12 @@ import android.provider.CalendarContract;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -228,7 +230,8 @@ public class EventDetailFragment extends RefreshableFragment {
     }
     public void insertParticipateButton(boolean withImage) {
         //create button
-        b = new Button(getContext());
+        b = new Button(getContext(),null,android.R.attr
+                .borderlessButtonStyle);
             checkParticipateButton();
 
         RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -240,6 +243,7 @@ public class EventDetailFragment extends RefreshableFragment {
             rl.addRule(RelativeLayout.BELOW,R.id.image);
 
         }
+        ViewCompat.setElevation(b,0);
         b.setId(View.generateViewId());
         b.setLayoutParams(rl);
         eventLayout.addView(b);
@@ -298,12 +302,14 @@ public class EventDetailFragment extends RefreshableFragment {
     private void setParticipateButton(Button b) {
         b.setBackgroundResource(R.drawable.participate_selector);
         b.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_event_white_48px, 0, 0, 0);
+        b.setCompoundDrawablePadding(8);
         b.setTextColor(getParticipateColorStateList());
         b.setText("Partecipa");
     }
     public void setNotParticipateButton(Button b) {
         b.setBackgroundResource(R.drawable.not_participate_selector);
-        b.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_event_white, 0, 0, 0);
+        b.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_event_white_48px, 0, 0, 0);
+        b.setCompoundDrawablePadding(8);
         b.setTextColor(getNotParticipateColorStateList());
         b.setText("Non partecipare più");
     }

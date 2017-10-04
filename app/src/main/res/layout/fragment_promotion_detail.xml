@@ -1,11 +1,13 @@
 <ScrollView android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#FFF"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#FFF"
     android:orientation="vertical"
     tools:context=".PromotionDetailFragment">
 
@@ -36,17 +38,21 @@
             android:layout_height="44dp"
             android:background="@color/colorAccent"
             android:id="@+id/imageEvent"
+            android:paddingTop="4dp"
+            android:paddingRight="2dp"
+            android:paddingLeft="2dp"
+            android:paddingBottom="2dp"
             android:src="@drawable/ic_event_white"/>
     <TextView
-        android:paddingRight="16dp"
+        android:paddingEnd="16dp"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:text="Valida dal 13 marzo al 25 aprile o fino ad esaurimento scorte"
         android:textColor="@color/colorAccent"
         android:gravity="center_vertical"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="8dp"
-        android:layout_toRightOf="@id/imageEvent"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@id/imageEvent"
         android:id="@+id/validity"
         android:textStyle="bold"
         />
@@ -80,6 +86,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
         android:id="@+id/listViewPromotions"
         />
 

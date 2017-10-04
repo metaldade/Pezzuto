@@ -72,7 +72,6 @@ public class PromotionDetailFragment extends RefreshableFragment {
         // Inflate the layout for this fragment
         p = mListener.getSelectedPromprod();
 
-        mListener.setFabVisible(true);
         mListener.setPromotionSheetBehaviour();
         mListener.getFab().setIcon(R.drawable.ic_cart);
         mListener.getFab().setOnClickListener(new View.OnClickListener() {
@@ -82,7 +81,7 @@ public class PromotionDetailFragment extends RefreshableFragment {
             }
         });
         mListener.disableSwipeRefresh();
-        mListener.setImageLoading(true);
+
         View v = inflater.inflate(R.layout.fragment_promotion_detail, container, false);
 
         TextView title = (TextView) v.findViewById(R.id.title);
@@ -98,11 +97,12 @@ public class PromotionDetailFragment extends RefreshableFragment {
         validity.setText("Promozione valida dal "+Statics.getSimpleDate(p.getValidaDal())+" al "+Statics.getSimpleDate(p.getValidaAl())+(p.isEsaurimento() ? " o esaurimento scorte" : ""));
         if (p.getProducts().isEmpty()) {
             textView1.setVisibility(View.GONE);
-            mListener.getFab().setVisibility(View.GONE);
+            mListener.setFabVisible(false);
         }
-        else mListener.getFab().setVisibility(View.VISIBLE);
+        else mListener.setFabVisible(true);
         category.setText(p.getCategory());
         //load image
+        mListener.setImageLoading(true);
         Statics.loadImage(getContext(), p.getImage(), image, new Callback() {
             @Override
             public void onSuccess() {

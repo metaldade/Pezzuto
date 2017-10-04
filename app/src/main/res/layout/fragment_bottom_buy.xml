@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:paddingTop="8dp"
     android:id="@+id/linearBottomBuy"
     tools:context=".BottomBuyFragment">
     <TextView
@@ -35,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:text="@string/order_info"/>
     <TextView
@@ -118,20 +119,17 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginBottom="24dp"
         android:background="@color/divider_color"/>
     <com.dd.CircularProgressButton
         android:id="@+id/goOnButton"
         android:layout_width="match_parent"
-        android:elevation="2dp"
         android:layout_height="48dp"
         android:textColor="@color/cpb_white"
         android:textSize="18sp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:visibility="gone"
-        android:layout_marginBottom="8dp"
-        app:cpb_cornerRadius="8dp"
+        app:cpb_cornerRadius="0dp"
         app:cpb_iconComplete="@drawable/ic_done"
         app:cpb_iconError="@drawable/ic_close"
         app:cpb_textIdle="Avanti"

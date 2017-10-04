@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private Toolbar toolbar;
     private BottomBar bottomBar;
     private RadioGroup radioChoice;
+    private boolean sheetLoaded = false;
     //type of fragments
     public static final String PROMOTION_DETAIL = "promotion_detail";
     public static final String PRODUCT_DETAIL = "product_detail";
@@ -297,8 +298,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (getIntent().getExtras() != null) {
             String type = getIntent().getExtras().getString("type");
             if (type != null) {
-                if (type.equals("eventi")) bottomBar.selectTabAtPosition(2);
-                else if (type.equals("prodotti")) bottomBar.selectTabAtPosition(0);
+                if (type.equals("EVENTI")) bottomBar.selectTabAtPosition(2);
+                else if (type.equals("PRODOTTI")) bottomBar.selectTabAtPosition(0);
                 else bottomBar.selectTabAtPosition(1);
             }
         }
@@ -306,8 +307,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.cart, menu);
         inflater.inflate(R.menu.search_menu, menu);
+        inflater.inflate(R.menu.cart, menu);
         inflater.inflate(R.menu.contacts, menu);
         inflater.inflate(R.menu.share, menu);
         search_menu = menu;
@@ -614,23 +615,25 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     public FloatingActionButton getFab() { return fab; }
     public void launchSheet() {
+        sheetLoaded = true;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.bottomsheet, BottomBuyFragment.newInstance("promotion")).commit();
-        fab.setIcon(R.drawable.ic_arrow);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
     public void launchSheetInfoFragment() {
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.bottomsheet, CustomerInfoFragment.newInstance("promotion")).commit();
         fab.setIcon(R.drawable.ic_cart);
     }
     public void launchEventInfoFragment() {
+        sheetLoaded = true;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.bottomsheet, new EventInfoFragment()).commit();
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
     public void launchFilterSheet() {
-
+        sheetLoaded = true;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.bottomsheet, new BottomFilterFragment()).commit();
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -638,8 +641,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     @Override
     public void onBackPressed()
     {
-        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED || bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_DRAGGING )
+        if (sheetLoaded) {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            sheetLoaded = false;
+        }
+        //if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED )
+         //   bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         else if (swipe.isRefreshing()) stopRefresh();
         else if (lastFragment.getType().equals(PROMOTION_DETAIL)) {
             launchFragment(PROMOTIONS);
@@ -668,8 +675,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_HIDDEN ||
-                        newState == BottomSheetBehavior.STATE_COLLAPSED) setFabVisible(true);
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) setFabVisible(true);
+                else if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
                 else setFabVisible(false);
             }
 
@@ -697,21 +706,16 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
               /*  if (newState == BottomSheetBehavior.STATE_DRAGGING || newState == BottomSheetBehavior.STATE_SETTLING) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }*/
-                if (newState == BottomSheetBehavior.STATE_HIDDEN ||
+                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+                else if (newState == BottomSheetBehavior.STATE_HIDDEN ||
                         newState == BottomSheetBehavior.STATE_COLLAPSED) setFabVisible(true);
                 else setFabVisible(false);
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                if (slideOffset < 0.5) {
-                    fab.setIcon(R.drawable.ic_cart);
-                    fab.setOnClickListener(sheetListener);
-                }
-                else {
-                    fab.setIcon(R.drawable.ic_arrow);
-                    fab.setOnClickListener(goOnListener);
-                }
             }
         });
     }
@@ -723,6 +727,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                         || newState == BottomSheetBehavior.STATE_COLLAPSED) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }*/
+                if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
             }
 
             @Override

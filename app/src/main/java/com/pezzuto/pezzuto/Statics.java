@@ -60,11 +60,14 @@ public class Statics {
     }
     public static String getSimpleDate(Date d) {
         DateFormat df = new SimpleDateFormat("dd/MM/yy",Locale.ITALIAN);
-        return df.format(d);
+        return removeZeroes(df.format(d));
     }
     public static String getDayMonth(Date d) {
         DateFormat df = new SimpleDateFormat("dd MMMM",Locale.ITALIAN);
-        return df.format(d);
+        return removeZeroes(df.format(d));
+    }
+    private static String removeZeroes(String s) {
+        return s.replaceFirst("^0+(?!$)", "");
     }
     public static String getExtDate(Date d) {
         DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss",Locale.ITALIAN);
@@ -79,9 +82,9 @@ public class Statics {
 
     public static String getFormattedEventDate(Event e) {
         return e.getEndDate() == null ? Statics.getDayMonth(e.getStartDate()) :
-                "Dal "+Statics.getDayMonth(e.getStartDate())+" al "+Statics.getDayMonth(e.getEndDate());
+                "Dal "+removeZeroes(Statics.getDayMonth(e.getStartDate()))+" al "+removeZeroes(Statics.getDayMonth(e.getEndDate()));
     }
-    public static void  saveImageToExternal(Bitmap bm, String type, int id) {
+    public static void saveImageToExternal(Bitmap bm, String type, int id) {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/req_images");
         myDir.mkdirs();

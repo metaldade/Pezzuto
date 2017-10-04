@@ -62,7 +62,7 @@ public class PromotionListViewAdapter extends ArrayAdapter<Product> {
             }
 
             if (price != null) {
-                price.setText(String.format (Locale.ITALY,"%.2f", Statics.getFinalPrice(context,p)));
+                price.setText(String.format (Locale.ITALY,"%.2f", Statics.getFinalPrice(context,p))+"€ / "+p.getMeasure());
             }
         }
 

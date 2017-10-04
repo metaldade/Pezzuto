@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dd.CircularProgressButton;
 import com.pezzuto.pezzuto.listeners.OnFirstRunInteractionListener;
 import com.pezzuto.pezzuto.listeners.OnFragmentInteractionListener;
 import com.pezzuto.pezzuto.ui.StickyHeaderFragment;
@@ -27,7 +28,7 @@ public class ScreenSlidePageFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     OnFirstRunInteractionListener mListener;
-    Button goOn;
+    CircularProgressButton goOn;
     TextView text1;
     ImageView slideImage;
     private String type;
@@ -59,7 +60,7 @@ public class ScreenSlidePageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_screen_slide_page, container, false);
-        goOn = (Button) v.findViewById(R.id.goOnButton);
+        goOn = (CircularProgressButton) v.findViewById(R.id.goOnButton);
         slideImage = (ImageView) v.findViewById(R.id.slideImage);
         text1 = (TextView) v.findViewById(R.id.text1);
         goOn.setOnClickListener(new View.OnClickListener() {
@@ -79,20 +80,20 @@ public class ScreenSlidePageFragment extends Fragment {
             content.setText(R.string.welcome_text);
             title.setText("Benvenuto nell'app di Pezzuto");
             slideImage.setImageResource(R.drawable.pezzuto);
-            goOn.setText("Avanti");
+            goOn.setIdleText("Avanti");
         }
         if (type.equals("remain_updated")) {
             content.setText(R.string.remain_updated_text);
             title.setText("Rimani aggiornato sulle nostre promozioni");
             slideImage.setImageResource(R.drawable.promozioni);
             text1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-            goOn.setText("Avanti");
+            goOn.setIdleText("Avanti");
         }
         if (type.equals("events")) {
             title.setText("Eventi");
             content.setText(R.string.events_text);
             slideImage.setImageResource(R.drawable.eventi);
-            goOn.setText("Avanti");
+            goOn.setIdleText("Avanti");
         }
 
         return v;

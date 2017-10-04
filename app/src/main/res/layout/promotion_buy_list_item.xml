@@ -6,16 +6,16 @@
     android:paddingTop="4dp"
     android:paddingBottom="4dp">
 <TextView
-    android:layout_width="280dp"
+    android:layout_width="250dp"
     android:layout_height="wrap_content"
     android:text="R999l tubo multi strato isolato o20x2 rosso"
-    android:textColor="#000"
+    android:textColor="#333333"
     android:textAppearance="?android:textAppearanceMedium"
     android:id="@+id/title"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="144€"
         android:id="@+id/price"
         android:textColor="@color/colorAccent"
         android:layout_marginTop="4dp"
@@ -29,34 +29,31 @@
         android:layout_below="@id/price"/>
 
     <ImageButton
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignParentRight="true"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="4dp"
         android:id="@+id/add"
         android:src="@drawable/ic_add"
         style="?android:attr/borderlessButtonStyle"
         />
     <ImageButton
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_centerVertical="true"
-        android:layout_marginRight="8dp"
         android:id="@+id/remove"
-        android:layout_toLeftOf="@id/add"
+        android:layout_toStartOf="@id/add"
         android:src="@drawable/ic_remove"
         style="?android:attr/borderlessButtonStyle"
         />
     <ImageButton android:id="@+id/removeItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
 
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:background="@null"
         android:src="@drawable/ic_delete_red"
         android:visibility="visible"
-        android:layout_marginRight="16dp"/>
+        android:layout_marginRight="20dp"/>
 </RelativeLayout>

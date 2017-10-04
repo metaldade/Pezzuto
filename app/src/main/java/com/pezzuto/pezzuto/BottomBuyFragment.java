@@ -99,6 +99,7 @@ public class BottomBuyFragment extends Fragment {
         else adapter = new BuyProductListViewAdapter(getContext(),R.layout.promotion_buy_list_item,prods,
                 imponibile, iva, total,type, cartListener);
         listViewProd.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         if (prods.size() > 0 && type.equals(CART)) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
         else if (prods.size() > 0 && !type.equals(CART)) GraphicUtils.setListViewHeightBasedOnChildren(listViewProd,0);
         return v;

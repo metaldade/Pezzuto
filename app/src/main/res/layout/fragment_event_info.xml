@@ -1,9 +1,15 @@
+<RelativeLayout android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFF"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="8dp"
+
     android:layout_height="match_parent"
     tools:context="com.pezzuto.pezzuto.EventInfoFragment">
 
@@ -67,23 +73,22 @@
         android:id="@+id/np"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
+        android:backgroundTint="#FFF"
         android:layout_height="wrap_content"
         />
+
+</LinearLayout>
     <com.dd.CircularProgressButton
         android:id="@+id/participateButton"
         android:layout_width="match_parent"
-        android:elevation="2dp"
         android:layout_height="48dp"
         android:textColor="@color/cpb_white"
         android:textSize="18sp"
-        android:layout_marginRight="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:layout_alignParentBottom="true"
-        app:cpb_cornerRadius="8dp"
+        android:layout_marginTop="24dp"
+        app:cpb_cornerRadius="0dp"
         app:cpb_iconComplete="@drawable/ic_done"
         app:cpb_iconError="@drawable/ic_close"
         app:cpb_textIdle="Partecipa"
         app:cpb_selectorIdle="@drawable/idle_state_selector"/>
-</LinearLayout>
+</RelativeLayout>

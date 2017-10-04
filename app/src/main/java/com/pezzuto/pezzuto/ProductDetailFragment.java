@@ -123,12 +123,14 @@ private SharedPreferences shre;
     }
     private void addToCart() {
        SharedUtils.addToCart(getContext(),p);
+        Toast.makeText(getContext(),p.getTitle()+" aggiunto al carrello",Toast.LENGTH_SHORT).show();
         mListener.setCartIconFull();
         setFabRemove();
     }
 
     private void removeFromCart() {
         SharedUtils.removeFromCart(getContext(),p);
+        Toast.makeText(getContext(),p.getTitle()+" rimosso al carrello",Toast.LENGTH_SHORT).show();
         if (SharedUtils.isCartEmpty(getContext())) mListener.setCartIconEmpty();
         setFabAdd();
     }
