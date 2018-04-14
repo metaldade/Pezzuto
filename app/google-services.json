@@ -40,15 +40,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
+              "client_id": "585814036843-qc4io6dg9ouqc33q05kr41gmd7mp26ja.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
               "client_id": "585814036843-1j7q1vkroormqsrqfi483j6ofg40fqdf.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "it.pezzuto.Pezzuto"
               }
-            },
-            {
-              "client_id": "585814036843-qc4io6dg9ouqc33q05kr41gmd7mp26ja.apps.googleusercontent.com",
-              "client_type": 3
             }
           ]
         },

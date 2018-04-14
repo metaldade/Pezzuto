@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tab_prodotti"
+        android:icon="@drawable/ic_local_offer_black_24px"
+        android:title="Prodotti" />
+    <item
+        android:id="@+id/tab_promozioni"
+        android:icon="@drawable/ic_grade_black_24px"
+        android:title="Promozioni" />
+    <item
+        android:id="@+id/tab_eventi"
+        android:icon="@drawable/ic_event_black_24px"
+        android:title="Eventi" />
+</menu>

@@ -66,8 +66,7 @@ import com.pezzuto.pezzuto.requests.RequestsUtils;
 import com.pezzuto.pezzuto.ui.StickyHeaderFragment;
 import com.pezzuto.pezzuto.ui.UiUtils;
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnTabReselectListener;
-import com.roughike.bottombar.OnTabSelectListener;
+import com.roughike.bottombar.OnMenuTabClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -178,10 +177,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
 
-        bottomBar = (BottomBar) findViewById(R.id.bottomBar);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+        bottomBar = BottomBar.attach(this, savedInstanceState);
+        bottomBar.setItems(R.menu.bottombar_tabs);
+        bottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
             @Override
-            public void onTabSelected(@IdRes int tabId) {
+            public void onMenuTabSelected(int tabId) {
                 setTitle("Promozioni");
                 if (!firstAccessProm) search_menu.findItem(R.id.search).collapseActionView();
                 if (tabId == R.id.tab_promozioni) {
@@ -233,10 +233,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                     }
                 }
             }
-        });
-        bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
+
+
             @Override
-            public void onTabReSelected(@IdRes int tabId) {
+            public void onMenuTabReSelected(int tabId) {
                 if (tabId == R.id.tab_promozioni) {
                     launchFragment(PROMOTIONS);
                 }
@@ -298,9 +298,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (getIntent().getExtras() != null) {
             String type = getIntent().getExtras().getString("type");
             if (type != null) {
-                if (type.equals("EVENTI")) bottomBar.selectTabAtPosition(2);
-                else if (type.equals("PRODOTTI")) bottomBar.selectTabAtPosition(0);
-                else bottomBar.selectTabAtPosition(1);
+                if (type.equals("EVENTI")) bottomBar.selectTabAtPosition(2,true);
+                else if (type.equals("PRODOTTI")) bottomBar.selectTabAtPosition(0,true);
+                else bottomBar.selectTabAtPosition(1,true);
             }
         }
     }
@@ -519,7 +519,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         RefreshableFragment f = (RefreshableFragment) getSupportFragmentManager().findFragmentByTag(key);
         if (f == null) {
             launchFragment(StickyHeaderFragment.newInstance(key),key);
-            if (key.equals(PRODUCTS)) bottomBar.selectTabAtPosition(0);
+            if (key.equals(PRODUCTS)) bottomBar.selectTabAtPosition(0,true);
             return;
         }
         if (f.hasEmptySet(key)) setEmptyState(key);
